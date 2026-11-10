@@ -1,0 +1,9 @@
+# 기존 Kafka Compose 뒤에 병합합니다. agent 다운로드 후 명시 적용하면 브로커가 재시작됩니다.
+services:
+  kafka:
+    environment:
+      KAFKA_OPTS: -javaagent:/opt/monitoring/jmx_prometheus_javaagent.jar=9404:/opt/monitoring/kafka-jmx.yml
+    ports: ["127.0.0.1:9404:9404"]
+    volumes:
+      - ../Monitoring/vendor/jmx_prometheus_javaagent.jar:/opt/monitoring/jmx_prometheus_javaagent.jar:ro
+      - ../Monitoring/exporters/kafka-jmx.yml:/opt/monitoring/kafka-jmx.yml:ro

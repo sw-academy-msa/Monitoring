@@ -1,0 +1,8 @@
+# Kafka EC2의 내부 광고 주소와 사설 바인딩을 확인한 뒤 사용합니다.
+name: stockdrop-kafka-metrics
+services:
+  kafka-exporter:
+    image: danielqsj/kafka-exporter:v1.9.0
+    restart: unless-stopped
+    command: ["--kafka.server=${KAFKA_INTERNAL_BOOTSTRAP:?Kafka internal address required}", --kafka.version=3.9.0, --offset.show-all]
+    ports: ["${KAFKA_METRICS_BIND_ADDRESS:?Kafka private address required}:9308:9308"]
