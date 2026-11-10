@@ -1,0 +1,326 @@
+{
+  "uid": "stockdrop-kafka",
+  "title": "STOCKDROP Kafka와 이벤트 처리",
+  "schemaVersion": 41,
+  "version": 1,
+  "timezone": "browser",
+  "refresh": "15s",
+  "time": {
+    "from": "now-1h",
+    "to": "now"
+  },
+  "tags": [
+    "STOCKDROP"
+  ],
+  "editable": false,
+  "panels": [
+    {
+      "id": 1,
+      "title": "Kafka Exporter 수집 상태",
+      "type": "timeseries",
+      "datasource": {
+        "type": "prometheus",
+        "uid": "stockdrop-prometheus"
+      },
+      "gridPos": {
+        "x": 0,
+        "y": 0,
+        "w": 12,
+        "h": 8
+      },
+      "fieldConfig": {
+        "defaults": {
+          "unit": "short"
+        },
+        "overrides": []
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "expr": "up{job=~\"kafka-.*\"}",
+          "legendFormat": "{{application}} {{instance}} {{consumergroup}} {{topic}}"
+        }
+      ]
+    },
+    {
+      "id": 2,
+      "title": "소비 그룹별 Lag",
+      "type": "timeseries",
+      "datasource": {
+        "type": "prometheus",
+        "uid": "stockdrop-prometheus"
+      },
+      "gridPos": {
+        "x": 12,
+        "y": 0,
+        "w": 12,
+        "h": 8
+      },
+      "fieldConfig": {
+        "defaults": {
+          "unit": "short"
+        },
+        "overrides": []
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "expr": "sum by (consumergroup,topic) (clamp_min(kafka_consumergroup_lag,0))",
+          "legendFormat": "{{application}} {{instance}} {{consumergroup}} {{topic}}"
+        }
+      ]
+    },
+    {
+      "id": 3,
+      "title": "커밋된 오프셋",
+      "type": "timeseries",
+      "datasource": {
+        "type": "prometheus",
+        "uid": "stockdrop-prometheus"
+      },
+      "gridPos": {
+        "x": 0,
+        "y": 8,
+        "w": 12,
+        "h": 8
+      },
+      "fieldConfig": {
+        "defaults": {
+          "unit": "short"
+        },
+        "overrides": []
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "expr": "kafka_consumergroup_current_offset",
+          "legendFormat": "{{application}} {{instance}} {{consumergroup}} {{topic}}"
+        }
+      ]
+    },
+    {
+      "id": 4,
+      "title": "토픽 최신 오프셋",
+      "type": "timeseries",
+      "datasource": {
+        "type": "prometheus",
+        "uid": "stockdrop-prometheus"
+      },
+      "gridPos": {
+        "x": 12,
+        "y": 8,
+        "w": 12,
+        "h": 8
+      },
+      "fieldConfig": {
+        "defaults": {
+          "unit": "short"
+        },
+        "overrides": []
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "expr": "kafka_topic_partition_current_offset",
+          "legendFormat": "{{application}} {{instance}} {{consumergroup}} {{topic}}"
+        }
+      ]
+    },
+    {
+      "id": 5,
+      "title": "토픽 파티션 수",
+      "type": "timeseries",
+      "datasource": {
+        "type": "prometheus",
+        "uid": "stockdrop-prometheus"
+      },
+      "gridPos": {
+        "x": 0,
+        "y": 16,
+        "w": 12,
+        "h": 8
+      },
+      "fieldConfig": {
+        "defaults": {
+          "unit": "short"
+        },
+        "overrides": []
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "expr": "kafka_topic_partitions",
+          "legendFormat": "{{application}} {{instance}} {{consumergroup}} {{topic}}"
+        }
+      ]
+    },
+    {
+      "id": 6,
+      "title": "브로커 유입 메시지",
+      "type": "timeseries",
+      "datasource": {
+        "type": "prometheus",
+        "uid": "stockdrop-prometheus"
+      },
+      "gridPos": {
+        "x": 12,
+        "y": 16,
+        "w": 12,
+        "h": 8
+      },
+      "fieldConfig": {
+        "defaults": {
+          "unit": "ops"
+        },
+        "overrides": []
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "expr": "rate(kafka_server_brokertopicmetrics_messagesin_total[5m])",
+          "legendFormat": "{{application}} {{instance}} {{consumergroup}} {{topic}}"
+        }
+      ]
+    },
+    {
+      "id": 7,
+      "title": "브로커 유입 바이트",
+      "type": "timeseries",
+      "datasource": {
+        "type": "prometheus",
+        "uid": "stockdrop-prometheus"
+      },
+      "gridPos": {
+        "x": 0,
+        "y": 24,
+        "w": 12,
+        "h": 8
+      },
+      "fieldConfig": {
+        "defaults": {
+          "unit": "Bps"
+        },
+        "overrides": []
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "expr": "rate(kafka_server_brokertopicmetrics_bytesin_total[5m])",
+          "legendFormat": "{{application}} {{instance}} {{consumergroup}} {{topic}}"
+        }
+      ]
+    },
+    {
+      "id": 8,
+      "title": "브로커 유출 바이트",
+      "type": "timeseries",
+      "datasource": {
+        "type": "prometheus",
+        "uid": "stockdrop-prometheus"
+      },
+      "gridPos": {
+        "x": 12,
+        "y": 24,
+        "w": 12,
+        "h": 8
+      },
+      "fieldConfig": {
+        "defaults": {
+          "unit": "Bps"
+        },
+        "overrides": []
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "expr": "rate(kafka_server_brokertopicmetrics_bytesout_total[5m])",
+          "legendFormat": "{{application}} {{instance}} {{consumergroup}} {{topic}}"
+        }
+      ]
+    },
+    {
+      "id": 9,
+      "title": "Under-replicated 파티션",
+      "type": "timeseries",
+      "datasource": {
+        "type": "prometheus",
+        "uid": "stockdrop-prometheus"
+      },
+      "gridPos": {
+        "x": 0,
+        "y": 32,
+        "w": 12,
+        "h": 8
+      },
+      "fieldConfig": {
+        "defaults": {
+          "unit": "short"
+        },
+        "overrides": []
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "expr": "kafka_server_replicamanager_underreplicatedpartitions",
+          "legendFormat": "{{application}} {{instance}} {{consumergroup}} {{topic}}"
+        }
+      ]
+    },
+    {
+      "id": 10,
+      "title": "서비스 Kafka 발행 오류",
+      "type": "timeseries",
+      "datasource": {
+        "type": "prometheus",
+        "uid": "stockdrop-prometheus"
+      },
+      "gridPos": {
+        "x": 12,
+        "y": 32,
+        "w": 12,
+        "h": 8
+      },
+      "fieldConfig": {
+        "defaults": {
+          "unit": "ops"
+        },
+        "overrides": []
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "expr": "sum by (application,instance) (rate(kafka_producer_record_error_total[5m]))",
+          "legendFormat": "{{application}} {{instance}} {{consumergroup}} {{topic}}"
+        }
+      ]
+    },
+    {
+      "id": 11,
+      "title": "미발행 Outbox 건수",
+      "type": "timeseries",
+      "datasource": {
+        "type": "prometheus",
+        "uid": "stockdrop-prometheus"
+      },
+      "gridPos": {
+        "x": 0,
+        "y": 40,
+        "w": 12,
+        "h": 8
+      },
+      "fieldConfig": {
+        "defaults": {
+          "unit": "short"
+        },
+        "overrides": []
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "expr": "stockdrop_outbox_pending",
+          "legendFormat": "{{application}} {{instance}} {{consumergroup}} {{topic}}"
+        }
+      ]
+    }
+  ]
+}

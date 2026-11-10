@@ -1,0 +1,11 @@
+# 외부 수신자는 미설정이며 UI에서 경보만 확인합니다.
+global:
+  resolve_timeout: 5m
+route:
+  receiver: local-only
+  group_by: [alertname, job, instance]
+  group_wait: 30s
+  group_interval: 5m
+  repeat_interval: 4h
+receivers:
+  - name: local-only

@@ -1,0 +1,12 @@
+# Grafana 서버가 내부 DNS로 Prometheus에 접근합니다.
+apiVersion: 1
+datasources:
+  - name: Prometheus
+    uid: stockdrop-prometheus
+    type: prometheus
+    access: proxy
+    url: http://prometheus:9090
+    isDefault: true
+    editable: false
+    jsonData:
+      timeInterval: 15s
