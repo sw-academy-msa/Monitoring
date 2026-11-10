@@ -18,6 +18,8 @@ docker compose -f ..\ProductQueryService\compose.kafka.yaml -f exporters\compose
 
 jar 다운로드와 SHA-256 검증을 먼저 완료해야 합니다. override 적용 시 Kafka가 재시작되므로 진행 중인 테스트가 없는 시점에 실행합니다.
 원복은 docker compose -f ../ProductQueryService/compose.kafka.yaml up -d kafka이며 기존 volume은 유지합니다.
+agent 적용 중 컨테이너에서 Kafka CLI(kafka-topics.sh 등)를 실행할 때는 KAFKA_OPTS=를 앞에 붙입니다. 붙이지 않으면 CLI JVM도 agent를 띄워 9404 포트 충돌로 실패합니다.
+override는 같은 이유로 healthcheck에서도 KAFKA_OPTS를 비웁니다.
 운영은 기존 Kafka Compose에 agent, mount, 9404 사설 바인딩을 확인 후 적용합니다. 이 저장소가 AWS Kafka를 자동 수정하지 않습니다.
 agent 미적용 시 브로커 패널은 No data/down입니다. 소비 그룹 지표와는 별개입니다.
 클라이언트 오류는 실제 Micrometer Kafka 계측에서 노출된 항목만 표시합니다. 지표 부재를 성공으로 간주하지 않습니다.

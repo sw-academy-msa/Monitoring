@@ -7,3 +7,6 @@ services:
     volumes:
       - ../Monitoring/vendor/jmx_prometheus_javaagent.jar:/opt/monitoring/jmx_prometheus_javaagent.jar:ro
       - ../Monitoring/exporters/kafka-jmx.yml:/opt/monitoring/kafka-jmx.yml:ro
+    # KAFKA_OPTS는 컨테이너의 모든 Java 도구에 적용되므로 healthcheck JVM이 9404를 선점해 브로커가 종료되지 않게 비웁니다.
+    healthcheck:
+      test: ["CMD-SHELL", "KAFKA_OPTS= /opt/kafka/bin/kafka-topics.sh --bootstrap-server localhost:9092 --list >/dev/null"]
