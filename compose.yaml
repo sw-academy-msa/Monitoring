@@ -1,0 +1,64 @@
+# 중앙 수집기만 실행하며 기존 DB와 Kafka 데이터는 변경하지 않습니다.
+name: stockdrop-monitoring
+services:
+  prometheus:
+    image: prom/prometheus:v3.13.5
+    restart: unless-stopped
+    command: [--config.file=/etc/prometheus/prometheus.yml, --storage.tsdb.path=/prometheus, --storage.tsdb.retention.time=15d, --storage.tsdb.retention.size=10GB]
+    ports: ["${MONITORING_BIND_ADDRESS:-127.0.0.1}:${PROMETHEUS_PORT:-9095}:9090"]
+    volumes:
+      - ./prometheus/prometheus.local.yml:/etc/prometheus/prometheus.yml:ro
+      - ./prometheus/rules:/etc/prometheus/rules:ro
+      - ./secrets/scrape-token:/run/secrets/scrape-token:ro
+      - prometheus-data:/prometheus
+    extra_hosts: [host.docker.internal:host-gateway]
+    networks: [monitoring]
+    healthcheck:
+      test: [CMD, wget, -q, -O, /dev/null, http://localhost:9090/-/ready]
+      interval: 15s
+      timeout: 5s
+      retries: 5
+  grafana:
+    image: grafana/grafana:12.3.1
+    restart: unless-stopped
+    environment:
+      GF_SECURITY_ADMIN_USER: ${GRAFANA_ADMIN_USER:-admin}
+      GF_SECURITY_ADMIN_PASSWORD__FILE: /run/secrets/grafana-password
+      GF_USERS_ALLOW_SIGN_UP: "false"
+      GF_AUTH_ANONYMOUS_ENABLED: "false"
+      GF_ANALYTICS_REPORTING_ENABLED: "false"
+    ports: ["${MONITORING_BIND_ADDRESS:-127.0.0.1}:${GRAFANA_PORT:-3001}:3000"]
+    volumes:
+      - ./grafana/provisioning:/etc/grafana/provisioning:ro
+      - ./grafana/dashboards:/var/lib/grafana/dashboards:ro
+      - ./secrets/grafana-password:/run/secrets/grafana-password:ro
+      - grafana-data:/var/lib/grafana
+    networks: [monitoring]
+    healthcheck:
+      test: [CMD, wget, -q, -O, /dev/null, http://localhost:3000/api/health]
+      interval: 15s
+      timeout: 5s
+      retries: 5
+  alertmanager:
+    image: prom/alertmanager:v0.28.1
+    restart: unless-stopped
+    command: ['--config.file=/etc/alertmanager/${ALERTMANAGER_CONFIG_NAME:-alertmanager.yml}', --storage.path=/alertmanager]
+    ports: ["${MONITORING_BIND_ADDRESS:-127.0.0.1}:${ALERTMANAGER_PORT:-9093}:9093"]
+    volumes:
+      - ./alertmanager:/etc/alertmanager:ro
+      - ./secrets/alertmanager:/run/secrets/alertmanager:ro
+      - alertmanager-data:/alertmanager
+    networks: [monitoring]
+  blackbox:
+    image: prom/blackbox-exporter:v0.26.0
+    restart: unless-stopped
+    command: [--config.file=/etc/blackbox/blackbox.yml]
+    volumes: [./blackbox/blackbox.yml:/etc/blackbox/blackbox.yml:ro]
+    extra_hosts: [host.docker.internal:host-gateway]
+    networks: [monitoring]
+networks:
+  monitoring:
+volumes:
+  prometheus-data:
+  grafana-data:
+  alertmanager-data:

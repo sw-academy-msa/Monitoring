@@ -1,0 +1,10 @@
+# Linux EC2 전용입니다. Docker Desktop VM의 지표를 Windows 호스트 지표로 취급하지 않습니다.
+name: stockdrop-node-metrics
+services:
+  node-exporter:
+    image: prom/node-exporter:v1.9.1
+    restart: unless-stopped
+    network_mode: host
+    pid: host
+    command: [--path.rootfs=/host, --web.listen-address=:9100]
+    volumes: ['/:/host:ro,rslave']

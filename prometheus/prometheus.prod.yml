@@ -1,0 +1,583 @@
+global:
+  scrape_interval: 15s
+  evaluation_interval: 15s
+  scrape_timeout: 10s
+  external_labels:
+    environment: prod
+rule_files: [/etc/prometheus/rules/*.yml]
+alerting:
+  alertmanagers:
+    - static_configs:
+        - targets: ['alertmanager:9093']
+scrape_configs:
+  - job_name: prometheus
+    static_configs:
+      - targets: ['localhost:9090']
+  - job_name: 'AccountService'
+    metrics_path: /actuator/prometheus
+    authorization:
+      type: Bearer
+      credentials_file: /run/secrets/scrape-token
+    ec2_sd_configs:
+      - region: ap-northeast-2
+        port: 8080
+        filters:
+          - name: tag:Project
+            values: [STOCKDROP]
+          - name: tag:Pool
+            values: [general]
+          - name: instance-state-name
+            values: [running]
+    relabel_configs:
+      - source_labels: [__meta_ec2_instance_id]
+        target_label: ec2_instance_id
+      - source_labels: [__meta_ec2_availability_zone]
+        target_label: availability_zone
+      - target_label: pool
+        replacement: general
+      - target_label: service
+        replacement: AccountService
+  - job_name: 'ProductCommandService'
+    metrics_path: /actuator/prometheus
+    authorization:
+      type: Bearer
+      credentials_file: /run/secrets/scrape-token
+    ec2_sd_configs:
+      - region: ap-northeast-2
+        port: 8081
+        filters:
+          - name: tag:Project
+            values: [STOCKDROP]
+          - name: tag:Pool
+            values: [purchase]
+          - name: instance-state-name
+            values: [running]
+    relabel_configs:
+      - source_labels: [__meta_ec2_instance_id]
+        target_label: ec2_instance_id
+      - source_labels: [__meta_ec2_availability_zone]
+        target_label: availability_zone
+      - target_label: pool
+        replacement: purchase
+      - target_label: service
+        replacement: ProductCommandService
+  - job_name: 'ProductQueryService'
+    metrics_path: /actuator/prometheus
+    authorization:
+      type: Bearer
+      credentials_file: /run/secrets/scrape-token
+    ec2_sd_configs:
+      - region: ap-northeast-2
+        port: 8082
+        filters:
+          - name: tag:Project
+            values: [STOCKDROP]
+          - name: tag:Pool
+            values: [general]
+          - name: instance-state-name
+            values: [running]
+    relabel_configs:
+      - source_labels: [__meta_ec2_instance_id]
+        target_label: ec2_instance_id
+      - source_labels: [__meta_ec2_availability_zone]
+        target_label: availability_zone
+      - target_label: pool
+        replacement: general
+      - target_label: service
+        replacement: ProductQueryService
+  - job_name: 'OrderCommandService'
+    metrics_path: /actuator/prometheus
+    authorization:
+      type: Bearer
+      credentials_file: /run/secrets/scrape-token
+    ec2_sd_configs:
+      - region: ap-northeast-2
+        port: 8083
+        filters:
+          - name: tag:Project
+            values: [STOCKDROP]
+          - name: tag:Pool
+            values: [purchase]
+          - name: instance-state-name
+            values: [running]
+    relabel_configs:
+      - source_labels: [__meta_ec2_instance_id]
+        target_label: ec2_instance_id
+      - source_labels: [__meta_ec2_availability_zone]
+        target_label: availability_zone
+      - target_label: pool
+        replacement: purchase
+      - target_label: service
+        replacement: OrderCommandService
+  - job_name: 'PaymentService'
+    metrics_path: /actuator/prometheus
+    authorization:
+      type: Bearer
+      credentials_file: /run/secrets/scrape-token
+    ec2_sd_configs:
+      - region: ap-northeast-2
+        port: 8084
+        filters:
+          - name: tag:Project
+            values: [STOCKDROP]
+          - name: tag:Pool
+            values: [general]
+          - name: instance-state-name
+            values: [running]
+    relabel_configs:
+      - source_labels: [__meta_ec2_instance_id]
+        target_label: ec2_instance_id
+      - source_labels: [__meta_ec2_availability_zone]
+        target_label: availability_zone
+      - target_label: pool
+        replacement: general
+      - target_label: service
+        replacement: PaymentService
+  - job_name: 'OrderQueryService'
+    metrics_path: /actuator/prometheus
+    authorization:
+      type: Bearer
+      credentials_file: /run/secrets/scrape-token
+    ec2_sd_configs:
+      - region: ap-northeast-2
+        port: 8085
+        filters:
+          - name: tag:Project
+            values: [STOCKDROP]
+          - name: tag:Pool
+            values: [general]
+          - name: instance-state-name
+            values: [running]
+    relabel_configs:
+      - source_labels: [__meta_ec2_instance_id]
+        target_label: ec2_instance_id
+      - source_labels: [__meta_ec2_availability_zone]
+        target_label: availability_zone
+      - target_label: pool
+        replacement: general
+      - target_label: service
+        replacement: OrderQueryService
+  - job_name: 'AIService'
+    metrics_path: /actuator/prometheus
+    authorization:
+      type: Bearer
+      credentials_file: /run/secrets/scrape-token
+    ec2_sd_configs:
+      - region: ap-northeast-2
+        port: 8086
+        filters:
+          - name: tag:Project
+            values: [STOCKDROP]
+          - name: tag:Pool
+            values: [general]
+          - name: instance-state-name
+            values: [running]
+    relabel_configs:
+      - source_labels: [__meta_ec2_instance_id]
+        target_label: ec2_instance_id
+      - source_labels: [__meta_ec2_availability_zone]
+        target_label: availability_zone
+      - target_label: pool
+        replacement: general
+      - target_label: service
+        replacement: AIService
+  - job_name: 'NotificationService'
+    metrics_path: /actuator/prometheus
+    authorization:
+      type: Bearer
+      credentials_file: /run/secrets/scrape-token
+    ec2_sd_configs:
+      - region: ap-northeast-2
+        port: 8087
+        filters:
+          - name: tag:Project
+            values: [STOCKDROP]
+          - name: tag:Pool
+            values: [general]
+          - name: instance-state-name
+            values: [running]
+    relabel_configs:
+      - source_labels: [__meta_ec2_instance_id]
+        target_label: ec2_instance_id
+      - source_labels: [__meta_ec2_availability_zone]
+        target_label: availability_zone
+      - target_label: pool
+        replacement: general
+      - target_label: service
+        replacement: NotificationService
+  - job_name: 'Gateway'
+    metrics_path: /actuator/prometheus
+    authorization:
+      type: Bearer
+      credentials_file: /run/secrets/scrape-token
+    ec2_sd_configs:
+      - region: ap-northeast-2
+        port: 8000
+        filters:
+          - name: tag:Project
+            values: [STOCKDROP]
+          - name: tag:Pool
+            values: [general]
+          - name: instance-state-name
+            values: [running]
+    relabel_configs:
+      - source_labels: [__meta_ec2_instance_id]
+        target_label: ec2_instance_id
+      - source_labels: [__meta_ec2_availability_zone]
+        target_label: availability_zone
+      - target_label: pool
+        replacement: general
+      - target_label: service
+        replacement: Gateway
+  - job_name: 'PurchaseGateway'
+    metrics_path: /actuator/prometheus
+    authorization:
+      type: Bearer
+      credentials_file: /run/secrets/scrape-token
+    ec2_sd_configs:
+      - region: ap-northeast-2
+        port: 8001
+        filters:
+          - name: tag:Project
+            values: [STOCKDROP]
+          - name: tag:Pool
+            values: [purchase]
+          - name: instance-state-name
+            values: [running]
+    relabel_configs:
+      - source_labels: [__meta_ec2_instance_id]
+        target_label: ec2_instance_id
+      - source_labels: [__meta_ec2_availability_zone]
+        target_label: availability_zone
+      - target_label: pool
+        replacement: purchase
+      - target_label: service
+        replacement: PurchaseGateway
+  - job_name: 'Eureka'
+    metrics_path: /actuator/prometheus
+    authorization:
+      type: Bearer
+      credentials_file: /run/secrets/scrape-token
+    ec2_sd_configs:
+      - region: ap-northeast-2
+        port: 8761
+        filters:
+          - name: tag:Project
+            values: [STOCKDROP]
+          - name: tag:Pool
+            values: [general]
+          - name: instance-state-name
+            values: [running]
+    relabel_configs:
+      - source_labels: [__meta_ec2_instance_id]
+        target_label: ec2_instance_id
+      - source_labels: [__meta_ec2_availability_zone]
+        target_label: availability_zone
+      - target_label: pool
+        replacement: general
+      - target_label: service
+        replacement: Eureka
+  - job_name: 'AccountService-health'
+    metrics_path: /probe
+    params:
+      module: [actuator_health]
+    ec2_sd_configs:
+      - region: ap-northeast-2
+        port: 8080
+        filters:
+          - name: tag:Project
+            values: [STOCKDROP]
+          - name: tag:Pool
+            values: [general]
+          - name: instance-state-name
+            values: [running]
+    relabel_configs:
+      - source_labels: [__address__]
+        target_label: __param_target
+        replacement: 'http://$1/actuator/health'
+      - source_labels: [__param_target]
+        target_label: instance
+      - source_labels: [__meta_ec2_instance_id]
+        target_label: ec2_instance_id
+      - target_label: service
+        replacement: AccountService
+      - target_label: __address__
+        replacement: blackbox:9115
+  - job_name: 'ProductCommandService-health'
+    metrics_path: /probe
+    params:
+      module: [actuator_health]
+    ec2_sd_configs:
+      - region: ap-northeast-2
+        port: 8081
+        filters:
+          - name: tag:Project
+            values: [STOCKDROP]
+          - name: tag:Pool
+            values: [purchase]
+          - name: instance-state-name
+            values: [running]
+    relabel_configs:
+      - source_labels: [__address__]
+        target_label: __param_target
+        replacement: 'http://$1/actuator/health'
+      - source_labels: [__param_target]
+        target_label: instance
+      - source_labels: [__meta_ec2_instance_id]
+        target_label: ec2_instance_id
+      - target_label: service
+        replacement: ProductCommandService
+      - target_label: __address__
+        replacement: blackbox:9115
+  - job_name: 'ProductQueryService-health'
+    metrics_path: /probe
+    params:
+      module: [actuator_health]
+    ec2_sd_configs:
+      - region: ap-northeast-2
+        port: 8082
+        filters:
+          - name: tag:Project
+            values: [STOCKDROP]
+          - name: tag:Pool
+            values: [general]
+          - name: instance-state-name
+            values: [running]
+    relabel_configs:
+      - source_labels: [__address__]
+        target_label: __param_target
+        replacement: 'http://$1/actuator/health'
+      - source_labels: [__param_target]
+        target_label: instance
+      - source_labels: [__meta_ec2_instance_id]
+        target_label: ec2_instance_id
+      - target_label: service
+        replacement: ProductQueryService
+      - target_label: __address__
+        replacement: blackbox:9115
+  - job_name: 'OrderCommandService-health'
+    metrics_path: /probe
+    params:
+      module: [actuator_health]
+    ec2_sd_configs:
+      - region: ap-northeast-2
+        port: 8083
+        filters:
+          - name: tag:Project
+            values: [STOCKDROP]
+          - name: tag:Pool
+            values: [purchase]
+          - name: instance-state-name
+            values: [running]
+    relabel_configs:
+      - source_labels: [__address__]
+        target_label: __param_target
+        replacement: 'http://$1/actuator/health'
+      - source_labels: [__param_target]
+        target_label: instance
+      - source_labels: [__meta_ec2_instance_id]
+        target_label: ec2_instance_id
+      - target_label: service
+        replacement: OrderCommandService
+      - target_label: __address__
+        replacement: blackbox:9115
+  - job_name: 'PaymentService-health'
+    metrics_path: /probe
+    params:
+      module: [actuator_health]
+    ec2_sd_configs:
+      - region: ap-northeast-2
+        port: 8084
+        filters:
+          - name: tag:Project
+            values: [STOCKDROP]
+          - name: tag:Pool
+            values: [general]
+          - name: instance-state-name
+            values: [running]
+    relabel_configs:
+      - source_labels: [__address__]
+        target_label: __param_target
+        replacement: 'http://$1/actuator/health'
+      - source_labels: [__param_target]
+        target_label: instance
+      - source_labels: [__meta_ec2_instance_id]
+        target_label: ec2_instance_id
+      - target_label: service
+        replacement: PaymentService
+      - target_label: __address__
+        replacement: blackbox:9115
+  - job_name: 'OrderQueryService-health'
+    metrics_path: /probe
+    params:
+      module: [actuator_health]
+    ec2_sd_configs:
+      - region: ap-northeast-2
+        port: 8085
+        filters:
+          - name: tag:Project
+            values: [STOCKDROP]
+          - name: tag:Pool
+            values: [general]
+          - name: instance-state-name
+            values: [running]
+    relabel_configs:
+      - source_labels: [__address__]
+        target_label: __param_target
+        replacement: 'http://$1/actuator/health'
+      - source_labels: [__param_target]
+        target_label: instance
+      - source_labels: [__meta_ec2_instance_id]
+        target_label: ec2_instance_id
+      - target_label: service
+        replacement: OrderQueryService
+      - target_label: __address__
+        replacement: blackbox:9115
+  - job_name: 'AIService-health'
+    metrics_path: /probe
+    params:
+      module: [actuator_health]
+    ec2_sd_configs:
+      - region: ap-northeast-2
+        port: 8086
+        filters:
+          - name: tag:Project
+            values: [STOCKDROP]
+          - name: tag:Pool
+            values: [general]
+          - name: instance-state-name
+            values: [running]
+    relabel_configs:
+      - source_labels: [__address__]
+        target_label: __param_target
+        replacement: 'http://$1/actuator/health'
+      - source_labels: [__param_target]
+        target_label: instance
+      - source_labels: [__meta_ec2_instance_id]
+        target_label: ec2_instance_id
+      - target_label: service
+        replacement: AIService
+      - target_label: __address__
+        replacement: blackbox:9115
+  - job_name: 'NotificationService-health'
+    metrics_path: /probe
+    params:
+      module: [actuator_health]
+    ec2_sd_configs:
+      - region: ap-northeast-2
+        port: 8087
+        filters:
+          - name: tag:Project
+            values: [STOCKDROP]
+          - name: tag:Pool
+            values: [general]
+          - name: instance-state-name
+            values: [running]
+    relabel_configs:
+      - source_labels: [__address__]
+        target_label: __param_target
+        replacement: 'http://$1/actuator/health'
+      - source_labels: [__param_target]
+        target_label: instance
+      - source_labels: [__meta_ec2_instance_id]
+        target_label: ec2_instance_id
+      - target_label: service
+        replacement: NotificationService
+      - target_label: __address__
+        replacement: blackbox:9115
+  - job_name: 'Gateway-health'
+    metrics_path: /probe
+    params:
+      module: [actuator_health]
+    ec2_sd_configs:
+      - region: ap-northeast-2
+        port: 8000
+        filters:
+          - name: tag:Project
+            values: [STOCKDROP]
+          - name: tag:Pool
+            values: [general]
+          - name: instance-state-name
+            values: [running]
+    relabel_configs:
+      - source_labels: [__address__]
+        target_label: __param_target
+        replacement: 'http://$1/actuator/health'
+      - source_labels: [__param_target]
+        target_label: instance
+      - source_labels: [__meta_ec2_instance_id]
+        target_label: ec2_instance_id
+      - target_label: service
+        replacement: Gateway
+      - target_label: __address__
+        replacement: blackbox:9115
+  - job_name: 'PurchaseGateway-health'
+    metrics_path: /probe
+    params:
+      module: [actuator_health]
+    ec2_sd_configs:
+      - region: ap-northeast-2
+        port: 8001
+        filters:
+          - name: tag:Project
+            values: [STOCKDROP]
+          - name: tag:Pool
+            values: [purchase]
+          - name: instance-state-name
+            values: [running]
+    relabel_configs:
+      - source_labels: [__address__]
+        target_label: __param_target
+        replacement: 'http://$1/actuator/health'
+      - source_labels: [__param_target]
+        target_label: instance
+      - source_labels: [__meta_ec2_instance_id]
+        target_label: ec2_instance_id
+      - target_label: service
+        replacement: PurchaseGateway
+      - target_label: __address__
+        replacement: blackbox:9115
+  - job_name: 'Eureka-health'
+    metrics_path: /probe
+    params:
+      module: [actuator_health]
+    ec2_sd_configs:
+      - region: ap-northeast-2
+        port: 8761
+        filters:
+          - name: tag:Project
+            values: [STOCKDROP]
+          - name: tag:Pool
+            values: [general]
+          - name: instance-state-name
+            values: [running]
+    relabel_configs:
+      - source_labels: [__address__]
+        target_label: __param_target
+        replacement: 'http://$1/actuator/health'
+      - source_labels: [__param_target]
+        target_label: instance
+      - source_labels: [__meta_ec2_instance_id]
+        target_label: ec2_instance_id
+      - target_label: service
+        replacement: Eureka
+      - target_label: __address__
+        replacement: blackbox:9115
+  - job_name: kafka-consumer
+    file_sd_configs:
+      - files: [/etc/prometheus/targets/kafka-consumer.json]
+  - job_name: kafka-broker
+    file_sd_configs:
+      - files: [/etc/prometheus/targets/kafka-broker.json]
+  - job_name: node
+    ec2_sd_configs:
+      - region: ap-northeast-2
+        port: 9100
+        filters:
+          - name: tag:Project
+            values: [STOCKDROP]
+          - name: instance-state-name
+            values: [running]
+  - job_name: command-postgresql
+    file_sd_configs:
+      - files: [/etc/prometheus/targets/postgresql.json]
