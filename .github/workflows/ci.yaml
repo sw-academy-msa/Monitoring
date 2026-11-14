@@ -1,0 +1,66 @@
+# 운영 대상에 접속하거나 Slack으로 발송하지 않고 Compose·Prometheus·Alertmanager·Grafana 설정과 경보 규칙만 검증합니다.
+name: CI
+on:
+  pull_request:
+  push:
+    branches: [main]
+permissions:
+  contents: read
+env:
+  PROMETHEUS_IMAGE: prom/prometheus:v3.13.5
+  ALERTMANAGER_IMAGE: prom/alertmanager:v0.28.1
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+
+      # 실제 값은 Git에 없으므로 설정 검사에 필요한 파일 존재만 더미 값으로 맞춥니다.
+      - name: Prepare dummy secrets
+        run: |
+          cp .env.example .env
+          mkdir -p secrets/alertmanager
+          echo ci-dummy-token > secrets/scrape-token
+          echo ci-dummy-password > secrets/grafana-password
+          echo https://hooks.slack.com/services/CI/DUMMY/URL > secrets/alertmanager/slack-webhook-url
+
+      # 로컬 Kafka overlay가 참조하는 외부 네트워크는 config 검사에서 만들지 않아도 됩니다.
+      - name: Check Compose files
+        run: |
+          docker compose -f compose.yaml -f compose.prod.yaml config --quiet
+          docker compose -f compose.yaml -f compose.kafka.yaml config --quiet
+
+      # 컨테이너 안 경로가 설정 파일의 rule_files·file_sd·credentials_file 경로와 같아야 합니다.
+      - name: Check Prometheus configs
+        run: |
+          for cfg in prometheus.local.yml prometheus.prod.yml; do
+            docker run --rm --entrypoint /bin/promtool \
+              -v "$PWD/prometheus/$cfg:/etc/prometheus/prometheus.yml:ro" \
+              -v "$PWD/prometheus/rules:/etc/prometheus/rules:ro" \
+              -v "$PWD/prometheus/targets:/etc/prometheus/targets:ro" \
+              -v "$PWD/secrets/scrape-token:/run/secrets/scrape-token:ro" \
+              "$PROMETHEUS_IMAGE" check config /etc/prometheus/prometheus.yml
+          done
+
+      - name: Test alert rules
+        run: |
+          docker run --rm --entrypoint /bin/promtool \
+            -v "$PWD/prometheus:/work:ro" -w /work/tests \
+            "$PROMETHEUS_IMAGE" test rules alerts.test.yml
+
+      # Slack 설정은 webhook 파일 경로만 확인하며 실제 발송하지 않습니다.
+      - name: Check Alertmanager configs
+        run: |
+          for cfg in alertmanager.yml alertmanager.slack.yml; do
+            docker run --rm --entrypoint /bin/amtool \
+              -v "$PWD/alertmanager:/etc/alertmanager:ro" \
+              -v "$PWD/secrets/alertmanager:/run/secrets/alertmanager:ro" \
+              "$ALERTMANAGER_IMAGE" check-config "/etc/alertmanager/$cfg"
+          done
+
+      - name: Check Grafana dashboards
+        run: |
+          for f in grafana/dashboards/*.json; do
+            python3 -m json.tool "$f" > /dev/null || { echo "Invalid JSON: $f"; exit 1; }
+          done
