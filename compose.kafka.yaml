@@ -1,0 +1,11 @@
+# 기존 Kafka INTERNAL listener를 사용하며 브로커를 새로 만들지 않습니다.
+services:
+  kafka-exporter:
+    image: danielqsj/kafka-exporter:v1.9.0
+    restart: unless-stopped
+    command: [--kafka.server=kafka:9092, --kafka.version=3.9.0, --group.filter=.*, '--topic.filter=stockdrop\..*', --offset.show-all]
+    networks: [monitoring, local-kafka]
+networks:
+  local-kafka:
+    external: true
+    name: stockdrop-query-kafka_default

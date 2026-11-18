@@ -1,0 +1,6 @@
+# 운영 대상 주소, IAM Role, 보안 그룹을 준비한 뒤 병합합니다.
+services:
+  prometheus:
+    volumes:
+      - ./prometheus/prometheus.prod.yml:/etc/prometheus/prometheus.yml:ro
+      - ./prometheus/targets:/etc/prometheus/targets:ro

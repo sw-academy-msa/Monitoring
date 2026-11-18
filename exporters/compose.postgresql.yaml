@@ -1,0 +1,8 @@
+# DB EC2에서 제한된 모니터링 전용 계정을 준비한 뒤 실행합니다.
+name: stockdrop-db-metrics
+services:
+  postgres-exporter:
+    image: quay.io/prometheuscommunity/postgres-exporter:v0.17.1
+    restart: unless-stopped
+    env_file: ../secrets/postgres-exporter.env
+    ports: ["${DB_METRICS_BIND_ADDRESS:?DB private address required}:9187:9187"]

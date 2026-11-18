@@ -1,0 +1,156 @@
+global:
+  scrape_interval: 15s
+  evaluation_interval: 15s
+  scrape_timeout: 10s
+  external_labels:
+    environment: local
+rule_files: [/etc/prometheus/rules/*.yml]
+alerting:
+  alertmanagers:
+    - static_configs:
+        - targets: ['alertmanager:9093']
+scrape_configs:
+  - job_name: prometheus
+    static_configs:
+      - targets: ['localhost:9090']
+  - job_name: 'AccountService'
+    metrics_path: /actuator/prometheus
+    authorization:
+      type: Bearer
+      credentials_file: /run/secrets/scrape-token
+    static_configs:
+      - targets: ['host.docker.internal:8080']
+        labels:
+          service: 'AccountService'
+          pool: 'general'
+  - job_name: 'ProductCommandService'
+    metrics_path: /actuator/prometheus
+    authorization:
+      type: Bearer
+      credentials_file: /run/secrets/scrape-token
+    static_configs:
+      - targets: ['host.docker.internal:8081']
+        labels:
+          service: 'ProductCommandService'
+          pool: 'purchase'
+  - job_name: 'ProductQueryService'
+    metrics_path: /actuator/prometheus
+    authorization:
+      type: Bearer
+      credentials_file: /run/secrets/scrape-token
+    static_configs:
+      - targets: ['host.docker.internal:8082']
+        labels:
+          service: 'ProductQueryService'
+          pool: 'general'
+  - job_name: 'OrderCommandService'
+    metrics_path: /actuator/prometheus
+    authorization:
+      type: Bearer
+      credentials_file: /run/secrets/scrape-token
+    static_configs:
+      - targets: ['host.docker.internal:8083']
+        labels:
+          service: 'OrderCommandService'
+          pool: 'purchase'
+  - job_name: 'PaymentService'
+    metrics_path: /actuator/prometheus
+    authorization:
+      type: Bearer
+      credentials_file: /run/secrets/scrape-token
+    static_configs:
+      - targets: ['host.docker.internal:8084']
+        labels:
+          service: 'PaymentService'
+          pool: 'general'
+  - job_name: 'OrderQueryService'
+    metrics_path: /actuator/prometheus
+    authorization:
+      type: Bearer
+      credentials_file: /run/secrets/scrape-token
+    static_configs:
+      - targets: ['host.docker.internal:8085']
+        labels:
+          service: 'OrderQueryService'
+          pool: 'general'
+  - job_name: 'AIService'
+    metrics_path: /actuator/prometheus
+    authorization:
+      type: Bearer
+      credentials_file: /run/secrets/scrape-token
+    static_configs:
+      - targets: ['host.docker.internal:8086']
+        labels:
+          service: 'AIService'
+          pool: 'general'
+  - job_name: 'NotificationService'
+    metrics_path: /actuator/prometheus
+    authorization:
+      type: Bearer
+      credentials_file: /run/secrets/scrape-token
+    static_configs:
+      - targets: ['host.docker.internal:8087']
+        labels:
+          service: 'NotificationService'
+          pool: 'general'
+  - job_name: 'Gateway'
+    metrics_path: /actuator/prometheus
+    authorization:
+      type: Bearer
+      credentials_file: /run/secrets/scrape-token
+    static_configs:
+      - targets: ['host.docker.internal:8000']
+        labels:
+          service: 'Gateway'
+          pool: 'general'
+  - job_name: 'PurchaseGateway'
+    metrics_path: /actuator/prometheus
+    authorization:
+      type: Bearer
+      credentials_file: /run/secrets/scrape-token
+    static_configs:
+      - targets: ['host.docker.internal:8001']
+        labels:
+          service: 'PurchaseGateway'
+          pool: 'purchase'
+  - job_name: 'Eureka'
+    metrics_path: /actuator/prometheus
+    authorization:
+      type: Bearer
+      credentials_file: /run/secrets/scrape-token
+    static_configs:
+      - targets: ['host.docker.internal:8761']
+        labels:
+          service: 'Eureka'
+          pool: 'general'
+  - job_name: application-health
+    metrics_path: /probe
+    params:
+      module: [actuator_health]
+    static_configs:
+      - targets:
+          - http://host.docker.internal:8080/actuator/health
+          - http://host.docker.internal:8081/actuator/health
+          - http://host.docker.internal:8082/actuator/health
+          - http://host.docker.internal:8083/actuator/health
+          - http://host.docker.internal:8084/actuator/health
+          - http://host.docker.internal:8085/actuator/health
+          - http://host.docker.internal:8086/actuator/health
+          - http://host.docker.internal:8087/actuator/health
+          - http://host.docker.internal:8000/actuator/health
+          - http://host.docker.internal:8001/actuator/health
+          - http://host.docker.internal:8761/actuator/health
+    relabel_configs:
+      - source_labels: [__address__]
+        target_label: __param_target
+      - source_labels: [__param_target]
+        target_label: instance
+      - target_label: __address__
+        replacement: blackbox:9115
+  - job_name: kafka-consumer
+    static_configs:
+      - targets: ['kafka-exporter:9308']
+  # Kafka에 JMX agent를 적용하기 전에는 down 또는 No data입니다.
+  - job_name: kafka-broker
+    static_configs:
+      - targets: ['host.docker.internal:9404']

@@ -1,0 +1,158 @@
+{
+  "uid": "stockdrop-hosts",
+  "title": "STOCKDROP EC2와 PostgreSQL",
+  "schemaVersion": 41,
+  "version": 1,
+  "timezone": "browser",
+  "refresh": "15s",
+  "time": {
+    "from": "now-1h",
+    "to": "now"
+  },
+  "tags": [
+    "STOCKDROP"
+  ],
+  "editable": false,
+  "panels": [
+    {
+      "id": 1,
+      "title": "EC2 CPU 사용률",
+      "type": "timeseries",
+      "datasource": {
+        "type": "prometheus",
+        "uid": "stockdrop-prometheus"
+      },
+      "gridPos": {
+        "x": 0,
+        "y": 0,
+        "w": 12,
+        "h": 8
+      },
+      "fieldConfig": {
+        "defaults": {
+          "unit": "percentunit"
+        },
+        "overrides": []
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "expr": "1 - avg by(instance)(rate(node_cpu_seconds_total{mode=\"idle\"}[5m]))",
+          "legendFormat": "{{application}} {{instance}} {{consumergroup}} {{topic}}"
+        }
+      ]
+    },
+    {
+      "id": 2,
+      "title": "EC2 가용 메모리",
+      "type": "timeseries",
+      "datasource": {
+        "type": "prometheus",
+        "uid": "stockdrop-prometheus"
+      },
+      "gridPos": {
+        "x": 12,
+        "y": 0,
+        "w": 12,
+        "h": 8
+      },
+      "fieldConfig": {
+        "defaults": {
+          "unit": "bytes"
+        },
+        "overrides": []
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "expr": "node_memory_MemAvailable_bytes",
+          "legendFormat": "{{application}} {{instance}} {{consumergroup}} {{topic}}"
+        }
+      ]
+    },
+    {
+      "id": 3,
+      "title": "파일시스템 여유",
+      "type": "timeseries",
+      "datasource": {
+        "type": "prometheus",
+        "uid": "stockdrop-prometheus"
+      },
+      "gridPos": {
+        "x": 0,
+        "y": 8,
+        "w": 12,
+        "h": 8
+      },
+      "fieldConfig": {
+        "defaults": {
+          "unit": "bytes"
+        },
+        "overrides": []
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "expr": "node_filesystem_avail_bytes{fstype!~\"tmpfs|overlay|squashfs\"}",
+          "legendFormat": "{{application}} {{instance}} {{consumergroup}} {{topic}}"
+        }
+      ]
+    },
+    {
+      "id": 4,
+      "title": "PostgreSQL 수집 성공",
+      "type": "timeseries",
+      "datasource": {
+        "type": "prometheus",
+        "uid": "stockdrop-prometheus"
+      },
+      "gridPos": {
+        "x": 12,
+        "y": 8,
+        "w": 12,
+        "h": 8
+      },
+      "fieldConfig": {
+        "defaults": {
+          "unit": "short"
+        },
+        "overrides": []
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "expr": "pg_up",
+          "legendFormat": "{{application}} {{instance}} {{consumergroup}} {{topic}}"
+        }
+      ]
+    },
+    {
+      "id": 5,
+      "title": "PostgreSQL 활성 연결",
+      "type": "timeseries",
+      "datasource": {
+        "type": "prometheus",
+        "uid": "stockdrop-prometheus"
+      },
+      "gridPos": {
+        "x": 0,
+        "y": 16,
+        "w": 12,
+        "h": 8
+      },
+      "fieldConfig": {
+        "defaults": {
+          "unit": "short"
+        },
+        "overrides": []
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "expr": "sum by(instance,datname)(pg_stat_activity_count)",
+          "legendFormat": "{{application}} {{instance}} {{consumergroup}} {{topic}}"
+        }
+      ]
+    }
+  ]
+}

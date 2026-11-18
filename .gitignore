@@ -1,0 +1,10 @@
+.env
+.env.*
+!.env.example
+secrets/*
+!secrets/.gitkeep
+vendor/*
+!vendor/.gitkeep
+data/
+logs/
+*.log

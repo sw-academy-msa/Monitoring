@@ -1,0 +1,11 @@
+# HTTP 성공과 Actuator 집계 상태 UP을 함께 검사합니다.
+modules:
+  actuator_health:
+    prober: http
+    timeout: 5s
+    http:
+      method: GET
+      valid_status_codes: [200]
+      preferred_ip_protocol: ip4
+      fail_if_body_not_matches_regexp:
+        - '"status"\s*:\s*"UP"'

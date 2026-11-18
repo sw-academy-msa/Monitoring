@@ -1,0 +1,22 @@
+rule_files: [../rules/stockdrop.yml]
+evaluation_interval: 1m
+tests:
+  - interval: 1m
+    input_series:
+      - series: 'up{job="synthetic-service",instance="test:8080"}'
+        values: '0 0 0 0'
+    alert_rule_test:
+      - eval_time: 3m
+        alertname: ScrapeTargetDown
+        exp_alerts:
+          - exp_labels: {job: synthetic-service, instance: 'test:8080', severity: critical}
+            exp_annotations:
+              summary: '메트릭 수집 실패: synthetic-service test:8080'
+  - interval: 1m
+    input_series:
+      - series: 'up{job="synthetic-service",instance="test:8080"}'
+        values: '1 1 1 1'
+    alert_rule_test:
+      - eval_time: 3m
+        alertname: ScrapeTargetDown
+        exp_alerts: []

@@ -1,0 +1,326 @@
+{
+  "uid": "stockdrop-services",
+  "title": "STOCKDROP 서비스 상태와 성능",
+  "schemaVersion": 41,
+  "version": 1,
+  "timezone": "browser",
+  "refresh": "15s",
+  "time": {
+    "from": "now-1h",
+    "to": "now"
+  },
+  "tags": [
+    "STOCKDROP"
+  ],
+  "editable": false,
+  "panels": [
+    {
+      "id": 1,
+      "title": "메트릭 수집 성공, 헬스와 별도",
+      "type": "timeseries",
+      "datasource": {
+        "type": "prometheus",
+        "uid": "stockdrop-prometheus"
+      },
+      "gridPos": {
+        "x": 0,
+        "y": 0,
+        "w": 12,
+        "h": 8
+      },
+      "fieldConfig": {
+        "defaults": {
+          "unit": "short"
+        },
+        "overrides": []
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "expr": "up",
+          "legendFormat": "{{application}} {{instance}} {{consumergroup}} {{topic}}"
+        }
+      ]
+    },
+    {
+      "id": 2,
+      "title": "서비스 헬스 UP",
+      "type": "timeseries",
+      "datasource": {
+        "type": "prometheus",
+        "uid": "stockdrop-prometheus"
+      },
+      "gridPos": {
+        "x": 12,
+        "y": 0,
+        "w": 12,
+        "h": 8
+      },
+      "fieldConfig": {
+        "defaults": {
+          "unit": "short"
+        },
+        "overrides": []
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "expr": "probe_success{job=~\".*-health|application-health\"}",
+          "legendFormat": "{{application}} {{instance}} {{consumergroup}} {{topic}}"
+        }
+      ]
+    },
+    {
+      "id": 3,
+      "title": "API 요청량",
+      "type": "timeseries",
+      "datasource": {
+        "type": "prometheus",
+        "uid": "stockdrop-prometheus"
+      },
+      "gridPos": {
+        "x": 0,
+        "y": 8,
+        "w": 12,
+        "h": 8
+      },
+      "fieldConfig": {
+        "defaults": {
+          "unit": "reqps"
+        },
+        "overrides": []
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "expr": "sum by (application,instance) (rate(http_server_requests_seconds_count[5m]))",
+          "legendFormat": "{{application}} {{instance}} {{consumergroup}} {{topic}}"
+        }
+      ]
+    },
+    {
+      "id": 4,
+      "title": "API 5xx 비율",
+      "type": "timeseries",
+      "datasource": {
+        "type": "prometheus",
+        "uid": "stockdrop-prometheus"
+      },
+      "gridPos": {
+        "x": 12,
+        "y": 8,
+        "w": 12,
+        "h": 8
+      },
+      "fieldConfig": {
+        "defaults": {
+          "unit": "percentunit"
+        },
+        "overrides": []
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "expr": "sum by (application,instance) (rate(http_server_requests_seconds_count{status=~\"5..\"}[5m])) / clamp_min(sum by (application,instance) (rate(http_server_requests_seconds_count[5m])),0.001)",
+          "legendFormat": "{{application}} {{instance}} {{consumergroup}} {{topic}}"
+        }
+      ]
+    },
+    {
+      "id": 5,
+      "title": "API P95 응답시간",
+      "type": "timeseries",
+      "datasource": {
+        "type": "prometheus",
+        "uid": "stockdrop-prometheus"
+      },
+      "gridPos": {
+        "x": 0,
+        "y": 16,
+        "w": 12,
+        "h": 8
+      },
+      "fieldConfig": {
+        "defaults": {
+          "unit": "s"
+        },
+        "overrides": []
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "expr": "histogram_quantile(0.95,sum by (application,instance,le)(rate(http_server_requests_seconds_bucket[5m])))",
+          "legendFormat": "{{application}} {{instance}} {{consumergroup}} {{topic}}"
+        }
+      ]
+    },
+    {
+      "id": 6,
+      "title": "JVM 힙 사용량",
+      "type": "timeseries",
+      "datasource": {
+        "type": "prometheus",
+        "uid": "stockdrop-prometheus"
+      },
+      "gridPos": {
+        "x": 12,
+        "y": 16,
+        "w": 12,
+        "h": 8
+      },
+      "fieldConfig": {
+        "defaults": {
+          "unit": "bytes"
+        },
+        "overrides": []
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "expr": "jvm_memory_used_bytes{area=\"heap\"}",
+          "legendFormat": "{{application}} {{instance}} {{consumergroup}} {{topic}}"
+        }
+      ]
+    },
+    {
+      "id": 7,
+      "title": "프로세스 CPU",
+      "type": "timeseries",
+      "datasource": {
+        "type": "prometheus",
+        "uid": "stockdrop-prometheus"
+      },
+      "gridPos": {
+        "x": 0,
+        "y": 24,
+        "w": 12,
+        "h": 8
+      },
+      "fieldConfig": {
+        "defaults": {
+          "unit": "percentunit"
+        },
+        "overrides": []
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "expr": "process_cpu_usage",
+          "legendFormat": "{{application}} {{instance}} {{consumergroup}} {{topic}}"
+        }
+      ]
+    },
+    {
+      "id": 8,
+      "title": "DB 사용 중 커넥션",
+      "type": "timeseries",
+      "datasource": {
+        "type": "prometheus",
+        "uid": "stockdrop-prometheus"
+      },
+      "gridPos": {
+        "x": 12,
+        "y": 24,
+        "w": 12,
+        "h": 8
+      },
+      "fieldConfig": {
+        "defaults": {
+          "unit": "short"
+        },
+        "overrides": []
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "expr": "hikaricp_connections_active",
+          "legendFormat": "{{application}} {{instance}} {{consumergroup}} {{topic}}"
+        }
+      ]
+    },
+    {
+      "id": 9,
+      "title": "DB 대기 중 커넥션",
+      "type": "timeseries",
+      "datasource": {
+        "type": "prometheus",
+        "uid": "stockdrop-prometheus"
+      },
+      "gridPos": {
+        "x": 0,
+        "y": 32,
+        "w": 12,
+        "h": 8
+      },
+      "fieldConfig": {
+        "defaults": {
+          "unit": "short"
+        },
+        "overrides": []
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "expr": "hikaricp_connections_pending",
+          "legendFormat": "{{application}} {{instance}} {{consumergroup}} {{topic}}"
+        }
+      ]
+    },
+    {
+      "id": 10,
+      "title": "미발행 Outbox 건수",
+      "type": "timeseries",
+      "datasource": {
+        "type": "prometheus",
+        "uid": "stockdrop-prometheus"
+      },
+      "gridPos": {
+        "x": 12,
+        "y": 32,
+        "w": 12,
+        "h": 8
+      },
+      "fieldConfig": {
+        "defaults": {
+          "unit": "short"
+        },
+        "overrides": []
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "expr": "stockdrop_outbox_pending",
+          "legendFormat": "{{application}} {{instance}} {{consumergroup}} {{topic}}"
+        }
+      ]
+    },
+    {
+      "id": 11,
+      "title": "가장 오래된 미발행 대기",
+      "type": "timeseries",
+      "datasource": {
+        "type": "prometheus",
+        "uid": "stockdrop-prometheus"
+      },
+      "gridPos": {
+        "x": 0,
+        "y": 40,
+        "w": 12,
+        "h": 8
+      },
+      "fieldConfig": {
+        "defaults": {
+          "unit": "s"
+        },
+        "overrides": []
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "expr": "stockdrop_outbox_oldest_pending_seconds",
+          "legendFormat": "{{application}} {{instance}} {{consumergroup}} {{topic}}"
+        }
+      ]
+    }
+  ]
+}

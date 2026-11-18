@@ -1,0 +1,60 @@
+# 초기 임계값이며 부하 검증 후 조정합니다.
+groups:
+  - name: stockdrop
+    rules:
+      - alert: ScrapeTargetDown
+        expr: up == 0
+        for: 2m
+        labels:
+          severity: critical
+        annotations:
+          summary: '메트릭 수집 실패: {{ $labels.job }} {{ $labels.instance }}'
+      - alert: ApplicationUnhealthy
+        expr: probe_success{job=~".*-health|application-health"} == 0
+        for: 1m
+        labels:
+          severity: critical
+        annotations:
+          summary: '서비스 헬스체크 실패: {{ $labels.instance }}'
+      - alert: ApiServerErrors
+        expr: sum by (application, instance) (rate(http_server_requests_seconds_count{status=~"5.."}[5m])) / clamp_min(sum by (application, instance) (rate(http_server_requests_seconds_count[5m])), 0.001) > 0.05
+        for: 5m
+        labels:
+          severity: warning
+        annotations:
+          summary: '서버 오류 비율 5% 초과: {{ $labels.application }}'
+      - alert: ApiP95Slow
+        expr: histogram_quantile(0.95, sum by (application, instance, le) (rate(http_server_requests_seconds_bucket[5m]))) > 2
+        for: 5m
+        labels:
+          severity: warning
+        annotations:
+          summary: 'API P95 응답시간 2초 초과: {{ $labels.application }}'
+      - alert: KafkaConsumerLagHigh
+        expr: sum by (consumergroup, topic) (clamp_min(kafka_consumergroup_lag, 0)) > 1000
+        for: 5m
+        labels:
+          severity: warning
+        annotations:
+          summary: 'Kafka 소비 지연: {{ $labels.consumergroup }} {{ $labels.topic }}'
+      - alert: OutboxDelayed
+        expr: stockdrop_outbox_oldest_pending_seconds > 120
+        for: 2m
+        labels:
+          severity: warning
+        annotations:
+          summary: '미발행 Outbox 대기: {{ $labels.application }}'
+      - alert: HostDiskLow
+        expr: node_filesystem_avail_bytes{fstype!~"tmpfs|overlay|squashfs"} / node_filesystem_size_bytes < 0.15
+        for: 5m
+        labels:
+          severity: warning
+        annotations:
+          summary: '디스크 여유 15% 미만: {{ $labels.instance }}'
+      - alert: OutboxCollectorUnavailable
+        expr: stockdrop_outbox_collector_available == 0
+        for: 2m
+        labels:
+          severity: warning
+        annotations:
+          summary: 'Outbox 집계 실패: {{ $labels.application }}'
