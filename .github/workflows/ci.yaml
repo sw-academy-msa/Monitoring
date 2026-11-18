@@ -4,6 +4,8 @@ on:
   pull_request:
   push:
     branches: [main]
+  # CD가 배포 전에 같은 검증을 먼저 실행합니다.
+  workflow_call:
 permissions:
   contents: read
 env:

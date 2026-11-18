@@ -578,6 +578,13 @@ scrape_configs:
             values: [STOCKDROP]
           - name: instance-state-name
             values: [running]
+    relabel_configs:
+      # NAT 인스턴스는 node exporter를 띄우지 않습니다. 수집 대상에 넣으면 항상 down으로 보입니다.
+      - source_labels: [__meta_ec2_tag_Name]
+        regex: .*-nat
+        action: drop
+      - source_labels: [__meta_ec2_instance_id]
+        target_label: ec2_instance_id
   - job_name: command-postgresql
     file_sd_configs:
       - files: [/etc/prometheus/targets/postgresql.json]

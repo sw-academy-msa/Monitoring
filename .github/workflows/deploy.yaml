@@ -1,0 +1,86 @@
+# main 머지(= main push) 시 AWS 모니터링 EC2에 이 레포 설정을 반영합니다.
+# 서버의 /opt/stockdrop/monitoring/start.sh(Infra hosts/monitoring)가 main을 받아 docker compose로 갱신합니다.
+# 설정·규칙·대시보드만 바뀌면 컨테이너를 재시작하지 않고 다시 읽고, 이미지 버전이 바뀐 컨테이너만 몇 초 재시작합니다.
+# 조직 변수 AWS_ACCOUNT_ID가 없으면 검증까지만 합니다. AWS 키는 저장하지 않고 OIDC로 main 전용 역할만 받습니다.
+name: CD
+
+on:
+  push:
+    branches: [main]
+  # 수동 실행은 main의 최신 커밋을 다시 반영합니다. main 브랜치에서만 배포 역할을 받을 수 있습니다.
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  id-token: write
+
+# 같은 브랜치의 배포는 순서대로 실행하고, 진행 중인 배포는 취소하지 않습니다.
+concurrency:
+  group: cd-monitoring-${{ github.ref_name }}
+  cancel-in-progress: false
+
+jobs:
+  validate:
+    uses: ./.github/workflows/ci.yaml
+
+  deploy:
+    needs: validate
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    env:
+      REGION: ap-northeast-2
+      NAME_PREFIX: stockdrop-prod
+      DEPLOY_ENABLED: ${{ vars.AWS_ACCOUNT_ID != '' }}
+    steps:
+      - name: Configure AWS credentials (OIDC)
+        if: env.DEPLOY_ENABLED == 'true'
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: arn:aws:iam::${{ vars.AWS_ACCOUNT_ID }}:role/stockdrop-prod-deploy-monitoring
+          aws-region: ap-northeast-2
+          role-session-name: gha-monitoring-${{ github.run_id }}
+
+      - name: Apply to monitoring EC2 (SSM Run Command)
+        if: env.DEPLOY_ENABLED == 'true'
+        run: |
+          instance=$(aws ec2 describe-instances --region "$REGION" \
+            --filters "Name=tag:Name,Values=$NAME_PREFIX-monitoring" "Name=instance-state-name,Values=running" \
+            --query 'Reservations[].Instances[].InstanceId' --output text)
+          [ "$(echo "$instance" | wc -w)" = "1" ] || { echo "::error::모니터링 EC2가 정확히 1대가 아닙니다: '$instance'"; exit 1; }
+          command="cd /opt/stockdrop/monitoring && AWS_REGION=$REGION NAME=$NAME_PREFIX PARAMETER_PATH=/stockdrop/prod MONITORING_REF=main bash start.sh"
+          command_id=$(aws ssm send-command --region "$REGION" --instance-ids "$instance" \
+            --document-name AWS-RunShellScript --timeout-seconds 900 \
+            --comment "CD monitoring ${GITHUB_SHA::7}" \
+            --parameters "$(jq -cn --arg c "$command" '{commands: [$c], executionTimeout: ["900"]}')" \
+            --query Command.CommandId --output text)
+          echo "command: $command_id ($instance)"
+          status=Unknown
+          for _ in $(seq 1 90); do
+            sleep 10
+            status=$(aws ssm get-command-invocation --region "$REGION" --command-id "$command_id" --instance-id "$instance" \
+              --query Status --output text 2>/dev/null || echo Unknown)
+            case "$status" in Pending|InProgress|Delayed|Cancelling|Unknown) continue ;; esac
+            break
+          done
+          aws ssm get-command-invocation --region "$REGION" --command-id "$command_id" --instance-id "$instance" \
+            --query '[StandardOutputContent,StandardErrorContent]' --output text || true
+          case "$status" in
+            Success) ;;
+            Pending|InProgress|Delayed|Cancelling|Unknown)
+              aws ssm cancel-command --region "$REGION" --command-id "$command_id" >/dev/null 2>&1 || true
+              echo "::error::15분 안에 끝나지 않아 취소했습니다($status)."; exit 1 ;;
+            *) echo "::error::반영 실패($status). 위 출력을 확인하세요."; exit 1 ;;
+          esac
+
+      - name: Summary
+        if: always()
+        run: |
+          {
+            echo "### monitoring"
+            echo "- 커밋: \`$GITHUB_SHA\`"
+            if [ "$DEPLOY_ENABLED" = true ]; then
+              echo "- 되돌리기: 이전 커밋으로 revert해 main에 머지하거나, 그 커밋의 성공한 CD 실행을 Re-run 합니다."
+            else
+              echo "- 조직 변수 AWS_ACCOUNT_ID가 없어 검증만 했습니다."
+            fi
+          } >> "$GITHUB_STEP_SUMMARY"
