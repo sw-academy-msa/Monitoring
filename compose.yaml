@@ -4,10 +4,11 @@ services:
   prometheus:
     image: prom/prometheus:v3.13.5
     restart: unless-stopped
-    command: [--config.file=/etc/prometheus/prometheus.yml, --storage.tsdb.path=/prometheus, --storage.tsdb.retention.time=15d, --storage.tsdb.retention.size=10GB]
+    # 설정은 폴더째 연결합니다. 파일 하나만 연결하면 git이 파일을 새로 쓸 때 컨테이너가 예전 파일을 계속 봐서 SIGHUP으로 다시 읽어도 반영되지 않습니다.
+    command: [--config.file=/etc/prometheus/config/prometheus.local.yml, --storage.tsdb.path=/prometheus, --storage.tsdb.retention.time=15d, --storage.tsdb.retention.size=10GB]
     ports: ["${MONITORING_BIND_ADDRESS:-127.0.0.1}:${PROMETHEUS_PORT:-9095}:9090"]
     volumes:
-      - ./prometheus/prometheus.local.yml:/etc/prometheus/prometheus.yml:ro
+      - ./prometheus:/etc/prometheus/config:ro
       - ./prometheus/rules:/etc/prometheus/rules:ro
       - ./secrets/scrape-token:/run/secrets/scrape-token:ro
       - prometheus-data:/prometheus
@@ -53,7 +54,8 @@ services:
     image: prom/blackbox-exporter:v0.26.0
     restart: unless-stopped
     command: [--config.file=/etc/blackbox/blackbox.yml]
-    volumes: [./blackbox/blackbox.yml:/etc/blackbox/blackbox.yml:ro]
+    # Prometheus와 같은 이유로 폴더째 연결합니다.
+    volumes: [./blackbox:/etc/blackbox:ro]
     extra_hosts: [host.docker.internal:host-gateway]
     networks: [monitoring]
 networks:
