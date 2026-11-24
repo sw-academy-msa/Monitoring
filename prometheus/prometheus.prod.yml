@@ -73,7 +73,7 @@ scrape_configs:
           - name: tag:Project
             values: [STOCKDROP]
           - name: tag:Pool
-            values: [general]
+            values: [general, query]
           - name: instance-state-name
             values: [running]
     relabel_configs:
@@ -81,8 +81,8 @@ scrape_configs:
         target_label: ec2_instance_id
       - source_labels: [__meta_ec2_availability_zone]
         target_label: availability_zone
-      - target_label: pool
-        replacement: general
+      - source_labels: [__meta_ec2_tag_Pool]
+        target_label: pool
       - target_label: service
         replacement: ProductQueryService
   - job_name: 'OrderCommandService'
@@ -121,7 +121,7 @@ scrape_configs:
           - name: tag:Project
             values: [STOCKDROP]
           - name: tag:Pool
-            values: [general]
+            values: [general, query]
           - name: instance-state-name
             values: [running]
     relabel_configs:
@@ -129,8 +129,8 @@ scrape_configs:
         target_label: ec2_instance_id
       - source_labels: [__meta_ec2_availability_zone]
         target_label: availability_zone
-      - target_label: pool
-        replacement: general
+      - source_labels: [__meta_ec2_tag_Pool]
+        target_label: pool
       - target_label: service
         replacement: PaymentService
   - job_name: 'OrderQueryService'
@@ -145,7 +145,7 @@ scrape_configs:
           - name: tag:Project
             values: [STOCKDROP]
           - name: tag:Pool
-            values: [general]
+            values: [general, query]
           - name: instance-state-name
             values: [running]
     relabel_configs:
@@ -153,8 +153,8 @@ scrape_configs:
         target_label: ec2_instance_id
       - source_labels: [__meta_ec2_availability_zone]
         target_label: availability_zone
-      - target_label: pool
-        replacement: general
+      - source_labels: [__meta_ec2_tag_Pool]
+        target_label: pool
       - target_label: service
         replacement: OrderQueryService
   - job_name: 'AIService'
@@ -169,7 +169,7 @@ scrape_configs:
           - name: tag:Project
             values: [STOCKDROP]
           - name: tag:Pool
-            values: [general]
+            values: [general, query]
           - name: instance-state-name
             values: [running]
     relabel_configs:
@@ -177,8 +177,8 @@ scrape_configs:
         target_label: ec2_instance_id
       - source_labels: [__meta_ec2_availability_zone]
         target_label: availability_zone
-      - target_label: pool
-        replacement: general
+      - source_labels: [__meta_ec2_tag_Pool]
+        target_label: pool
       - target_label: service
         replacement: AIService
   - job_name: 'NotificationService'
@@ -340,7 +340,7 @@ scrape_configs:
           - name: tag:Project
             values: [STOCKDROP]
           - name: tag:Pool
-            values: [general]
+            values: [general, query]
           - name: instance-state-name
             values: [running]
     relabel_configs:
@@ -392,7 +392,7 @@ scrape_configs:
           - name: tag:Project
             values: [STOCKDROP]
           - name: tag:Pool
-            values: [general]
+            values: [general, query]
           - name: instance-state-name
             values: [running]
     relabel_configs:
@@ -418,7 +418,7 @@ scrape_configs:
           - name: tag:Project
             values: [STOCKDROP]
           - name: tag:Pool
-            values: [general]
+            values: [general, query]
           - name: instance-state-name
             values: [running]
     relabel_configs:
@@ -444,7 +444,7 @@ scrape_configs:
           - name: tag:Project
             values: [STOCKDROP]
           - name: tag:Pool
-            values: [general]
+            values: [general, query]
           - name: instance-state-name
             values: [running]
     relabel_configs:
@@ -579,6 +579,8 @@ scrape_configs:
           - name: instance-state-name
             values: [running]
     relabel_configs:
+      - source_labels: [__meta_ec2_tag_Pool]
+        target_label: pool
       # NAT 인스턴스는 node exporter를 띄우지 않습니다. 수집 대상에 넣으면 항상 down으로 보입니다.
       - source_labels: [__meta_ec2_tag_Name]
         regex: .*-nat
