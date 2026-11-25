@@ -205,6 +205,30 @@ scrape_configs:
         replacement: general
       - target_label: service
         replacement: NotificationService
+  - job_name: 'CouponService'
+    metrics_path: /actuator/prometheus
+    authorization:
+      type: Bearer
+      credentials_file: /run/secrets/scrape-token
+    ec2_sd_configs:
+      - region: ap-northeast-2
+        port: 8088
+        filters:
+          - name: tag:Project
+            values: [STOCKDROP]
+          - name: tag:Pool
+            values: [general]
+          - name: instance-state-name
+            values: [running]
+    relabel_configs:
+      - source_labels: [__meta_ec2_instance_id]
+        target_label: ec2_instance_id
+      - source_labels: [__meta_ec2_availability_zone]
+        target_label: availability_zone
+      - target_label: pool
+        replacement: general
+      - target_label: service
+        replacement: CouponService
   - job_name: 'Gateway'
     metrics_path: /actuator/prometheus
     authorization:
@@ -483,6 +507,32 @@ scrape_configs:
         target_label: ec2_instance_id
       - target_label: service
         replacement: NotificationService
+      - target_label: __address__
+        replacement: blackbox:9115
+  - job_name: 'CouponService-health'
+    metrics_path: /probe
+    params:
+      module: [actuator_health]
+    ec2_sd_configs:
+      - region: ap-northeast-2
+        port: 8088
+        filters:
+          - name: tag:Project
+            values: [STOCKDROP]
+          - name: tag:Pool
+            values: [general]
+          - name: instance-state-name
+            values: [running]
+    relabel_configs:
+      - source_labels: [__address__]
+        target_label: __param_target
+        replacement: 'http://$1/actuator/health'
+      - source_labels: [__param_target]
+        target_label: instance
+      - source_labels: [__meta_ec2_instance_id]
+        target_label: ec2_instance_id
+      - target_label: service
+        replacement: CouponService
       - target_label: __address__
         replacement: blackbox:9115
   - job_name: 'Gateway-health'
