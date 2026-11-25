@@ -58,3 +58,38 @@ groups:
           severity: warning
         annotations:
           summary: 'Outbox 집계 실패: {{ $labels.application }}'
+      - alert: CouponBudgetNearlyExhausted
+        expr: stockdrop_coupon_campaign_budget_warning > 0
+        for: 1m
+        labels:
+          severity: warning
+        annotations:
+          summary: '쿠폰 캠페인 예산 90% 소진'
+      - alert: CouponTargetDispatchFailed
+        expr: stockdrop_coupon_pending_failed > 0
+        for: 1m
+        labels:
+          severity: warning
+        annotations:
+          summary: '쿠폰 대상 처리 실패'
+      - alert: CouponLocksOverdue
+        expr: stockdrop_coupon_locks_overdue > 0
+        for: 1m
+        labels:
+          severity: warning
+        annotations:
+          summary: '쿠폰 잠금 24시간 초과'
+      - alert: CouponDltPublished
+        expr: increase(stockdrop_coupon_dlt_published_total[5m]) > 0
+        for: 1m
+        labels:
+          severity: warning
+        annotations:
+          summary: '쿠폰 DLT 발생'
+      - alert: PaymentGaDispatchFailed
+        expr: increase(stockdrop_payment_ga_failed_total[5m]) > 0
+        for: 1m
+        labels:
+          severity: warning
+        annotations:
+          summary: '결제 GA 전송 재시도 소진'
