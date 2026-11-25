@@ -20,3 +20,17 @@ tests:
       - eval_time: 3m
         alertname: ScrapeTargetDown
         exp_alerts: []
+  - interval: 1m
+    input_series:
+      - series: 'stockdrop_coupon_locks_overdue{application="coupon-service"}'
+        values: '0 1 1 1'
+    alert_rule_test:
+      - eval_time: 0m
+        alertname: CouponLocksOverdue
+        exp_alerts: []
+      - eval_time: 3m
+        alertname: CouponLocksOverdue
+        exp_alerts:
+          - exp_labels: {application: coupon-service, severity: warning}
+            exp_annotations:
+              summary: '쿠폰 잠금 24시간 초과'
