@@ -86,3 +86,10 @@ groups:
           severity: warning
         annotations:
           summary: '쿠폰 DLT 발생'
+      - alert: PaymentGaDispatchFailed
+        expr: increase(stockdrop_payment_ga_failed_total[5m]) > 0
+        for: 1m
+        labels:
+          severity: warning
+        annotations:
+          summary: '결제 GA 전송 재시도 소진'
