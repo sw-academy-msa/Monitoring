@@ -73,7 +73,7 @@ scrape_configs:
           - name: tag:Project
             values: [STOCKDROP]
           - name: tag:Pool
-            values: [general, query]
+            values: [query]
           - name: instance-state-name
             values: [running]
     relabel_configs:
@@ -121,7 +121,7 @@ scrape_configs:
           - name: tag:Project
             values: [STOCKDROP]
           - name: tag:Pool
-            values: [general, query]
+            values: [query]
           - name: instance-state-name
             values: [running]
     relabel_configs:
@@ -145,7 +145,7 @@ scrape_configs:
           - name: tag:Project
             values: [STOCKDROP]
           - name: tag:Pool
-            values: [general, query]
+            values: [query]
           - name: instance-state-name
             values: [running]
     relabel_configs:
@@ -169,7 +169,7 @@ scrape_configs:
           - name: tag:Project
             values: [STOCKDROP]
           - name: tag:Pool
-            values: [general, query]
+            values: [query]
           - name: instance-state-name
             values: [running]
     relabel_configs:
@@ -364,7 +364,7 @@ scrape_configs:
           - name: tag:Project
             values: [STOCKDROP]
           - name: tag:Pool
-            values: [general, query]
+            values: [query]
           - name: instance-state-name
             values: [running]
     relabel_configs:
@@ -416,7 +416,7 @@ scrape_configs:
           - name: tag:Project
             values: [STOCKDROP]
           - name: tag:Pool
-            values: [general, query]
+            values: [query]
           - name: instance-state-name
             values: [running]
     relabel_configs:
@@ -442,7 +442,7 @@ scrape_configs:
           - name: tag:Project
             values: [STOCKDROP]
           - name: tag:Pool
-            values: [general, query]
+            values: [query]
           - name: instance-state-name
             values: [running]
     relabel_configs:
@@ -468,7 +468,7 @@ scrape_configs:
           - name: tag:Project
             values: [STOCKDROP]
           - name: tag:Pool
-            values: [general, query]
+            values: [query]
           - name: instance-state-name
             values: [running]
     relabel_configs:
