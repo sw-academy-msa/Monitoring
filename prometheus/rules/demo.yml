@@ -163,6 +163,6 @@ groups:
       - record: demo:gateway_route_rps
         expr: sum by(service,routeId,routeUri)(rate(spring_cloud_gateway_requests_seconds_count[1m]))
       - record: demo:outbox_pending
-        expr: max by(service)(stockdrop_outbox_pending and on(service,instance)(stockdrop_outbox_collector_available == 1))
+        expr: max by(service,application)(stockdrop_outbox_pending and on(service,instance)(stockdrop_outbox_collector_available == 1))
       - record: demo:outbox_oldest_pending_seconds
-        expr: max by(service)(stockdrop_outbox_oldest_pending_seconds and on(service,instance)(stockdrop_outbox_collector_available == 1))
+        expr: max by(service,application)(stockdrop_outbox_oldest_pending_seconds and on(service,instance)(stockdrop_outbox_collector_available == 1))
