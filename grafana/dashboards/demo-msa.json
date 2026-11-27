@@ -48,7 +48,7 @@
       "fieldConfig": {
         "defaults": {
           "unit": "short",
-          "noValue": "계측 예정 / 자료 없음",
+          "noValue": "관측 불가",
           "color": {
             "mode": "fixed",
             "fixed": "#b8c3d6"
@@ -103,7 +103,7 @@
       "targets": [
         {
           "refId": "A",
-          "expr": "sum(rate(http_server_requests_seconds_count{service=~\"Gateway|PurchaseGateway\",status=~\"5..\",uri!~\"/actuator.*\"}[1m]))",
+          "expr": "sum(sum by(service)(rate(http_server_requests_seconds_count{service=~\"Gateway|PurchaseGateway\",status=~\"5..\",uri!~\"/actuator.*\"}[1m])) or on(service) (0 * (max by(service)(up{service=~\"Gateway|PurchaseGateway\"}) == 1)))",
           "legendFormat": "",
           "datasource": {
             "type": "prometheus",
@@ -117,7 +117,7 @@
       "fieldConfig": {
         "defaults": {
           "unit": "reqps",
-          "noValue": "계측 예정 / 자료 없음",
+          "noValue": "관측 불가",
           "color": {
             "mode": "fixed",
             "fixed": "#b8c3d6"
@@ -186,7 +186,7 @@
       "fieldConfig": {
         "defaults": {
           "unit": "short",
-          "noValue": "계측 예정 / 자료 없음",
+          "noValue": "관측 불가",
           "color": {
             "mode": "fixed",
             "fixed": "#b8c3d6"
@@ -241,7 +241,7 @@
       "targets": [
         {
           "refId": "A",
-          "expr": "max(demo:outbox_oldest_pending_seconds)",
+          "expr": "max(stockdrop_outbox_oldest_pending_seconds and on(service,instance) (stockdrop_outbox_collector_available == 1))",
           "legendFormat": "",
           "datasource": {
             "type": "prometheus",
@@ -255,7 +255,7 @@
       "fieldConfig": {
         "defaults": {
           "unit": "s",
-          "noValue": "계측 예정 / 자료 없음",
+          "noValue": "관측 불가",
           "color": {
             "mode": "fixed",
             "fixed": "#b8c3d6"
@@ -324,7 +324,7 @@
       "fieldConfig": {
         "defaults": {
           "unit": "short",
-          "noValue": "계측 예정 / 자료 없음",
+          "noValue": "관측 불가",
           "color": {
             "mode": "fixed",
             "fixed": "#b8c3d6"
@@ -365,12 +365,12 @@
     {
       "id": 6,
       "type": "canvas",
-      "title": "MSA 흐름 | 파랑 HTTP RPS | 보라 Kafka | 상태 2/2 초록, 1/2 노랑, 0/2 빨강",
+      "title": "MSA 구조와 실시간 상태",
       "gridPos": {
         "x": 0,
         "y": 3,
-        "w": 17,
-        "h": 18
+        "w": 24,
+        "h": 16
       },
       "datasource": {
         "type": "prometheus",
@@ -379,54 +379,6 @@
       "targets": [
         {
           "refId": "0",
-          "expr": "demo:service_ready_ratio{service=\"Gateway\"}",
-          "legendFormat": "Gateway_ratio",
-          "datasource": {
-            "type": "prometheus",
-            "uid": "stockdrop-prometheus"
-          },
-          "instant": true,
-          "range": false,
-          "format": "time_series"
-        },
-        {
-          "refId": "1",
-          "expr": "demo:service_ready{service=\"Gateway\"}",
-          "legendFormat": "Gateway_ready",
-          "datasource": {
-            "type": "prometheus",
-            "uid": "stockdrop-prometheus"
-          },
-          "instant": true,
-          "range": false,
-          "format": "time_series"
-        },
-        {
-          "refId": "2",
-          "expr": "demo:service_ready_ratio{service=\"PurchaseGateway\"}",
-          "legendFormat": "PurchaseGateway_ratio",
-          "datasource": {
-            "type": "prometheus",
-            "uid": "stockdrop-prometheus"
-          },
-          "instant": true,
-          "range": false,
-          "format": "time_series"
-        },
-        {
-          "refId": "3",
-          "expr": "demo:service_ready{service=\"PurchaseGateway\"}",
-          "legendFormat": "PurchaseGateway_ready",
-          "datasource": {
-            "type": "prometheus",
-            "uid": "stockdrop-prometheus"
-          },
-          "instant": true,
-          "range": false,
-          "format": "time_series"
-        },
-        {
-          "refId": "4",
           "expr": "demo:service_ready_ratio{service=\"AccountService\"}",
           "legendFormat": "AccountService_ratio",
           "datasource": {
@@ -438,7 +390,7 @@
           "format": "time_series"
         },
         {
-          "refId": "5",
+          "refId": "1",
           "expr": "demo:service_ready{service=\"AccountService\"}",
           "legendFormat": "AccountService_ready",
           "datasource": {
@@ -450,55 +402,7 @@
           "format": "time_series"
         },
         {
-          "refId": "6",
-          "expr": "demo:service_ready_ratio{service=\"ProductQueryService\"}",
-          "legendFormat": "ProductQueryService_ratio",
-          "datasource": {
-            "type": "prometheus",
-            "uid": "stockdrop-prometheus"
-          },
-          "instant": true,
-          "range": false,
-          "format": "time_series"
-        },
-        {
-          "refId": "7",
-          "expr": "demo:service_ready{service=\"ProductQueryService\"}",
-          "legendFormat": "ProductQueryService_ready",
-          "datasource": {
-            "type": "prometheus",
-            "uid": "stockdrop-prometheus"
-          },
-          "instant": true,
-          "range": false,
-          "format": "time_series"
-        },
-        {
-          "refId": "8",
-          "expr": "demo:service_ready_ratio{service=\"OrderQueryService\"}",
-          "legendFormat": "OrderQueryService_ratio",
-          "datasource": {
-            "type": "prometheus",
-            "uid": "stockdrop-prometheus"
-          },
-          "instant": true,
-          "range": false,
-          "format": "time_series"
-        },
-        {
-          "refId": "9",
-          "expr": "demo:service_ready{service=\"OrderQueryService\"}",
-          "legendFormat": "OrderQueryService_ready",
-          "datasource": {
-            "type": "prometheus",
-            "uid": "stockdrop-prometheus"
-          },
-          "instant": true,
-          "range": false,
-          "format": "time_series"
-        },
-        {
-          "refId": "10",
+          "refId": "2",
           "expr": "demo:service_ready_ratio{service=\"NotificationService\"}",
           "legendFormat": "NotificationService_ratio",
           "datasource": {
@@ -510,7 +414,7 @@
           "format": "time_series"
         },
         {
-          "refId": "11",
+          "refId": "3",
           "expr": "demo:service_ready{service=\"NotificationService\"}",
           "legendFormat": "NotificationService_ready",
           "datasource": {
@@ -522,103 +426,7 @@
           "format": "time_series"
         },
         {
-          "refId": "12",
-          "expr": "demo:service_ready_ratio{service=\"ProductCommandService\"}",
-          "legendFormat": "ProductCommandService_ratio",
-          "datasource": {
-            "type": "prometheus",
-            "uid": "stockdrop-prometheus"
-          },
-          "instant": true,
-          "range": false,
-          "format": "time_series"
-        },
-        {
-          "refId": "13",
-          "expr": "demo:service_ready{service=\"ProductCommandService\"}",
-          "legendFormat": "ProductCommandService_ready",
-          "datasource": {
-            "type": "prometheus",
-            "uid": "stockdrop-prometheus"
-          },
-          "instant": true,
-          "range": false,
-          "format": "time_series"
-        },
-        {
-          "refId": "14",
-          "expr": "demo:service_ready_ratio{service=\"OrderCommandService\"}",
-          "legendFormat": "OrderCommandService_ratio",
-          "datasource": {
-            "type": "prometheus",
-            "uid": "stockdrop-prometheus"
-          },
-          "instant": true,
-          "range": false,
-          "format": "time_series"
-        },
-        {
-          "refId": "15",
-          "expr": "demo:service_ready{service=\"OrderCommandService\"}",
-          "legendFormat": "OrderCommandService_ready",
-          "datasource": {
-            "type": "prometheus",
-            "uid": "stockdrop-prometheus"
-          },
-          "instant": true,
-          "range": false,
-          "format": "time_series"
-        },
-        {
-          "refId": "16",
-          "expr": "demo:service_ready_ratio{service=\"PaymentService\"}",
-          "legendFormat": "PaymentService_ratio",
-          "datasource": {
-            "type": "prometheus",
-            "uid": "stockdrop-prometheus"
-          },
-          "instant": true,
-          "range": false,
-          "format": "time_series"
-        },
-        {
-          "refId": "17",
-          "expr": "demo:service_ready{service=\"PaymentService\"}",
-          "legendFormat": "PaymentService_ready",
-          "datasource": {
-            "type": "prometheus",
-            "uid": "stockdrop-prometheus"
-          },
-          "instant": true,
-          "range": false,
-          "format": "time_series"
-        },
-        {
-          "refId": "18",
-          "expr": "demo:service_ready_ratio{service=\"AIService\"}",
-          "legendFormat": "AIService_ratio",
-          "datasource": {
-            "type": "prometheus",
-            "uid": "stockdrop-prometheus"
-          },
-          "instant": true,
-          "range": false,
-          "format": "time_series"
-        },
-        {
-          "refId": "19",
-          "expr": "demo:service_ready{service=\"AIService\"}",
-          "legendFormat": "AIService_ready",
-          "datasource": {
-            "type": "prometheus",
-            "uid": "stockdrop-prometheus"
-          },
-          "instant": true,
-          "range": false,
-          "format": "time_series"
-        },
-        {
-          "refId": "20",
+          "refId": "4",
           "expr": "demo:service_ready_ratio{service=\"CouponService\"}",
           "legendFormat": "CouponService_ratio",
           "datasource": {
@@ -630,7 +438,7 @@
           "format": "time_series"
         },
         {
-          "refId": "21",
+          "refId": "5",
           "expr": "demo:service_ready{service=\"CouponService\"}",
           "legendFormat": "CouponService_ready",
           "datasource": {
@@ -642,7 +450,7 @@
           "format": "time_series"
         },
         {
-          "refId": "22",
+          "refId": "6",
           "expr": "demo:service_ready_ratio{service=\"Eureka\"}",
           "legendFormat": "Eureka_ratio",
           "datasource": {
@@ -654,7 +462,7 @@
           "format": "time_series"
         },
         {
-          "refId": "23",
+          "refId": "7",
           "expr": "demo:service_ready{service=\"Eureka\"}",
           "legendFormat": "Eureka_ready",
           "datasource": {
@@ -666,9 +474,201 @@
           "format": "time_series"
         },
         {
+          "refId": "8",
+          "expr": "demo:service_ready_ratio{service=\"ProductQueryService\"}",
+          "legendFormat": "ProductQueryService_ratio",
+          "datasource": {
+            "type": "prometheus",
+            "uid": "stockdrop-prometheus"
+          },
+          "instant": true,
+          "range": false,
+          "format": "time_series"
+        },
+        {
+          "refId": "9",
+          "expr": "demo:service_ready{service=\"ProductQueryService\"}",
+          "legendFormat": "ProductQueryService_ready",
+          "datasource": {
+            "type": "prometheus",
+            "uid": "stockdrop-prometheus"
+          },
+          "instant": true,
+          "range": false,
+          "format": "time_series"
+        },
+        {
+          "refId": "10",
+          "expr": "demo:service_ready_ratio{service=\"OrderQueryService\"}",
+          "legendFormat": "OrderQueryService_ratio",
+          "datasource": {
+            "type": "prometheus",
+            "uid": "stockdrop-prometheus"
+          },
+          "instant": true,
+          "range": false,
+          "format": "time_series"
+        },
+        {
+          "refId": "11",
+          "expr": "demo:service_ready{service=\"OrderQueryService\"}",
+          "legendFormat": "OrderQueryService_ready",
+          "datasource": {
+            "type": "prometheus",
+            "uid": "stockdrop-prometheus"
+          },
+          "instant": true,
+          "range": false,
+          "format": "time_series"
+        },
+        {
+          "refId": "12",
+          "expr": "demo:service_ready_ratio{service=\"AIService\"}",
+          "legendFormat": "AIService_ratio",
+          "datasource": {
+            "type": "prometheus",
+            "uid": "stockdrop-prometheus"
+          },
+          "instant": true,
+          "range": false,
+          "format": "time_series"
+        },
+        {
+          "refId": "13",
+          "expr": "demo:service_ready{service=\"AIService\"}",
+          "legendFormat": "AIService_ready",
+          "datasource": {
+            "type": "prometheus",
+            "uid": "stockdrop-prometheus"
+          },
+          "instant": true,
+          "range": false,
+          "format": "time_series"
+        },
+        {
+          "refId": "14",
+          "expr": "demo:service_ready_ratio{service=\"PaymentService\"}",
+          "legendFormat": "PaymentService_ratio",
+          "datasource": {
+            "type": "prometheus",
+            "uid": "stockdrop-prometheus"
+          },
+          "instant": true,
+          "range": false,
+          "format": "time_series"
+        },
+        {
+          "refId": "15",
+          "expr": "demo:service_ready{service=\"PaymentService\"}",
+          "legendFormat": "PaymentService_ready",
+          "datasource": {
+            "type": "prometheus",
+            "uid": "stockdrop-prometheus"
+          },
+          "instant": true,
+          "range": false,
+          "format": "time_series"
+        },
+        {
+          "refId": "16",
+          "expr": "demo:service_ready_ratio{service=\"ProductCommandService\"}",
+          "legendFormat": "ProductCommandService_ratio",
+          "datasource": {
+            "type": "prometheus",
+            "uid": "stockdrop-prometheus"
+          },
+          "instant": true,
+          "range": false,
+          "format": "time_series"
+        },
+        {
+          "refId": "17",
+          "expr": "demo:service_ready{service=\"ProductCommandService\"}",
+          "legendFormat": "ProductCommandService_ready",
+          "datasource": {
+            "type": "prometheus",
+            "uid": "stockdrop-prometheus"
+          },
+          "instant": true,
+          "range": false,
+          "format": "time_series"
+        },
+        {
+          "refId": "18",
+          "expr": "demo:service_ready_ratio{service=\"OrderCommandService\"}",
+          "legendFormat": "OrderCommandService_ratio",
+          "datasource": {
+            "type": "prometheus",
+            "uid": "stockdrop-prometheus"
+          },
+          "instant": true,
+          "range": false,
+          "format": "time_series"
+        },
+        {
+          "refId": "19",
+          "expr": "demo:service_ready{service=\"OrderCommandService\"}",
+          "legendFormat": "OrderCommandService_ready",
+          "datasource": {
+            "type": "prometheus",
+            "uid": "stockdrop-prometheus"
+          },
+          "instant": true,
+          "range": false,
+          "format": "time_series"
+        },
+        {
+          "refId": "20",
+          "expr": "demo:service_ready_ratio{service=\"Gateway\"}",
+          "legendFormat": "Gateway_ratio",
+          "datasource": {
+            "type": "prometheus",
+            "uid": "stockdrop-prometheus"
+          },
+          "instant": true,
+          "range": false,
+          "format": "time_series"
+        },
+        {
+          "refId": "21",
+          "expr": "demo:service_ready{service=\"Gateway\"}",
+          "legendFormat": "Gateway_ready",
+          "datasource": {
+            "type": "prometheus",
+            "uid": "stockdrop-prometheus"
+          },
+          "instant": true,
+          "range": false,
+          "format": "time_series"
+        },
+        {
+          "refId": "22",
+          "expr": "demo:service_ready_ratio{service=\"PurchaseGateway\"}",
+          "legendFormat": "PurchaseGateway_ratio",
+          "datasource": {
+            "type": "prometheus",
+            "uid": "stockdrop-prometheus"
+          },
+          "instant": true,
+          "range": false,
+          "format": "time_series"
+        },
+        {
+          "refId": "23",
+          "expr": "demo:service_ready{service=\"PurchaseGateway\"}",
+          "legendFormat": "PurchaseGateway_ready",
+          "datasource": {
+            "type": "prometheus",
+            "uid": "stockdrop-prometheus"
+          },
+          "instant": true,
+          "range": false,
+          "format": "time_series"
+        },
+        {
           "refId": "24",
-          "expr": "sum(demo:gateway_route_rps{service=\"Gateway\",routeId=~\"account\"}) or vector(0/0)",
-          "legendFormat": "route_0",
+          "expr": "(sum(rate(spring_cloud_gateway_requests_seconds_count{service=\"Gateway\",routeUri=\"lb://account-service\"}[1m])) or vector(0))",
+          "legendFormat": "AccountService_rps",
           "datasource": {
             "type": "prometheus",
             "uid": "stockdrop-prometheus"
@@ -679,8 +679,8 @@
         },
         {
           "refId": "25",
-          "expr": "sum(demo:gateway_route_rps{service=\"Gateway\",routeId=~\"product-query\"}) or vector(0/0)",
-          "legendFormat": "route_1",
+          "expr": "(sum(rate(spring_cloud_gateway_requests_seconds_count{service=\"Gateway\",routeUri=\"lb://notification-service\"}[1m])) or vector(0))",
+          "legendFormat": "NotificationService_rps",
           "datasource": {
             "type": "prometheus",
             "uid": "stockdrop-prometheus"
@@ -691,8 +691,8 @@
         },
         {
           "refId": "26",
-          "expr": "sum(demo:gateway_route_rps{service=\"Gateway\",routeId=~\"product-category-catalog\"}) or vector(0/0)",
-          "legendFormat": "route_2",
+          "expr": "(sum(rate(spring_cloud_gateway_requests_seconds_count{service=\"Gateway\",routeUri=\"lb://coupon-service\"}[1m])) or vector(0))",
+          "legendFormat": "CouponService_rps",
           "datasource": {
             "type": "prometheus",
             "uid": "stockdrop-prometheus"
@@ -703,8 +703,8 @@
         },
         {
           "refId": "27",
-          "expr": "sum(demo:gateway_route_rps{service=\"Gateway\",routeId=~\"order-query\"}) or vector(0/0)",
-          "legendFormat": "route_3",
+          "expr": "(sum(rate(spring_cloud_gateway_requests_seconds_count{service=\"Gateway\",routeUri=\"lb://product-query-service\"}[1m])) or vector(0))",
+          "legendFormat": "ProductQueryService_rps",
           "datasource": {
             "type": "prometheus",
             "uid": "stockdrop-prometheus"
@@ -715,8 +715,8 @@
         },
         {
           "refId": "28",
-          "expr": "sum(demo:gateway_route_rps{service=\"Gateway\",routeId=~\"payment\"}) or vector(0/0)",
-          "legendFormat": "route_4",
+          "expr": "(sum(rate(spring_cloud_gateway_requests_seconds_count{service=\"Gateway\",routeUri=\"lb://order-query-service\"}[1m])) or vector(0))",
+          "legendFormat": "OrderQueryService_rps",
           "datasource": {
             "type": "prometheus",
             "uid": "stockdrop-prometheus"
@@ -727,8 +727,8 @@
         },
         {
           "refId": "29",
-          "expr": "sum(demo:gateway_route_rps{service=\"Gateway\",routeId=~\"ai-.*\"}) or vector(0/0)",
-          "legendFormat": "route_5",
+          "expr": "(sum(rate(spring_cloud_gateway_requests_seconds_count{service=\"Gateway\",routeUri=\"lb://ai-service\"}[1m])) or vector(0))",
+          "legendFormat": "AIService_rps",
           "datasource": {
             "type": "prometheus",
             "uid": "stockdrop-prometheus"
@@ -739,8 +739,8 @@
         },
         {
           "refId": "30",
-          "expr": "sum(demo:gateway_route_rps{service=\"Gateway\",routeId=~\"notifications-.*\"}) or vector(0/0)",
-          "legendFormat": "route_6",
+          "expr": "(sum(rate(spring_cloud_gateway_requests_seconds_count{service=\"Gateway\",routeUri=\"lb://payment-service\"}[1m])) or vector(0)) + (sum(rate(spring_cloud_gateway_requests_seconds_count{service=\"PurchaseGateway\",routeUri=\"lb://payment-service\"}[1m])) or vector(0))",
+          "legendFormat": "PaymentService_rps",
           "datasource": {
             "type": "prometheus",
             "uid": "stockdrop-prometheus"
@@ -751,8 +751,8 @@
         },
         {
           "refId": "31",
-          "expr": "sum(demo:gateway_route_rps{service=\"Gateway\",routeId=~\"coupon\"}) or vector(0/0)",
-          "legendFormat": "route_7",
+          "expr": "(sum(rate(spring_cloud_gateway_requests_seconds_count{service=\"Gateway\",routeUri=\"lb://product-command-service\"}[1m])) or vector(0)) + (sum(rate(spring_cloud_gateway_requests_seconds_count{service=\"PurchaseGateway\",routeUri=\"lb://product-command-service\"}[1m])) or vector(0))",
+          "legendFormat": "ProductCommandService_rps",
           "datasource": {
             "type": "prometheus",
             "uid": "stockdrop-prometheus"
@@ -763,20 +763,8 @@
         },
         {
           "refId": "32",
-          "expr": "sum(demo:gateway_route_rps{service=\"PurchaseGateway\",routeId=~\"product-command\"}) or vector(0/0)",
-          "legendFormat": "route_8",
-          "datasource": {
-            "type": "prometheus",
-            "uid": "stockdrop-prometheus"
-          },
-          "instant": true,
-          "range": false,
-          "format": "time_series"
-        },
-        {
-          "refId": "33",
-          "expr": "sum(demo:gateway_route_rps{service=\"PurchaseGateway\",routeId=~\"order-command\"}) or vector(0/0)",
-          "legendFormat": "route_9",
+          "expr": "(sum(rate(spring_cloud_gateway_requests_seconds_count{service=\"PurchaseGateway\",routeUri=\"lb://order-command-service\"}[1m])) or vector(0))",
+          "legendFormat": "OrderCommandService_rps",
           "datasource": {
             "type": "prometheus",
             "uid": "stockdrop-prometheus"
@@ -789,7 +777,7 @@
       "fieldConfig": {
         "defaults": {
           "unit": "short",
-          "noValue": "계측 예정 / 자료 없음",
+          "noValue": "관측 불가",
           "color": {
             "mode": "thresholds"
           },
@@ -833,7 +821,7 @@
           {
             "matcher": {
               "id": "byName",
-              "options": "route_0"
+              "options": "AccountService_rps"
             },
             "properties": [
               {
@@ -847,35 +835,31 @@
               {
                 "id": "color",
                 "value": {
-                  "mode": "fixed",
-                  "fixed": "blue"
+                  "mode": "thresholds"
                 }
               },
               {
-                "id": "noValue",
-                "value": "계측 예정"
-              },
-              {
-                "id": "mappings",
-                "value": [
-                  {
-                    "type": "special",
-                    "options": {
-                      "match": "nan",
-                      "result": {
-                        "text": "계측 예정",
-                        "color": "#808080"
-                      }
+                "id": "thresholds",
+                "value": {
+                  "mode": "absolute",
+                  "steps": [
+                    {
+                      "color": "#718096",
+                      "value": null
+                    },
+                    {
+                      "color": "#80b4ff",
+                      "value": 0.001
                     }
-                  }
-                ]
+                  ]
+                }
               }
             ]
           },
           {
             "matcher": {
               "id": "byName",
-              "options": "route_1"
+              "options": "NotificationService_rps"
             },
             "properties": [
               {
@@ -889,35 +873,31 @@
               {
                 "id": "color",
                 "value": {
-                  "mode": "fixed",
-                  "fixed": "blue"
+                  "mode": "thresholds"
                 }
               },
               {
-                "id": "noValue",
-                "value": "계측 예정"
-              },
-              {
-                "id": "mappings",
-                "value": [
-                  {
-                    "type": "special",
-                    "options": {
-                      "match": "nan",
-                      "result": {
-                        "text": "계측 예정",
-                        "color": "#808080"
-                      }
+                "id": "thresholds",
+                "value": {
+                  "mode": "absolute",
+                  "steps": [
+                    {
+                      "color": "#718096",
+                      "value": null
+                    },
+                    {
+                      "color": "#80b4ff",
+                      "value": 0.001
                     }
-                  }
-                ]
+                  ]
+                }
               }
             ]
           },
           {
             "matcher": {
               "id": "byName",
-              "options": "route_2"
+              "options": "CouponService_rps"
             },
             "properties": [
               {
@@ -931,35 +911,31 @@
               {
                 "id": "color",
                 "value": {
-                  "mode": "fixed",
-                  "fixed": "blue"
+                  "mode": "thresholds"
                 }
               },
               {
-                "id": "noValue",
-                "value": "계측 예정"
-              },
-              {
-                "id": "mappings",
-                "value": [
-                  {
-                    "type": "special",
-                    "options": {
-                      "match": "nan",
-                      "result": {
-                        "text": "계측 예정",
-                        "color": "#808080"
-                      }
+                "id": "thresholds",
+                "value": {
+                  "mode": "absolute",
+                  "steps": [
+                    {
+                      "color": "#718096",
+                      "value": null
+                    },
+                    {
+                      "color": "#80b4ff",
+                      "value": 0.001
                     }
-                  }
-                ]
+                  ]
+                }
               }
             ]
           },
           {
             "matcher": {
               "id": "byName",
-              "options": "route_3"
+              "options": "ProductQueryService_rps"
             },
             "properties": [
               {
@@ -973,35 +949,31 @@
               {
                 "id": "color",
                 "value": {
-                  "mode": "fixed",
-                  "fixed": "blue"
+                  "mode": "thresholds"
                 }
               },
               {
-                "id": "noValue",
-                "value": "계측 예정"
-              },
-              {
-                "id": "mappings",
-                "value": [
-                  {
-                    "type": "special",
-                    "options": {
-                      "match": "nan",
-                      "result": {
-                        "text": "계측 예정",
-                        "color": "#808080"
-                      }
+                "id": "thresholds",
+                "value": {
+                  "mode": "absolute",
+                  "steps": [
+                    {
+                      "color": "#718096",
+                      "value": null
+                    },
+                    {
+                      "color": "#80b4ff",
+                      "value": 0.001
                     }
-                  }
-                ]
+                  ]
+                }
               }
             ]
           },
           {
             "matcher": {
               "id": "byName",
-              "options": "route_4"
+              "options": "OrderQueryService_rps"
             },
             "properties": [
               {
@@ -1015,35 +987,31 @@
               {
                 "id": "color",
                 "value": {
-                  "mode": "fixed",
-                  "fixed": "blue"
+                  "mode": "thresholds"
                 }
               },
               {
-                "id": "noValue",
-                "value": "계측 예정"
-              },
-              {
-                "id": "mappings",
-                "value": [
-                  {
-                    "type": "special",
-                    "options": {
-                      "match": "nan",
-                      "result": {
-                        "text": "계측 예정",
-                        "color": "#808080"
-                      }
+                "id": "thresholds",
+                "value": {
+                  "mode": "absolute",
+                  "steps": [
+                    {
+                      "color": "#718096",
+                      "value": null
+                    },
+                    {
+                      "color": "#80b4ff",
+                      "value": 0.001
                     }
-                  }
-                ]
+                  ]
+                }
               }
             ]
           },
           {
             "matcher": {
               "id": "byName",
-              "options": "route_5"
+              "options": "AIService_rps"
             },
             "properties": [
               {
@@ -1057,35 +1025,31 @@
               {
                 "id": "color",
                 "value": {
-                  "mode": "fixed",
-                  "fixed": "blue"
+                  "mode": "thresholds"
                 }
               },
               {
-                "id": "noValue",
-                "value": "계측 예정"
-              },
-              {
-                "id": "mappings",
-                "value": [
-                  {
-                    "type": "special",
-                    "options": {
-                      "match": "nan",
-                      "result": {
-                        "text": "계측 예정",
-                        "color": "#808080"
-                      }
+                "id": "thresholds",
+                "value": {
+                  "mode": "absolute",
+                  "steps": [
+                    {
+                      "color": "#718096",
+                      "value": null
+                    },
+                    {
+                      "color": "#80b4ff",
+                      "value": 0.001
                     }
-                  }
-                ]
+                  ]
+                }
               }
             ]
           },
           {
             "matcher": {
               "id": "byName",
-              "options": "route_6"
+              "options": "PaymentService_rps"
             },
             "properties": [
               {
@@ -1099,35 +1063,31 @@
               {
                 "id": "color",
                 "value": {
-                  "mode": "fixed",
-                  "fixed": "blue"
+                  "mode": "thresholds"
                 }
               },
               {
-                "id": "noValue",
-                "value": "계측 예정"
-              },
-              {
-                "id": "mappings",
-                "value": [
-                  {
-                    "type": "special",
-                    "options": {
-                      "match": "nan",
-                      "result": {
-                        "text": "계측 예정",
-                        "color": "#808080"
-                      }
+                "id": "thresholds",
+                "value": {
+                  "mode": "absolute",
+                  "steps": [
+                    {
+                      "color": "#718096",
+                      "value": null
+                    },
+                    {
+                      "color": "#80b4ff",
+                      "value": 0.001
                     }
-                  }
-                ]
+                  ]
+                }
               }
             ]
           },
           {
             "matcher": {
               "id": "byName",
-              "options": "route_7"
+              "options": "ProductCommandService_rps"
             },
             "properties": [
               {
@@ -1141,35 +1101,31 @@
               {
                 "id": "color",
                 "value": {
-                  "mode": "fixed",
-                  "fixed": "blue"
+                  "mode": "thresholds"
                 }
               },
               {
-                "id": "noValue",
-                "value": "계측 예정"
-              },
-              {
-                "id": "mappings",
-                "value": [
-                  {
-                    "type": "special",
-                    "options": {
-                      "match": "nan",
-                      "result": {
-                        "text": "계측 예정",
-                        "color": "#808080"
-                      }
+                "id": "thresholds",
+                "value": {
+                  "mode": "absolute",
+                  "steps": [
+                    {
+                      "color": "#718096",
+                      "value": null
+                    },
+                    {
+                      "color": "#80b4ff",
+                      "value": 0.001
                     }
-                  }
-                ]
+                  ]
+                }
               }
             ]
           },
           {
             "matcher": {
               "id": "byName",
-              "options": "route_8"
+              "options": "OrderCommandService_rps"
             },
             "properties": [
               {
@@ -1183,70 +1139,24 @@
               {
                 "id": "color",
                 "value": {
-                  "mode": "fixed",
-                  "fixed": "blue"
+                  "mode": "thresholds"
                 }
               },
               {
-                "id": "noValue",
-                "value": "계측 예정"
-              },
-              {
-                "id": "mappings",
-                "value": [
-                  {
-                    "type": "special",
-                    "options": {
-                      "match": "nan",
-                      "result": {
-                        "text": "계측 예정",
-                        "color": "#808080"
-                      }
-                    }
-                  }
-                ]
-              }
-            ]
-          },
-          {
-            "matcher": {
-              "id": "byName",
-              "options": "route_9"
-            },
-            "properties": [
-              {
-                "id": "unit",
-                "value": "reqps"
-              },
-              {
-                "id": "decimals",
-                "value": 2
-              },
-              {
-                "id": "color",
+                "id": "thresholds",
                 "value": {
-                  "mode": "fixed",
-                  "fixed": "blue"
-                }
-              },
-              {
-                "id": "noValue",
-                "value": "계측 예정"
-              },
-              {
-                "id": "mappings",
-                "value": [
-                  {
-                    "type": "special",
-                    "options": {
-                      "match": "nan",
-                      "result": {
-                        "text": "계측 예정",
-                        "color": "#808080"
-                      }
+                  "mode": "absolute",
+                  "steps": [
+                    {
+                      "color": "#718096",
+                      "value": null
+                    },
+                    {
+                      "color": "#80b4ff",
+                      "value": 0.001
                     }
-                  }
-                ]
+                  ]
+                }
               }
             ]
           }
@@ -1254,7 +1164,7 @@
       },
       "options": {
         "inlineEditing": false,
-        "panZoom": true,
+        "panZoom": false,
         "zoomToContent": true,
         "showAdvancedTypes": true,
         "tooltip": {
@@ -1265,13 +1175,13 @@
           "type": "frame",
           "elements": [
             {
-              "name": "Gateway",
-              "type": "metric-value",
+              "name": "pool_general",
+              "type": "text",
               "placement": {
-                "left": 400,
-                "top": 170,
-                "width": 200,
-                "height": 72,
+                "left": 340,
+                "top": 180,
+                "width": 560,
+                "height": 180,
                 "rotation": 0
               },
               "constraint": {
@@ -1280,214 +1190,36 @@
               },
               "background": {
                 "color": {
-                  "field": "Gateway_ratio",
-                  "fixed": "#475569"
+                  "fixed": "#17202c"
                 }
               },
               "border": {
                 "color": {
-                  "fixed": "#475569"
+                  "fixed": "#40516a"
                 },
                 "width": 1,
                 "radius": 6
               },
               "config": {
                 "text": {
-                  "mode": "field",
-                  "field": "Gateway_ready",
-                  "fixed": ""
+                  "mode": "fixed",
+                  "fixed": " "
                 },
                 "color": {
-                  "fixed": "#ffffff"
+                  "fixed": "#dce5f4"
                 },
-                "size": 19,
+                "size": 15,
                 "align": "center",
                 "valign": "middle"
-              },
-              "links": [
-                {
-                  "title": "서비스 상세",
-                  "url": "/d/stockdrop-services?var-service=Gateway"
-                }
-              ],
-              "connections": [
-                {
-                  "targetName": "AccountService",
-                  "path": "straight",
-                  "source": {
-                    "x": 0,
-                    "y": -1
-                  },
-                  "target": {
-                    "x": 0,
-                    "y": 1
-                  },
-                  "color": {
-                    "fixed": "#5794f2"
-                  },
-                  "size": {
-                    "fixed": 2
-                  },
-                  "direction": {
-                    "fixed": "forward"
-                  }
-                },
-                {
-                  "targetName": "ProductQueryService",
-                  "path": "straight",
-                  "source": {
-                    "x": 0,
-                    "y": -1
-                  },
-                  "target": {
-                    "x": 0,
-                    "y": 1
-                  },
-                  "color": {
-                    "fixed": "#5794f2"
-                  },
-                  "size": {
-                    "fixed": 2
-                  },
-                  "direction": {
-                    "fixed": "forward"
-                  }
-                },
-                {
-                  "targetName": "ProductCommandService",
-                  "path": "straight",
-                  "source": {
-                    "x": 0,
-                    "y": 1
-                  },
-                  "target": {
-                    "x": 0,
-                    "y": -1
-                  },
-                  "color": {
-                    "fixed": "#5794f2"
-                  },
-                  "size": {
-                    "fixed": 2
-                  },
-                  "direction": {
-                    "fixed": "forward"
-                  }
-                },
-                {
-                  "targetName": "OrderQueryService",
-                  "path": "straight",
-                  "source": {
-                    "x": 0,
-                    "y": -1
-                  },
-                  "target": {
-                    "x": 0,
-                    "y": 1
-                  },
-                  "color": {
-                    "fixed": "#5794f2"
-                  },
-                  "size": {
-                    "fixed": 2
-                  },
-                  "direction": {
-                    "fixed": "forward"
-                  }
-                },
-                {
-                  "targetName": "PaymentService",
-                  "path": "straight",
-                  "source": {
-                    "x": 0,
-                    "y": 1
-                  },
-                  "target": {
-                    "x": 0,
-                    "y": -1
-                  },
-                  "color": {
-                    "fixed": "#5794f2"
-                  },
-                  "size": {
-                    "fixed": 2
-                  },
-                  "direction": {
-                    "fixed": "forward"
-                  }
-                },
-                {
-                  "targetName": "AIService",
-                  "path": "straight",
-                  "source": {
-                    "x": 0,
-                    "y": 1
-                  },
-                  "target": {
-                    "x": 0,
-                    "y": -1
-                  },
-                  "color": {
-                    "fixed": "#5794f2"
-                  },
-                  "size": {
-                    "fixed": 2
-                  },
-                  "direction": {
-                    "fixed": "forward"
-                  }
-                },
-                {
-                  "targetName": "NotificationService",
-                  "path": "straight",
-                  "source": {
-                    "x": 0,
-                    "y": -1
-                  },
-                  "target": {
-                    "x": 0,
-                    "y": 1
-                  },
-                  "color": {
-                    "fixed": "#5794f2"
-                  },
-                  "size": {
-                    "fixed": 2
-                  },
-                  "direction": {
-                    "fixed": "forward"
-                  }
-                },
-                {
-                  "targetName": "CouponService",
-                  "path": "straight",
-                  "source": {
-                    "x": 0,
-                    "y": 1
-                  },
-                  "target": {
-                    "x": 0,
-                    "y": -1
-                  },
-                  "color": {
-                    "fixed": "#5794f2"
-                  },
-                  "size": {
-                    "fixed": 2
-                  },
-                  "direction": {
-                    "fixed": "forward"
-                  }
-                }
-              ]
+              }
             },
             {
-              "name": "Gateway_title",
+              "name": "title_general",
               "type": "text",
               "placement": {
-                "left": 400,
-                "top": 172,
-                "width": 200,
+                "left": 348,
+                "top": 185,
+                "width": 110,
                 "height": 28,
                 "rotation": 0
               },
@@ -1502,7 +1234,7 @@
               },
               "border": {
                 "color": {
-                  "fixed": "#475569"
+                  "fixed": "transparent"
                 },
                 "width": 0,
                 "radius": 6
@@ -1510,10 +1242,49 @@
               "config": {
                 "text": {
                   "mode": "fixed",
-                  "fixed": "Gateway"
+                  "fixed": "general 풀"
                 },
                 "color": {
-                  "fixed": "#e2e8f0"
+                  "fixed": "#9fb4d2"
+                },
+                "size": 17,
+                "align": "center",
+                "valign": "middle"
+              }
+            },
+            {
+              "name": "pool_query",
+              "type": "text",
+              "placement": {
+                "left": 920,
+                "top": 180,
+                "width": 560,
+                "height": 180,
+                "rotation": 0
+              },
+              "constraint": {
+                "horizontal": "left",
+                "vertical": "top"
+              },
+              "background": {
+                "color": {
+                  "fixed": "#17202c"
+                }
+              },
+              "border": {
+                "color": {
+                  "fixed": "#40516a"
+                },
+                "width": 1,
+                "radius": 6
+              },
+              "config": {
+                "text": {
+                  "mode": "fixed",
+                  "fixed": " "
+                },
+                "color": {
+                  "fixed": "#dce5f4"
                 },
                 "size": 15,
                 "align": "center",
@@ -1521,142 +1292,12 @@
               }
             },
             {
-              "name": "Gateway_expected",
+              "name": "title_query",
               "type": "text",
               "placement": {
-                "left": 400,
-                "top": 219,
-                "width": 200,
-                "height": 20,
-                "rotation": 0
-              },
-              "constraint": {
-                "horizontal": "left",
-                "vertical": "top"
-              },
-              "background": {
-                "color": {
-                  "fixed": "transparent"
-                }
-              },
-              "border": {
-                "color": {
-                  "fixed": "#475569"
-                },
-                "width": 0,
-                "radius": 6
-              },
-              "config": {
-                "text": {
-                  "mode": "fixed",
-                  "fixed": "ready / expected 2"
-                },
-                "color": {
-                  "fixed": "#e2e8f0"
-                },
-                "size": 11,
-                "align": "center",
-                "valign": "middle"
-              }
-            },
-            {
-              "name": "PurchaseGateway",
-              "type": "metric-value",
-              "placement": {
-                "left": 640,
-                "top": 170,
-                "width": 200,
-                "height": 72,
-                "rotation": 0
-              },
-              "constraint": {
-                "horizontal": "left",
-                "vertical": "top"
-              },
-              "background": {
-                "color": {
-                  "field": "PurchaseGateway_ratio",
-                  "fixed": "#475569"
-                }
-              },
-              "border": {
-                "color": {
-                  "fixed": "#475569"
-                },
-                "width": 1,
-                "radius": 6
-              },
-              "config": {
-                "text": {
-                  "mode": "field",
-                  "field": "PurchaseGateway_ready",
-                  "fixed": ""
-                },
-                "color": {
-                  "fixed": "#ffffff"
-                },
-                "size": 19,
-                "align": "center",
-                "valign": "middle"
-              },
-              "links": [
-                {
-                  "title": "서비스 상세",
-                  "url": "/d/stockdrop-services?var-service=PurchaseGateway"
-                }
-              ],
-              "connections": [
-                {
-                  "targetName": "ProductCommandService",
-                  "path": "straight",
-                  "source": {
-                    "x": 0,
-                    "y": 1
-                  },
-                  "target": {
-                    "x": 0,
-                    "y": -1
-                  },
-                  "color": {
-                    "fixed": "#5794f2"
-                  },
-                  "size": {
-                    "fixed": 2
-                  },
-                  "direction": {
-                    "fixed": "forward"
-                  }
-                },
-                {
-                  "targetName": "OrderCommandService",
-                  "path": "straight",
-                  "source": {
-                    "x": 0,
-                    "y": 1
-                  },
-                  "target": {
-                    "x": 0,
-                    "y": -1
-                  },
-                  "color": {
-                    "fixed": "#5794f2"
-                  },
-                  "size": {
-                    "fixed": 2
-                  },
-                  "direction": {
-                    "fixed": "forward"
-                  }
-                }
-              ]
-            },
-            {
-              "name": "PurchaseGateway_title",
-              "type": "text",
-              "placement": {
-                "left": 640,
-                "top": 172,
-                "width": 200,
+                "left": 928,
+                "top": 185,
+                "width": 110,
                 "height": 28,
                 "rotation": 0
               },
@@ -1671,7 +1312,7 @@
               },
               "border": {
                 "color": {
-                  "fixed": "#475569"
+                  "fixed": "transparent"
                 },
                 "width": 0,
                 "radius": 6
@@ -1679,10 +1320,49 @@
               "config": {
                 "text": {
                   "mode": "fixed",
-                  "fixed": "PurchaseGateway"
+                  "fixed": "query 풀"
                 },
                 "color": {
-                  "fixed": "#e2e8f0"
+                  "fixed": "#9fb4d2"
+                },
+                "size": 17,
+                "align": "center",
+                "valign": "middle"
+              }
+            },
+            {
+              "name": "pool_purchase",
+              "type": "text",
+              "placement": {
+                "left": 1500,
+                "top": 180,
+                "width": 280,
+                "height": 180,
+                "rotation": 0
+              },
+              "constraint": {
+                "horizontal": "left",
+                "vertical": "top"
+              },
+              "background": {
+                "color": {
+                  "fixed": "#17202c"
+                }
+              },
+              "border": {
+                "color": {
+                  "fixed": "#40516a"
+                },
+                "width": 1,
+                "radius": 6
+              },
+              "config": {
+                "text": {
+                  "mode": "fixed",
+                  "fixed": " "
+                },
+                "color": {
+                  "fixed": "#dce5f4"
                 },
                 "size": 15,
                 "align": "center",
@@ -1690,13 +1370,13 @@
               }
             },
             {
-              "name": "PurchaseGateway_expected",
+              "name": "title_purchase",
               "type": "text",
               "placement": {
-                "left": 640,
-                "top": 219,
-                "width": 200,
-                "height": 20,
+                "left": 1508,
+                "top": 185,
+                "width": 110,
+                "height": 28,
                 "rotation": 0
               },
               "constraint": {
@@ -1710,7 +1390,7 @@
               },
               "border": {
                 "color": {
-                  "fixed": "#475569"
+                  "fixed": "transparent"
                 },
                 "width": 0,
                 "radius": 6
@@ -1718,12 +1398,12 @@
               "config": {
                 "text": {
                   "mode": "fixed",
-                  "fixed": "ready / expected 2"
+                  "fixed": "purchase 풀"
                 },
                 "color": {
-                  "fixed": "#e2e8f0"
+                  "fixed": "#9fb4d2"
                 },
-                "size": 11,
+                "size": 17,
                 "align": "center",
                 "valign": "middle"
               }
@@ -1732,10 +1412,10 @@
               "name": "AccountService",
               "type": "metric-value",
               "placement": {
-                "left": 30,
-                "top": 35,
-                "width": 200,
-                "height": 72,
+                "left": 350,
+                "top": 260,
+                "width": 125,
+                "height": 80,
                 "rotation": 0
               },
               "constraint": {
@@ -1750,7 +1430,7 @@
               },
               "border": {
                 "color": {
-                  "fixed": "#475569"
+                  "fixed": "#52647c"
                 },
                 "width": 1,
                 "radius": 6
@@ -1758,31 +1438,56 @@
               "config": {
                 "text": {
                   "mode": "field",
-                  "field": "AccountService_ready",
-                  "fixed": ""
+                  "field": "AccountService_ready"
                 },
                 "color": {
                   "fixed": "#ffffff"
                 },
-                "size": 19,
+                "size": 24,
                 "align": "center",
                 "valign": "middle"
               },
-              "links": [
+              "connections": [
                 {
-                  "title": "서비스 상세",
-                  "url": "/d/stockdrop-services?var-service=AccountService"
+                  "targetName": "Kafka",
+                  "path": "straight",
+                  "source": {
+                    "x": 0,
+                    "y": -1
+                  },
+                  "target": {
+                    "x": -0.8993055555555556,
+                    "y": 1
+                  },
+                  "sourceOriginal": {
+                    "x": 412.5,
+                    "y": 340.0
+                  },
+                  "targetOriginal": {
+                    "x": 413.5,
+                    "y": 422.0
+                  },
+                  "vertices": [],
+                  "color": {
+                    "fixed": "#b877d9"
+                  },
+                  "size": {
+                    "fixed": 2
+                  },
+                  "direction": {
+                    "fixed": "forward"
+                  }
                 }
               ]
             },
             {
-              "name": "AccountService_title",
+              "name": "AccountService_name",
               "type": "text",
               "placement": {
-                "left": 30,
-                "top": 37,
-                "width": 200,
-                "height": 28,
+                "left": 350,
+                "top": 263,
+                "width": 125,
+                "height": 24,
                 "rotation": 0
               },
               "constraint": {
@@ -1796,7 +1501,7 @@
               },
               "border": {
                 "color": {
-                  "fixed": "#475569"
+                  "fixed": "transparent"
                 },
                 "width": 0,
                 "radius": 6
@@ -1804,12 +1509,12 @@
               "config": {
                 "text": {
                   "mode": "fixed",
-                  "fixed": "AccountService"
+                  "fixed": "Account"
                 },
                 "color": {
-                  "fixed": "#e2e8f0"
+                  "fixed": "#dce5f4"
                 },
-                "size": 15,
+                "size": 14,
                 "align": "center",
                 "valign": "middle"
               }
@@ -1818,10 +1523,10 @@
               "name": "AccountService_expected",
               "type": "text",
               "placement": {
-                "left": 30,
-                "top": 84,
-                "width": 200,
-                "height": 20,
+                "left": 350,
+                "top": 317,
+                "width": 125,
+                "height": 18,
                 "rotation": 0
               },
               "constraint": {
@@ -1835,7 +1540,7 @@
               },
               "border": {
                 "color": {
-                  "fixed": "#475569"
+                  "fixed": "transparent"
                 },
                 "width": 0,
                 "radius": 6
@@ -1846,259 +1551,7 @@
                   "fixed": "ready / expected 2"
                 },
                 "color": {
-                  "fixed": "#e2e8f0"
-                },
-                "size": 11,
-                "align": "center",
-                "valign": "middle"
-              }
-            },
-            {
-              "name": "ProductQueryService",
-              "type": "metric-value",
-              "placement": {
-                "left": 290,
-                "top": 35,
-                "width": 200,
-                "height": 72,
-                "rotation": 0
-              },
-              "constraint": {
-                "horizontal": "left",
-                "vertical": "top"
-              },
-              "background": {
-                "color": {
-                  "field": "ProductQueryService_ratio",
-                  "fixed": "#475569"
-                }
-              },
-              "border": {
-                "color": {
-                  "fixed": "#475569"
-                },
-                "width": 1,
-                "radius": 6
-              },
-              "config": {
-                "text": {
-                  "mode": "field",
-                  "field": "ProductQueryService_ready",
-                  "fixed": ""
-                },
-                "color": {
-                  "fixed": "#ffffff"
-                },
-                "size": 19,
-                "align": "center",
-                "valign": "middle"
-              },
-              "links": [
-                {
-                  "title": "서비스 상세",
-                  "url": "/d/stockdrop-services?var-service=ProductQueryService"
-                }
-              ],
-              "connections": []
-            },
-            {
-              "name": "ProductQueryService_title",
-              "type": "text",
-              "placement": {
-                "left": 290,
-                "top": 37,
-                "width": 200,
-                "height": 28,
-                "rotation": 0
-              },
-              "constraint": {
-                "horizontal": "left",
-                "vertical": "top"
-              },
-              "background": {
-                "color": {
-                  "fixed": "transparent"
-                }
-              },
-              "border": {
-                "color": {
-                  "fixed": "#475569"
-                },
-                "width": 0,
-                "radius": 6
-              },
-              "config": {
-                "text": {
-                  "mode": "fixed",
-                  "fixed": "ProductQueryService"
-                },
-                "color": {
-                  "fixed": "#e2e8f0"
-                },
-                "size": 15,
-                "align": "center",
-                "valign": "middle"
-              }
-            },
-            {
-              "name": "ProductQueryService_expected",
-              "type": "text",
-              "placement": {
-                "left": 290,
-                "top": 84,
-                "width": 200,
-                "height": 20,
-                "rotation": 0
-              },
-              "constraint": {
-                "horizontal": "left",
-                "vertical": "top"
-              },
-              "background": {
-                "color": {
-                  "fixed": "transparent"
-                }
-              },
-              "border": {
-                "color": {
-                  "fixed": "#475569"
-                },
-                "width": 0,
-                "radius": 6
-              },
-              "config": {
-                "text": {
-                  "mode": "fixed",
-                  "fixed": "ready / expected 2"
-                },
-                "color": {
-                  "fixed": "#e2e8f0"
-                },
-                "size": 11,
-                "align": "center",
-                "valign": "middle"
-              }
-            },
-            {
-              "name": "OrderQueryService",
-              "type": "metric-value",
-              "placement": {
-                "left": 550,
-                "top": 35,
-                "width": 200,
-                "height": 72,
-                "rotation": 0
-              },
-              "constraint": {
-                "horizontal": "left",
-                "vertical": "top"
-              },
-              "background": {
-                "color": {
-                  "field": "OrderQueryService_ratio",
-                  "fixed": "#475569"
-                }
-              },
-              "border": {
-                "color": {
-                  "fixed": "#475569"
-                },
-                "width": 1,
-                "radius": 6
-              },
-              "config": {
-                "text": {
-                  "mode": "field",
-                  "field": "OrderQueryService_ready",
-                  "fixed": ""
-                },
-                "color": {
-                  "fixed": "#ffffff"
-                },
-                "size": 19,
-                "align": "center",
-                "valign": "middle"
-              },
-              "links": [
-                {
-                  "title": "서비스 상세",
-                  "url": "/d/stockdrop-services?var-service=OrderQueryService"
-                }
-              ],
-              "connections": []
-            },
-            {
-              "name": "OrderQueryService_title",
-              "type": "text",
-              "placement": {
-                "left": 550,
-                "top": 37,
-                "width": 200,
-                "height": 28,
-                "rotation": 0
-              },
-              "constraint": {
-                "horizontal": "left",
-                "vertical": "top"
-              },
-              "background": {
-                "color": {
-                  "fixed": "transparent"
-                }
-              },
-              "border": {
-                "color": {
-                  "fixed": "#475569"
-                },
-                "width": 0,
-                "radius": 6
-              },
-              "config": {
-                "text": {
-                  "mode": "fixed",
-                  "fixed": "OrderQueryService"
-                },
-                "color": {
-                  "fixed": "#e2e8f0"
-                },
-                "size": 15,
-                "align": "center",
-                "valign": "middle"
-              }
-            },
-            {
-              "name": "OrderQueryService_expected",
-              "type": "text",
-              "placement": {
-                "left": 550,
-                "top": 84,
-                "width": 200,
-                "height": 20,
-                "rotation": 0
-              },
-              "constraint": {
-                "horizontal": "left",
-                "vertical": "top"
-              },
-              "background": {
-                "color": {
-                  "fixed": "transparent"
-                }
-              },
-              "border": {
-                "color": {
-                  "fixed": "#475569"
-                },
-                "width": 0,
-                "radius": 6
-              },
-              "config": {
-                "text": {
-                  "mode": "fixed",
-                  "fixed": "ready / expected 2"
-                },
-                "color": {
-                  "fixed": "#e2e8f0"
+                  "fixed": "#dce5f4"
                 },
                 "size": 11,
                 "align": "center",
@@ -2109,10 +1562,10 @@
               "name": "NotificationService",
               "type": "metric-value",
               "placement": {
-                "left": 810,
-                "top": 35,
-                "width": 200,
-                "height": 72,
+                "left": 490,
+                "top": 260,
+                "width": 125,
+                "height": 80,
                 "rotation": 0
               },
               "constraint": {
@@ -2127,7 +1580,7 @@
               },
               "border": {
                 "color": {
-                  "fixed": "#475569"
+                  "fixed": "#52647c"
                 },
                 "width": 1,
                 "radius": 6
@@ -2135,32 +1588,56 @@
               "config": {
                 "text": {
                   "mode": "field",
-                  "field": "NotificationService_ready",
-                  "fixed": ""
+                  "field": "NotificationService_ready"
                 },
                 "color": {
                   "fixed": "#ffffff"
                 },
-                "size": 19,
+                "size": 24,
                 "align": "center",
                 "valign": "middle"
               },
-              "links": [
+              "connections": [
                 {
-                  "title": "서비스 상세",
-                  "url": "/d/stockdrop-services?var-service=NotificationService"
+                  "targetName": "Kafka",
+                  "path": "straight",
+                  "source": {
+                    "x": 0,
+                    "y": -1
+                  },
+                  "target": {
+                    "x": -0.7048611111111112,
+                    "y": 1
+                  },
+                  "sourceOriginal": {
+                    "x": 552.5,
+                    "y": 340.0
+                  },
+                  "targetOriginal": {
+                    "x": 553.5,
+                    "y": 422.0
+                  },
+                  "vertices": [],
+                  "color": {
+                    "fixed": "#b877d9"
+                  },
+                  "size": {
+                    "fixed": 2
+                  },
+                  "direction": {
+                    "fixed": "forward"
+                  }
                 }
-              ],
-              "connections": []
+              ]
             },
             {
-              "name": "NotificationService_title",
+              "name": "NotificationService_name",
               "type": "text",
               "placement": {
-                "left": 810,
-                "top": 37,
-                "width": 200,
-                "height": 28,
+                "left": 490,
+                "top": 263,
+                "width": 125,
+                "height": 24,
                 "rotation": 0
               },
               "constraint": {
@@ -2174,7 +1651,7 @@
               },
               "border": {
                 "color": {
-                  "fixed": "#475569"
+                  "fixed": "transparent"
                 },
                 "width": 0,
                 "radius": 6
@@ -2182,12 +1659,12 @@
               "config": {
                 "text": {
                   "mode": "fixed",
-                  "fixed": "NotificationService"
+                  "fixed": "Notification"
                 },
                 "color": {
-                  "fixed": "#e2e8f0"
+                  "fixed": "#dce5f4"
                 },
-                "size": 15,
+                "size": 14,
                 "align": "center",
                 "valign": "middle"
               }
@@ -2196,10 +1673,10 @@
               "name": "NotificationService_expected",
               "type": "text",
               "placement": {
-                "left": 810,
-                "top": 84,
-                "width": 200,
-                "height": 20,
+                "left": 490,
+                "top": 317,
+                "width": 125,
+                "height": 18,
                 "rotation": 0
               },
               "constraint": {
@@ -2213,7 +1690,7 @@
               },
               "border": {
                 "color": {
-                  "fixed": "#475569"
+                  "fixed": "transparent"
                 },
                 "width": 0,
                 "radius": 6
@@ -2224,599 +1701,7 @@
                   "fixed": "ready / expected 2"
                 },
                 "color": {
-                  "fixed": "#e2e8f0"
-                },
-                "size": 11,
-                "align": "center",
-                "valign": "middle"
-              }
-            },
-            {
-              "name": "ProductCommandService",
-              "type": "metric-value",
-              "placement": {
-                "left": 30,
-                "top": 290,
-                "width": 200,
-                "height": 72,
-                "rotation": 0
-              },
-              "constraint": {
-                "horizontal": "left",
-                "vertical": "top"
-              },
-              "background": {
-                "color": {
-                  "field": "ProductCommandService_ratio",
-                  "fixed": "#475569"
-                }
-              },
-              "border": {
-                "color": {
-                  "fixed": "#475569"
-                },
-                "width": 1,
-                "radius": 6
-              },
-              "config": {
-                "text": {
-                  "mode": "field",
-                  "field": "ProductCommandService_ready",
-                  "fixed": ""
-                },
-                "color": {
-                  "fixed": "#ffffff"
-                },
-                "size": 19,
-                "align": "center",
-                "valign": "middle"
-              },
-              "links": [
-                {
-                  "title": "서비스 상세",
-                  "url": "/d/stockdrop-services?var-service=ProductCommandService"
-                }
-              ],
-              "connections": [
-                {
-                  "targetName": "Kafka",
-                  "path": "straight",
-                  "source": {
-                    "x": 1,
-                    "y": 0
-                  },
-                  "target": {
-                    "x": -1,
-                    "y": 0
-                  },
-                  "color": {
-                    "fixed": "#b877d9"
-                  },
-                  "size": {
-                    "fixed": 2
-                  },
-                  "direction": {
-                    "fixed": "forward"
-                  }
-                }
-              ]
-            },
-            {
-              "name": "ProductCommandService_title",
-              "type": "text",
-              "placement": {
-                "left": 30,
-                "top": 292,
-                "width": 200,
-                "height": 28,
-                "rotation": 0
-              },
-              "constraint": {
-                "horizontal": "left",
-                "vertical": "top"
-              },
-              "background": {
-                "color": {
-                  "fixed": "transparent"
-                }
-              },
-              "border": {
-                "color": {
-                  "fixed": "#475569"
-                },
-                "width": 0,
-                "radius": 6
-              },
-              "config": {
-                "text": {
-                  "mode": "fixed",
-                  "fixed": "ProductCommandService"
-                },
-                "color": {
-                  "fixed": "#e2e8f0"
-                },
-                "size": 15,
-                "align": "center",
-                "valign": "middle"
-              }
-            },
-            {
-              "name": "ProductCommandService_expected",
-              "type": "text",
-              "placement": {
-                "left": 30,
-                "top": 339,
-                "width": 200,
-                "height": 20,
-                "rotation": 0
-              },
-              "constraint": {
-                "horizontal": "left",
-                "vertical": "top"
-              },
-              "background": {
-                "color": {
-                  "fixed": "transparent"
-                }
-              },
-              "border": {
-                "color": {
-                  "fixed": "#475569"
-                },
-                "width": 0,
-                "radius": 6
-              },
-              "config": {
-                "text": {
-                  "mode": "fixed",
-                  "fixed": "ready / expected 2"
-                },
-                "color": {
-                  "fixed": "#e2e8f0"
-                },
-                "size": 11,
-                "align": "center",
-                "valign": "middle"
-              }
-            },
-            {
-              "name": "OrderCommandService",
-              "type": "metric-value",
-              "placement": {
-                "left": 810,
-                "top": 290,
-                "width": 200,
-                "height": 72,
-                "rotation": 0
-              },
-              "constraint": {
-                "horizontal": "left",
-                "vertical": "top"
-              },
-              "background": {
-                "color": {
-                  "field": "OrderCommandService_ratio",
-                  "fixed": "#475569"
-                }
-              },
-              "border": {
-                "color": {
-                  "fixed": "#475569"
-                },
-                "width": 1,
-                "radius": 6
-              },
-              "config": {
-                "text": {
-                  "mode": "field",
-                  "field": "OrderCommandService_ready",
-                  "fixed": ""
-                },
-                "color": {
-                  "fixed": "#ffffff"
-                },
-                "size": 19,
-                "align": "center",
-                "valign": "middle"
-              },
-              "links": [
-                {
-                  "title": "서비스 상세",
-                  "url": "/d/stockdrop-services?var-service=OrderCommandService"
-                }
-              ],
-              "connections": [
-                {
-                  "targetName": "Kafka",
-                  "path": "straight",
-                  "source": {
-                    "x": -1,
-                    "y": 0
-                  },
-                  "target": {
-                    "x": 1,
-                    "y": 0
-                  },
-                  "color": {
-                    "fixed": "#b877d9"
-                  },
-                  "size": {
-                    "fixed": 2
-                  },
-                  "direction": {
-                    "fixed": "forward"
-                  }
-                }
-              ]
-            },
-            {
-              "name": "OrderCommandService_title",
-              "type": "text",
-              "placement": {
-                "left": 810,
-                "top": 292,
-                "width": 200,
-                "height": 28,
-                "rotation": 0
-              },
-              "constraint": {
-                "horizontal": "left",
-                "vertical": "top"
-              },
-              "background": {
-                "color": {
-                  "fixed": "transparent"
-                }
-              },
-              "border": {
-                "color": {
-                  "fixed": "#475569"
-                },
-                "width": 0,
-                "radius": 6
-              },
-              "config": {
-                "text": {
-                  "mode": "fixed",
-                  "fixed": "OrderCommandService"
-                },
-                "color": {
-                  "fixed": "#e2e8f0"
-                },
-                "size": 15,
-                "align": "center",
-                "valign": "middle"
-              }
-            },
-            {
-              "name": "OrderCommandService_expected",
-              "type": "text",
-              "placement": {
-                "left": 810,
-                "top": 339,
-                "width": 200,
-                "height": 20,
-                "rotation": 0
-              },
-              "constraint": {
-                "horizontal": "left",
-                "vertical": "top"
-              },
-              "background": {
-                "color": {
-                  "fixed": "transparent"
-                }
-              },
-              "border": {
-                "color": {
-                  "fixed": "#475569"
-                },
-                "width": 0,
-                "radius": 6
-              },
-              "config": {
-                "text": {
-                  "mode": "fixed",
-                  "fixed": "ready / expected 2"
-                },
-                "color": {
-                  "fixed": "#e2e8f0"
-                },
-                "size": 11,
-                "align": "center",
-                "valign": "middle"
-              }
-            },
-            {
-              "name": "PaymentService",
-              "type": "metric-value",
-              "placement": {
-                "left": 810,
-                "top": 435,
-                "width": 200,
-                "height": 72,
-                "rotation": 0
-              },
-              "constraint": {
-                "horizontal": "left",
-                "vertical": "top"
-              },
-              "background": {
-                "color": {
-                  "field": "PaymentService_ratio",
-                  "fixed": "#475569"
-                }
-              },
-              "border": {
-                "color": {
-                  "fixed": "#475569"
-                },
-                "width": 1,
-                "radius": 6
-              },
-              "config": {
-                "text": {
-                  "mode": "field",
-                  "field": "PaymentService_ready",
-                  "fixed": ""
-                },
-                "color": {
-                  "fixed": "#ffffff"
-                },
-                "size": 19,
-                "align": "center",
-                "valign": "middle"
-              },
-              "links": [
-                {
-                  "title": "서비스 상세",
-                  "url": "/d/stockdrop-services?var-service=PaymentService"
-                }
-              ],
-              "connections": [
-                {
-                  "targetName": "Kafka",
-                  "path": "straight",
-                  "source": {
-                    "x": -1,
-                    "y": 0
-                  },
-                  "target": {
-                    "x": 1,
-                    "y": 0
-                  },
-                  "color": {
-                    "fixed": "#b877d9"
-                  },
-                  "size": {
-                    "fixed": 2
-                  },
-                  "direction": {
-                    "fixed": "forward"
-                  }
-                }
-              ]
-            },
-            {
-              "name": "PaymentService_title",
-              "type": "text",
-              "placement": {
-                "left": 810,
-                "top": 437,
-                "width": 200,
-                "height": 28,
-                "rotation": 0
-              },
-              "constraint": {
-                "horizontal": "left",
-                "vertical": "top"
-              },
-              "background": {
-                "color": {
-                  "fixed": "transparent"
-                }
-              },
-              "border": {
-                "color": {
-                  "fixed": "#475569"
-                },
-                "width": 0,
-                "radius": 6
-              },
-              "config": {
-                "text": {
-                  "mode": "fixed",
-                  "fixed": "PaymentService"
-                },
-                "color": {
-                  "fixed": "#e2e8f0"
-                },
-                "size": 15,
-                "align": "center",
-                "valign": "middle"
-              }
-            },
-            {
-              "name": "PaymentService_expected",
-              "type": "text",
-              "placement": {
-                "left": 810,
-                "top": 484,
-                "width": 200,
-                "height": 20,
-                "rotation": 0
-              },
-              "constraint": {
-                "horizontal": "left",
-                "vertical": "top"
-              },
-              "background": {
-                "color": {
-                  "fixed": "transparent"
-                }
-              },
-              "border": {
-                "color": {
-                  "fixed": "#475569"
-                },
-                "width": 0,
-                "radius": 6
-              },
-              "config": {
-                "text": {
-                  "mode": "fixed",
-                  "fixed": "ready / expected 2"
-                },
-                "color": {
-                  "fixed": "#e2e8f0"
-                },
-                "size": 11,
-                "align": "center",
-                "valign": "middle"
-              }
-            },
-            {
-              "name": "AIService",
-              "type": "metric-value",
-              "placement": {
-                "left": 30,
-                "top": 435,
-                "width": 200,
-                "height": 72,
-                "rotation": 0
-              },
-              "constraint": {
-                "horizontal": "left",
-                "vertical": "top"
-              },
-              "background": {
-                "color": {
-                  "field": "AIService_ratio",
-                  "fixed": "#475569"
-                }
-              },
-              "border": {
-                "color": {
-                  "fixed": "#475569"
-                },
-                "width": 1,
-                "radius": 6
-              },
-              "config": {
-                "text": {
-                  "mode": "field",
-                  "field": "AIService_ready",
-                  "fixed": ""
-                },
-                "color": {
-                  "fixed": "#ffffff"
-                },
-                "size": 19,
-                "align": "center",
-                "valign": "middle"
-              },
-              "links": [
-                {
-                  "title": "서비스 상세",
-                  "url": "/d/stockdrop-services?var-service=AIService"
-                }
-              ],
-              "connections": [
-                {
-                  "targetName": "Kafka",
-                  "path": "straight",
-                  "source": {
-                    "x": 1,
-                    "y": 0
-                  },
-                  "target": {
-                    "x": -1,
-                    "y": 0
-                  },
-                  "color": {
-                    "fixed": "#b877d9"
-                  },
-                  "size": {
-                    "fixed": 2
-                  },
-                  "direction": {
-                    "fixed": "forward"
-                  }
-                }
-              ]
-            },
-            {
-              "name": "AIService_title",
-              "type": "text",
-              "placement": {
-                "left": 30,
-                "top": 437,
-                "width": 200,
-                "height": 28,
-                "rotation": 0
-              },
-              "constraint": {
-                "horizontal": "left",
-                "vertical": "top"
-              },
-              "background": {
-                "color": {
-                  "fixed": "transparent"
-                }
-              },
-              "border": {
-                "color": {
-                  "fixed": "#475569"
-                },
-                "width": 0,
-                "radius": 6
-              },
-              "config": {
-                "text": {
-                  "mode": "fixed",
-                  "fixed": "AIService"
-                },
-                "color": {
-                  "fixed": "#e2e8f0"
-                },
-                "size": 15,
-                "align": "center",
-                "valign": "middle"
-              }
-            },
-            {
-              "name": "AIService_expected",
-              "type": "text",
-              "placement": {
-                "left": 30,
-                "top": 484,
-                "width": 200,
-                "height": 20,
-                "rotation": 0
-              },
-              "constraint": {
-                "horizontal": "left",
-                "vertical": "top"
-              },
-              "background": {
-                "color": {
-                  "fixed": "transparent"
-                }
-              },
-              "border": {
-                "color": {
-                  "fixed": "#475569"
-                },
-                "width": 0,
-                "radius": 6
-              },
-              "config": {
-                "text": {
-                  "mode": "fixed",
-                  "fixed": "ready / expected 2"
-                },
-                "color": {
-                  "fixed": "#e2e8f0"
+                  "fixed": "#dce5f4"
                 },
                 "size": 11,
                 "align": "center",
@@ -2827,10 +1712,10 @@
               "name": "CouponService",
               "type": "metric-value",
               "placement": {
-                "left": 550,
-                "top": 570,
-                "width": 200,
-                "height": 72,
+                "left": 630,
+                "top": 260,
+                "width": 125,
+                "height": 80,
                 "rotation": 0
               },
               "constraint": {
@@ -2845,7 +1730,7 @@
               },
               "border": {
                 "color": {
-                  "fixed": "#475569"
+                  "fixed": "#52647c"
                 },
                 "width": 1,
                 "radius": 6
@@ -2853,32 +1738,56 @@
               "config": {
                 "text": {
                   "mode": "field",
-                  "field": "CouponService_ready",
-                  "fixed": ""
+                  "field": "CouponService_ready"
                 },
                 "color": {
                   "fixed": "#ffffff"
                 },
-                "size": 19,
+                "size": 24,
                 "align": "center",
                 "valign": "middle"
               },
-              "links": [
+              "connections": [
                 {
-                  "title": "서비스 상세",
-                  "url": "/d/stockdrop-services?var-service=CouponService"
+                  "targetName": "Kafka",
+                  "path": "straight",
+                  "source": {
+                    "x": 0,
+                    "y": -1
+                  },
+                  "target": {
+                    "x": -0.5104166666666667,
+                    "y": 1
+                  },
+                  "sourceOriginal": {
+                    "x": 692.5,
+                    "y": 340.0
+                  },
+                  "targetOriginal": {
+                    "x": 693.5,
+                    "y": 422.0
+                  },
+                  "vertices": [],
+                  "color": {
+                    "fixed": "#b877d9"
+                  },
+                  "size": {
+                    "fixed": 2
+                  },
+                  "direction": {
+                    "fixed": "forward"
+                  }
                 }
-              ],
-              "connections": []
+              ]
             },
             {
-              "name": "CouponService_title",
+              "name": "CouponService_name",
               "type": "text",
               "placement": {
-                "left": 550,
-                "top": 572,
-                "width": 200,
-                "height": 28,
+                "left": 630,
+                "top": 263,
+                "width": 125,
+                "height": 24,
                 "rotation": 0
               },
               "constraint": {
@@ -2892,7 +1801,7 @@
               },
               "border": {
                 "color": {
-                  "fixed": "#475569"
+                  "fixed": "transparent"
                 },
                 "width": 0,
                 "radius": 6
@@ -2900,12 +1809,12 @@
               "config": {
                 "text": {
                   "mode": "fixed",
-                  "fixed": "CouponService"
+                  "fixed": "Coupon"
                 },
                 "color": {
-                  "fixed": "#e2e8f0"
+                  "fixed": "#dce5f4"
                 },
-                "size": 15,
+                "size": 14,
                 "align": "center",
                 "valign": "middle"
               }
@@ -2914,10 +1823,10 @@
               "name": "CouponService_expected",
               "type": "text",
               "placement": {
-                "left": 550,
-                "top": 619,
-                "width": 200,
-                "height": 20,
+                "left": 630,
+                "top": 317,
+                "width": 125,
+                "height": 18,
                 "rotation": 0
               },
               "constraint": {
@@ -2931,7 +1840,7 @@
               },
               "border": {
                 "color": {
-                  "fixed": "#475569"
+                  "fixed": "transparent"
                 },
                 "width": 0,
                 "radius": 6
@@ -2942,7 +1851,7 @@
                   "fixed": "ready / expected 2"
                 },
                 "color": {
-                  "fixed": "#e2e8f0"
+                  "fixed": "#dce5f4"
                 },
                 "size": 11,
                 "align": "center",
@@ -2953,10 +1862,10 @@
               "name": "Eureka",
               "type": "metric-value",
               "placement": {
-                "left": 290,
-                "top": 570,
-                "width": 200,
-                "height": 72,
+                "left": 770,
+                "top": 260,
+                "width": 125,
+                "height": 80,
                 "rotation": 0
               },
               "constraint": {
@@ -2971,7 +1880,7 @@
               },
               "border": {
                 "color": {
-                  "fixed": "#475569"
+                  "fixed": "#52647c"
                 },
                 "width": 1,
                 "radius": 6
@@ -2979,31 +1888,24 @@
               "config": {
                 "text": {
                   "mode": "field",
-                  "field": "Eureka_ready",
-                  "fixed": ""
+                  "field": "Eureka_ready"
                 },
                 "color": {
                   "fixed": "#ffffff"
                 },
-                "size": 19,
+                "size": 24,
                 "align": "center",
                 "valign": "middle"
-              },
-              "links": [
-                {
-                  "title": "서비스 상세",
-                  "url": "/d/stockdrop-services?var-service=Eureka"
-                }
-              ]
+              }
             },
             {
-              "name": "Eureka_title",
+              "name": "Eureka_name",
               "type": "text",
               "placement": {
-                "left": 290,
-                "top": 572,
-                "width": 200,
-                "height": 28,
+                "left": 770,
+                "top": 263,
+                "width": 125,
+                "height": 24,
                 "rotation": 0
               },
               "constraint": {
@@ -3017,7 +1919,7 @@
               },
               "border": {
                 "color": {
-                  "fixed": "#475569"
+                  "fixed": "transparent"
                 },
                 "width": 0,
                 "radius": 6
@@ -3028,9 +1930,9 @@
                   "fixed": "Eureka"
                 },
                 "color": {
-                  "fixed": "#e2e8f0"
+                  "fixed": "#dce5f4"
                 },
-                "size": 15,
+                "size": 14,
                 "align": "center",
                 "valign": "middle"
               }
@@ -3039,10 +1941,10 @@
               "name": "Eureka_expected",
               "type": "text",
               "placement": {
-                "left": 290,
-                "top": 619,
-                "width": 200,
-                "height": 20,
+                "left": 770,
+                "top": 317,
+                "width": 125,
+                "height": 18,
                 "rotation": 0
               },
               "constraint": {
@@ -3056,7 +1958,7 @@
               },
               "border": {
                 "color": {
-                  "fixed": "#475569"
+                  "fixed": "transparent"
                 },
                 "width": 0,
                 "radius": 6
@@ -3067,7 +1969,7 @@
                   "fixed": "ready / expected 2"
                 },
                 "color": {
-                  "fixed": "#e2e8f0"
+                  "fixed": "#dce5f4"
                 },
                 "size": 11,
                 "align": "center",
@@ -3075,13 +1977,13 @@
               }
             },
             {
-              "name": "Kafka",
+              "name": "registration",
               "type": "text",
               "placement": {
-                "left": 440,
-                "top": 365,
-                "width": 230,
-                "height": 70,
+                "left": 770,
+                "top": 343,
+                "width": 125,
+                "height": 16,
                 "rotation": 0
               },
               "constraint": {
@@ -3090,12 +1992,12 @@
               },
               "background": {
                 "color": {
-                  "fixed": "#302047"
+                  "fixed": "transparent"
                 }
               },
               "border": {
                 "color": {
-                  "fixed": "#475569"
+                  "fixed": "transparent"
                 },
                 "width": 0,
                 "radius": 6
@@ -3103,29 +2005,991 @@
               "config": {
                 "text": {
                   "mode": "fixed",
-                  "fixed": "Kafka 허브"
+                  "fixed": "서비스 등록"
                 },
-                "size": 22,
                 "color": {
-                  "fixed": "#d8b4fe"
+                  "fixed": "#9fb4d2"
                 },
+                "size": 11,
+                "align": "center",
+                "valign": "middle"
+              }
+            },
+            {
+              "name": "ProductQueryService",
+              "type": "metric-value",
+              "placement": {
+                "left": 930,
+                "top": 260,
+                "width": 125,
+                "height": 80,
+                "rotation": 0
+              },
+              "constraint": {
+                "horizontal": "left",
+                "vertical": "top"
+              },
+              "background": {
+                "color": {
+                  "field": "ProductQueryService_ratio",
+                  "fixed": "#475569"
+                }
+              },
+              "border": {
+                "color": {
+                  "fixed": "#52647c"
+                },
+                "width": 1,
+                "radius": 6
+              },
+              "config": {
+                "text": {
+                  "mode": "field",
+                  "field": "ProductQueryService_ready"
+                },
+                "color": {
+                  "fixed": "#ffffff"
+                },
+                "size": 24,
                 "align": "center",
                 "valign": "middle"
               },
               "connections": [
                 {
-                  "targetName": "ProductQueryService",
+                  "targetName": "Kafka",
                   "path": "straight",
                   "source": {
-                    "x": -1,
-                    "y": 0
+                    "x": 0,
+                    "y": -1
                   },
                   "target": {
+                    "x": -0.09375,
+                    "y": 1
+                  },
+                  "sourceOriginal": {
+                    "x": 992.5,
+                    "y": 340.0
+                  },
+                  "targetOriginal": {
+                    "x": 993.5,
+                    "y": 422.0
+                  },
+                  "vertices": [],
+                  "color": {
+                    "fixed": "#b877d9"
+                  },
+                  "size": {
+                    "fixed": 2
+                  },
+                  "direction": {
+                    "fixed": "forward"
+                  }
+                }
+              ]
+            },
+            {
+              "name": "ProductQueryService_name",
+              "type": "text",
+              "placement": {
+                "left": 930,
+                "top": 263,
+                "width": 125,
+                "height": 24,
+                "rotation": 0
+              },
+              "constraint": {
+                "horizontal": "left",
+                "vertical": "top"
+              },
+              "background": {
+                "color": {
+                  "fixed": "transparent"
+                }
+              },
+              "border": {
+                "color": {
+                  "fixed": "transparent"
+                },
+                "width": 0,
+                "radius": 6
+              },
+              "config": {
+                "text": {
+                  "mode": "fixed",
+                  "fixed": "ProductQuery"
+                },
+                "color": {
+                  "fixed": "#dce5f4"
+                },
+                "size": 14,
+                "align": "center",
+                "valign": "middle"
+              }
+            },
+            {
+              "name": "ProductQueryService_expected",
+              "type": "text",
+              "placement": {
+                "left": 930,
+                "top": 317,
+                "width": 125,
+                "height": 18,
+                "rotation": 0
+              },
+              "constraint": {
+                "horizontal": "left",
+                "vertical": "top"
+              },
+              "background": {
+                "color": {
+                  "fixed": "transparent"
+                }
+              },
+              "border": {
+                "color": {
+                  "fixed": "transparent"
+                },
+                "width": 0,
+                "radius": 6
+              },
+              "config": {
+                "text": {
+                  "mode": "fixed",
+                  "fixed": "ready / expected 2"
+                },
+                "color": {
+                  "fixed": "#dce5f4"
+                },
+                "size": 11,
+                "align": "center",
+                "valign": "middle"
+              }
+            },
+            {
+              "name": "OrderQueryService",
+              "type": "metric-value",
+              "placement": {
+                "left": 1070,
+                "top": 260,
+                "width": 125,
+                "height": 80,
+                "rotation": 0
+              },
+              "constraint": {
+                "horizontal": "left",
+                "vertical": "top"
+              },
+              "background": {
+                "color": {
+                  "field": "OrderQueryService_ratio",
+                  "fixed": "#475569"
+                }
+              },
+              "border": {
+                "color": {
+                  "fixed": "#52647c"
+                },
+                "width": 1,
+                "radius": 6
+              },
+              "config": {
+                "text": {
+                  "mode": "field",
+                  "field": "OrderQueryService_ready"
+                },
+                "color": {
+                  "fixed": "#ffffff"
+                },
+                "size": 24,
+                "align": "center",
+                "valign": "middle"
+              },
+              "connections": [
+                {
+                  "targetName": "Kafka",
+                  "path": "straight",
+                  "source": {
+                    "x": 0,
+                    "y": -1
+                  },
+                  "target": {
+                    "x": 0.10069444444444442,
+                    "y": 1
+                  },
+                  "sourceOriginal": {
+                    "x": 1132.5,
+                    "y": 340.0
+                  },
+                  "targetOriginal": {
+                    "x": 1133.5,
+                    "y": 422.0
+                  },
+                  "vertices": [],
+                  "color": {
+                    "fixed": "#b877d9"
+                  },
+                  "size": {
+                    "fixed": 2
+                  },
+                  "direction": {
+                    "fixed": "forward"
+                  }
+                }
+              ]
+            },
+            {
+              "name": "OrderQueryService_name",
+              "type": "text",
+              "placement": {
+                "left": 1070,
+                "top": 263,
+                "width": 125,
+                "height": 24,
+                "rotation": 0
+              },
+              "constraint": {
+                "horizontal": "left",
+                "vertical": "top"
+              },
+              "background": {
+                "color": {
+                  "fixed": "transparent"
+                }
+              },
+              "border": {
+                "color": {
+                  "fixed": "transparent"
+                },
+                "width": 0,
+                "radius": 6
+              },
+              "config": {
+                "text": {
+                  "mode": "fixed",
+                  "fixed": "OrderQuery"
+                },
+                "color": {
+                  "fixed": "#dce5f4"
+                },
+                "size": 14,
+                "align": "center",
+                "valign": "middle"
+              }
+            },
+            {
+              "name": "OrderQueryService_expected",
+              "type": "text",
+              "placement": {
+                "left": 1070,
+                "top": 317,
+                "width": 125,
+                "height": 18,
+                "rotation": 0
+              },
+              "constraint": {
+                "horizontal": "left",
+                "vertical": "top"
+              },
+              "background": {
+                "color": {
+                  "fixed": "transparent"
+                }
+              },
+              "border": {
+                "color": {
+                  "fixed": "transparent"
+                },
+                "width": 0,
+                "radius": 6
+              },
+              "config": {
+                "text": {
+                  "mode": "fixed",
+                  "fixed": "ready / expected 2"
+                },
+                "color": {
+                  "fixed": "#dce5f4"
+                },
+                "size": 11,
+                "align": "center",
+                "valign": "middle"
+              }
+            },
+            {
+              "name": "AIService",
+              "type": "metric-value",
+              "placement": {
+                "left": 1210,
+                "top": 260,
+                "width": 125,
+                "height": 80,
+                "rotation": 0
+              },
+              "constraint": {
+                "horizontal": "left",
+                "vertical": "top"
+              },
+              "background": {
+                "color": {
+                  "field": "AIService_ratio",
+                  "fixed": "#475569"
+                }
+              },
+              "border": {
+                "color": {
+                  "fixed": "#52647c"
+                },
+                "width": 1,
+                "radius": 6
+              },
+              "config": {
+                "text": {
+                  "mode": "field",
+                  "field": "AIService_ready"
+                },
+                "color": {
+                  "fixed": "#ffffff"
+                },
+                "size": 24,
+                "align": "center",
+                "valign": "middle"
+              },
+              "connections": [
+                {
+                  "targetName": "Kafka",
+                  "path": "straight",
+                  "source": {
+                    "x": 0,
+                    "y": -1
+                  },
+                  "target": {
+                    "x": 0.29513888888888884,
+                    "y": 1
+                  },
+                  "sourceOriginal": {
+                    "x": 1272.5,
+                    "y": 340.0
+                  },
+                  "targetOriginal": {
+                    "x": 1273.5,
+                    "y": 422.0
+                  },
+                  "vertices": [],
+                  "color": {
+                    "fixed": "#b877d9"
+                  },
+                  "size": {
+                    "fixed": 2
+                  },
+                  "direction": {
+                    "fixed": "forward"
+                  }
+                }
+              ]
+            },
+            {
+              "name": "AIService_name",
+              "type": "text",
+              "placement": {
+                "left": 1210,
+                "top": 263,
+                "width": 125,
+                "height": 24,
+                "rotation": 0
+              },
+              "constraint": {
+                "horizontal": "left",
+                "vertical": "top"
+              },
+              "background": {
+                "color": {
+                  "fixed": "transparent"
+                }
+              },
+              "border": {
+                "color": {
+                  "fixed": "transparent"
+                },
+                "width": 0,
+                "radius": 6
+              },
+              "config": {
+                "text": {
+                  "mode": "fixed",
+                  "fixed": "AI"
+                },
+                "color": {
+                  "fixed": "#dce5f4"
+                },
+                "size": 14,
+                "align": "center",
+                "valign": "middle"
+              }
+            },
+            {
+              "name": "AIService_expected",
+              "type": "text",
+              "placement": {
+                "left": 1210,
+                "top": 317,
+                "width": 125,
+                "height": 18,
+                "rotation": 0
+              },
+              "constraint": {
+                "horizontal": "left",
+                "vertical": "top"
+              },
+              "background": {
+                "color": {
+                  "fixed": "transparent"
+                }
+              },
+              "border": {
+                "color": {
+                  "fixed": "transparent"
+                },
+                "width": 0,
+                "radius": 6
+              },
+              "config": {
+                "text": {
+                  "mode": "fixed",
+                  "fixed": "ready / expected 2"
+                },
+                "color": {
+                  "fixed": "#dce5f4"
+                },
+                "size": 11,
+                "align": "center",
+                "valign": "middle"
+              }
+            },
+            {
+              "name": "PaymentService",
+              "type": "metric-value",
+              "placement": {
+                "left": 1350,
+                "top": 260,
+                "width": 125,
+                "height": 80,
+                "rotation": 0
+              },
+              "constraint": {
+                "horizontal": "left",
+                "vertical": "top"
+              },
+              "background": {
+                "color": {
+                  "field": "PaymentService_ratio",
+                  "fixed": "#475569"
+                }
+              },
+              "border": {
+                "color": {
+                  "fixed": "#52647c"
+                },
+                "width": 1,
+                "radius": 6
+              },
+              "config": {
+                "text": {
+                  "mode": "field",
+                  "field": "PaymentService_ready"
+                },
+                "color": {
+                  "fixed": "#ffffff"
+                },
+                "size": 24,
+                "align": "center",
+                "valign": "middle"
+              },
+              "connections": [
+                {
+                  "targetName": "Kafka",
+                  "path": "straight",
+                  "source": {
+                    "x": 0,
+                    "y": -1
+                  },
+                  "target": {
+                    "x": 0.48958333333333326,
+                    "y": 1
+                  },
+                  "sourceOriginal": {
+                    "x": 1412.5,
+                    "y": 340.0
+                  },
+                  "targetOriginal": {
+                    "x": 1413.5,
+                    "y": 422.0
+                  },
+                  "vertices": [],
+                  "color": {
+                    "fixed": "#b877d9"
+                  },
+                  "size": {
+                    "fixed": 2
+                  },
+                  "direction": {
+                    "fixed": "forward"
+                  }
+                }
+              ]
+            },
+            {
+              "name": "PaymentService_name",
+              "type": "text",
+              "placement": {
+                "left": 1350,
+                "top": 263,
+                "width": 125,
+                "height": 24,
+                "rotation": 0
+              },
+              "constraint": {
+                "horizontal": "left",
+                "vertical": "top"
+              },
+              "background": {
+                "color": {
+                  "fixed": "transparent"
+                }
+              },
+              "border": {
+                "color": {
+                  "fixed": "transparent"
+                },
+                "width": 0,
+                "radius": 6
+              },
+              "config": {
+                "text": {
+                  "mode": "fixed",
+                  "fixed": "Payment"
+                },
+                "color": {
+                  "fixed": "#dce5f4"
+                },
+                "size": 14,
+                "align": "center",
+                "valign": "middle"
+              }
+            },
+            {
+              "name": "PaymentService_expected",
+              "type": "text",
+              "placement": {
+                "left": 1350,
+                "top": 317,
+                "width": 125,
+                "height": 18,
+                "rotation": 0
+              },
+              "constraint": {
+                "horizontal": "left",
+                "vertical": "top"
+              },
+              "background": {
+                "color": {
+                  "fixed": "transparent"
+                }
+              },
+              "border": {
+                "color": {
+                  "fixed": "transparent"
+                },
+                "width": 0,
+                "radius": 6
+              },
+              "config": {
+                "text": {
+                  "mode": "fixed",
+                  "fixed": "ready / expected 2"
+                },
+                "color": {
+                  "fixed": "#dce5f4"
+                },
+                "size": 11,
+                "align": "center",
+                "valign": "middle"
+              }
+            },
+            {
+              "name": "ProductCommandService",
+              "type": "metric-value",
+              "placement": {
+                "left": 1510,
+                "top": 260,
+                "width": 125,
+                "height": 80,
+                "rotation": 0
+              },
+              "constraint": {
+                "horizontal": "left",
+                "vertical": "top"
+              },
+              "background": {
+                "color": {
+                  "field": "ProductCommandService_ratio",
+                  "fixed": "#475569"
+                }
+              },
+              "border": {
+                "color": {
+                  "fixed": "#52647c"
+                },
+                "width": 1,
+                "radius": 6
+              },
+              "config": {
+                "text": {
+                  "mode": "field",
+                  "field": "ProductCommandService_ready"
+                },
+                "color": {
+                  "fixed": "#ffffff"
+                },
+                "size": 24,
+                "align": "center",
+                "valign": "middle"
+              },
+              "connections": [
+                {
+                  "targetName": "Kafka",
+                  "path": "straight",
+                  "source": {
+                    "x": 0,
+                    "y": -1
+                  },
+                  "target": {
+                    "x": 0.7118055555555556,
+                    "y": 1
+                  },
+                  "sourceOriginal": {
+                    "x": 1572.5,
+                    "y": 340.0
+                  },
+                  "targetOriginal": {
+                    "x": 1573.5,
+                    "y": 422.0
+                  },
+                  "vertices": [],
+                  "color": {
+                    "fixed": "#b877d9"
+                  },
+                  "size": {
+                    "fixed": 2
+                  },
+                  "direction": {
+                    "fixed": "forward"
+                  }
+                }
+              ]
+            },
+            {
+              "name": "ProductCommandService_name",
+              "type": "text",
+              "placement": {
+                "left": 1510,
+                "top": 263,
+                "width": 125,
+                "height": 24,
+                "rotation": 0
+              },
+              "constraint": {
+                "horizontal": "left",
+                "vertical": "top"
+              },
+              "background": {
+                "color": {
+                  "fixed": "transparent"
+                }
+              },
+              "border": {
+                "color": {
+                  "fixed": "transparent"
+                },
+                "width": 0,
+                "radius": 6
+              },
+              "config": {
+                "text": {
+                  "mode": "fixed",
+                  "fixed": "ProductCommand"
+                },
+                "color": {
+                  "fixed": "#dce5f4"
+                },
+                "size": 14,
+                "align": "center",
+                "valign": "middle"
+              }
+            },
+            {
+              "name": "ProductCommandService_expected",
+              "type": "text",
+              "placement": {
+                "left": 1510,
+                "top": 317,
+                "width": 125,
+                "height": 18,
+                "rotation": 0
+              },
+              "constraint": {
+                "horizontal": "left",
+                "vertical": "top"
+              },
+              "background": {
+                "color": {
+                  "fixed": "transparent"
+                }
+              },
+              "border": {
+                "color": {
+                  "fixed": "transparent"
+                },
+                "width": 0,
+                "radius": 6
+              },
+              "config": {
+                "text": {
+                  "mode": "fixed",
+                  "fixed": "ready / expected 2"
+                },
+                "color": {
+                  "fixed": "#dce5f4"
+                },
+                "size": 11,
+                "align": "center",
+                "valign": "middle"
+              }
+            },
+            {
+              "name": "OrderCommandService",
+              "type": "metric-value",
+              "placement": {
+                "left": 1650,
+                "top": 260,
+                "width": 125,
+                "height": 80,
+                "rotation": 0
+              },
+              "constraint": {
+                "horizontal": "left",
+                "vertical": "top"
+              },
+              "background": {
+                "color": {
+                  "field": "OrderCommandService_ratio",
+                  "fixed": "#475569"
+                }
+              },
+              "border": {
+                "color": {
+                  "fixed": "#52647c"
+                },
+                "width": 1,
+                "radius": 6
+              },
+              "config": {
+                "text": {
+                  "mode": "field",
+                  "field": "OrderCommandService_ready"
+                },
+                "color": {
+                  "fixed": "#ffffff"
+                },
+                "size": 24,
+                "align": "center",
+                "valign": "middle"
+              },
+              "connections": [
+                {
+                  "targetName": "Kafka",
+                  "path": "straight",
+                  "source": {
+                    "x": 0,
+                    "y": -1
+                  },
+                  "target": {
+                    "x": 0.90625,
+                    "y": 1
+                  },
+                  "sourceOriginal": {
+                    "x": 1712.5,
+                    "y": 340.0
+                  },
+                  "targetOriginal": {
+                    "x": 1713.5,
+                    "y": 422.0
+                  },
+                  "vertices": [],
+                  "color": {
+                    "fixed": "#b877d9"
+                  },
+                  "size": {
+                    "fixed": 2
+                  },
+                  "direction": {
+                    "fixed": "forward"
+                  }
+                }
+              ]
+            },
+            {
+              "name": "OrderCommandService_name",
+              "type": "text",
+              "placement": {
+                "left": 1650,
+                "top": 263,
+                "width": 125,
+                "height": 24,
+                "rotation": 0
+              },
+              "constraint": {
+                "horizontal": "left",
+                "vertical": "top"
+              },
+              "background": {
+                "color": {
+                  "fixed": "transparent"
+                }
+              },
+              "border": {
+                "color": {
+                  "fixed": "transparent"
+                },
+                "width": 0,
+                "radius": 6
+              },
+              "config": {
+                "text": {
+                  "mode": "fixed",
+                  "fixed": "OrderCommand"
+                },
+                "color": {
+                  "fixed": "#dce5f4"
+                },
+                "size": 14,
+                "align": "center",
+                "valign": "middle"
+              }
+            },
+            {
+              "name": "OrderCommandService_expected",
+              "type": "text",
+              "placement": {
+                "left": 1650,
+                "top": 317,
+                "width": 125,
+                "height": 18,
+                "rotation": 0
+              },
+              "constraint": {
+                "horizontal": "left",
+                "vertical": "top"
+              },
+              "background": {
+                "color": {
+                  "fixed": "transparent"
+                }
+              },
+              "border": {
+                "color": {
+                  "fixed": "transparent"
+                },
+                "width": 0,
+                "radius": 6
+              },
+              "config": {
+                "text": {
+                  "mode": "fixed",
+                  "fixed": "ready / expected 2"
+                },
+                "color": {
+                  "fixed": "#dce5f4"
+                },
+                "size": 11,
+                "align": "center",
+                "valign": "middle"
+              }
+            },
+            {
+              "name": "Gateway",
+              "type": "metric-value",
+              "placement": {
+                "left": 130,
+                "top": 224,
+                "width": 160,
+                "height": 80,
+                "rotation": 0
+              },
+              "constraint": {
+                "horizontal": "left",
+                "vertical": "top"
+              },
+              "background": {
+                "color": {
+                  "field": "Gateway_ratio",
+                  "fixed": "#475569"
+                }
+              },
+              "border": {
+                "color": {
+                  "fixed": "#52647c"
+                },
+                "width": 1,
+                "radius": 6
+              },
+              "config": {
+                "text": {
+                  "mode": "field",
+                  "field": "Gateway_ready"
+                },
+                "color": {
+                  "fixed": "#ffffff"
+                },
+                "size": 24,
+                "align": "center",
+                "valign": "middle"
+              },
+              "connections": [
+                {
+                  "targetName": "AccountService",
+                  "path": "straight",
+                  "source": {
                     "x": 1,
                     "y": 0
                   },
+                  "target": {
+                    "x": 0,
+                    "y": 1
+                  },
+                  "sourceOriginal": {
+                    "x": 290.0,
+                    "y": 264.0
+                  },
+                  "targetOriginal": {
+                    "x": 412.5,
+                    "y": 260.0
+                  },
+                  "vertices": [
+                    {
+                      "x": 0.16326530612244897,
+                      "y": -0.0
+                    },
+                    {
+                      "x": 0.16326530612244897,
+                      "y": 7.25
+                    },
+                    {
+                      "x": 1.0,
+                      "y": 7.25
+                    }
+                  ],
                   "color": {
-                    "fixed": "#b877d9"
+                    "fixed": "#5794f2"
                   },
                   "size": {
                     "fixed": 2
@@ -3142,32 +3006,33 @@
                     "y": 0
                   },
                   "target": {
-                    "x": -1,
-                    "y": 0
+                    "x": 0,
+                    "y": 1
                   },
+                  "sourceOriginal": {
+                    "x": 290.0,
+                    "y": 264.0
+                  },
+                  "targetOriginal": {
+                    "x": 552.5,
+                    "y": 260.0
+                  },
+                  "vertices": [
+                    {
+                      "x": 0.0761904761904762,
+                      "y": -0.0
+                    },
+                    {
+                      "x": 0.0761904761904762,
+                      "y": 7.25
+                    },
+                    {
+                      "x": 1.0,
+                      "y": 7.25
+                    }
+                  ],
                   "color": {
-                    "fixed": "#b877d9"
-                  },
-                  "size": {
-                    "fixed": 2
-                  },
-                  "direction": {
-                    "fixed": "forward"
-                  }
-                },
-                {
-                  "targetName": "OrderQueryService",
-                  "path": "straight",
-                  "source": {
-                    "x": 1,
-                    "y": 0
-                  },
-                  "target": {
-                    "x": -1,
-                    "y": 0
-                  },
-                  "color": {
-                    "fixed": "#b877d9"
+                    "fixed": "#5794f2"
                   },
                   "size": {
                     "fixed": 2
@@ -3184,11 +3049,33 @@
                     "y": 0
                   },
                   "target": {
-                    "x": -1,
-                    "y": 0
+                    "x": 0,
+                    "y": 1
                   },
+                  "sourceOriginal": {
+                    "x": 290.0,
+                    "y": 264.0
+                  },
+                  "targetOriginal": {
+                    "x": 692.5,
+                    "y": 260.0
+                  },
+                  "vertices": [
+                    {
+                      "x": 0.049689440993788817,
+                      "y": -0.0
+                    },
+                    {
+                      "x": 0.049689440993788817,
+                      "y": 7.25
+                    },
+                    {
+                      "x": 1.0,
+                      "y": 7.25
+                    }
+                  ],
                   "color": {
-                    "fixed": "#b877d9"
+                    "fixed": "#5794f2"
                   },
                   "size": {
                     "fixed": 2
@@ -3198,18 +3085,40 @@
                   }
                 },
                 {
-                  "targetName": "ProductCommandService",
+                  "targetName": "ProductQueryService",
                   "path": "straight",
                   "source": {
-                    "x": -1,
-                    "y": 0
-                  },
-                  "target": {
                     "x": 1,
                     "y": 0
                   },
+                  "target": {
+                    "x": 0,
+                    "y": 1
+                  },
+                  "sourceOriginal": {
+                    "x": 290.0,
+                    "y": 264.0
+                  },
+                  "targetOriginal": {
+                    "x": 992.5,
+                    "y": 260.0
+                  },
+                  "vertices": [
+                    {
+                      "x": 0.028469750889679714,
+                      "y": -0.0
+                    },
+                    {
+                      "x": 0.028469750889679714,
+                      "y": 7.25
+                    },
+                    {
+                      "x": 1.0,
+                      "y": 7.25
+                    }
+                  ],
                   "color": {
-                    "fixed": "#b877d9"
+                    "fixed": "#5794f2"
                   },
                   "size": {
                     "fixed": 2
@@ -3219,18 +3128,83 @@
                   }
                 },
                 {
-                  "targetName": "OrderCommandService",
+                  "targetName": "OrderQueryService",
                   "path": "straight",
                   "source": {
                     "x": 1,
                     "y": 0
                   },
                   "target": {
-                    "x": -1,
+                    "x": 0,
+                    "y": 1
+                  },
+                  "sourceOriginal": {
+                    "x": 290.0,
+                    "y": 264.0
+                  },
+                  "targetOriginal": {
+                    "x": 1132.5,
+                    "y": 260.0
+                  },
+                  "vertices": [
+                    {
+                      "x": 0.02373887240356083,
+                      "y": -0.0
+                    },
+                    {
+                      "x": 0.02373887240356083,
+                      "y": 7.25
+                    },
+                    {
+                      "x": 1.0,
+                      "y": 7.25
+                    }
+                  ],
+                  "color": {
+                    "fixed": "#5794f2"
+                  },
+                  "size": {
+                    "fixed": 2
+                  },
+                  "direction": {
+                    "fixed": "forward"
+                  }
+                },
+                {
+                  "targetName": "AIService",
+                  "path": "straight",
+                  "source": {
+                    "x": 1,
                     "y": 0
                   },
+                  "target": {
+                    "x": 0,
+                    "y": 1
+                  },
+                  "sourceOriginal": {
+                    "x": 290.0,
+                    "y": 264.0
+                  },
+                  "targetOriginal": {
+                    "x": 1272.5,
+                    "y": 260.0
+                  },
+                  "vertices": [
+                    {
+                      "x": 0.020356234096692113,
+                      "y": -0.0
+                    },
+                    {
+                      "x": 0.020356234096692113,
+                      "y": 7.25
+                    },
+                    {
+                      "x": 1.0,
+                      "y": 7.25
+                    }
+                  ],
                   "color": {
-                    "fixed": "#b877d9"
+                    "fixed": "#5794f2"
                   },
                   "size": {
                     "fixed": 2
@@ -3247,11 +3221,33 @@
                     "y": 0
                   },
                   "target": {
-                    "x": -1,
-                    "y": 0
+                    "x": 0,
+                    "y": 1
                   },
+                  "sourceOriginal": {
+                    "x": 290.0,
+                    "y": 264.0
+                  },
+                  "targetOriginal": {
+                    "x": 1412.5,
+                    "y": 260.0
+                  },
+                  "vertices": [
+                    {
+                      "x": 0.017817371937639197,
+                      "y": -0.0
+                    },
+                    {
+                      "x": 0.017817371937639197,
+                      "y": 7.25
+                    },
+                    {
+                      "x": 1.0,
+                      "y": 7.25
+                    }
+                  ],
                   "color": {
-                    "fixed": "#b877d9"
+                    "fixed": "#5794f2"
                   },
                   "size": {
                     "fixed": 2
@@ -3261,18 +3257,40 @@
                   }
                 },
                 {
-                  "targetName": "AIService",
+                  "targetName": "ProductCommandService",
                   "path": "straight",
                   "source": {
-                    "x": -1,
-                    "y": 0
-                  },
-                  "target": {
                     "x": 1,
                     "y": 0
                   },
+                  "target": {
+                    "x": 0,
+                    "y": 1
+                  },
+                  "sourceOriginal": {
+                    "x": 290.0,
+                    "y": 264.0
+                  },
+                  "targetOriginal": {
+                    "x": 1572.5,
+                    "y": 260.0
+                  },
+                  "vertices": [
+                    {
+                      "x": 0.015594541910331383,
+                      "y": -0.0
+                    },
+                    {
+                      "x": 0.015594541910331383,
+                      "y": 7.25
+                    },
+                    {
+                      "x": 1.0,
+                      "y": 7.25
+                    }
+                  ],
                   "color": {
-                    "fixed": "#b877d9"
+                    "fixed": "#5794f2"
                   },
                   "size": {
                     "fixed": 2
@@ -3284,413 +3302,13 @@
               ]
             },
             {
-              "name": "route_0",
-              "type": "metric-value",
-              "placement": {
-                "left": 250.0,
-                "top": 144.5,
-                "width": 100,
-                "height": 24,
-                "rotation": 0
-              },
-              "constraint": {
-                "horizontal": "left",
-                "vertical": "top"
-              },
-              "background": {
-                "color": {
-                  "fixed": "#182231"
-                }
-              },
-              "border": {
-                "color": {
-                  "fixed": "#475569"
-                },
-                "width": 1,
-                "radius": 6
-              },
-              "config": {
-                "text": {
-                  "mode": "field",
-                  "field": "route_0",
-                  "fixed": ""
-                },
-                "color": {
-                  "fixed": "#ffffff"
-                },
-                "size": 12,
-                "align": "center",
-                "valign": "middle"
-              }
-            },
-            {
-              "name": "route_1",
-              "type": "metric-value",
-              "placement": {
-                "left": 380.0,
-                "top": 162.5,
-                "width": 100,
-                "height": 24,
-                "rotation": 0
-              },
-              "constraint": {
-                "horizontal": "left",
-                "vertical": "top"
-              },
-              "background": {
-                "color": {
-                  "fixed": "#182231"
-                }
-              },
-              "border": {
-                "color": {
-                  "fixed": "#475569"
-                },
-                "width": 1,
-                "radius": 6
-              },
-              "config": {
-                "text": {
-                  "mode": "field",
-                  "field": "route_1",
-                  "fixed": ""
-                },
-                "color": {
-                  "fixed": "#ffffff"
-                },
-                "size": 12,
-                "align": "center",
-                "valign": "middle"
-              }
-            },
-            {
-              "name": "route_2",
-              "type": "metric-value",
-              "placement": {
-                "left": 250.0,
-                "top": 272.0,
-                "width": 100,
-                "height": 24,
-                "rotation": 0
-              },
-              "constraint": {
-                "horizontal": "left",
-                "vertical": "top"
-              },
-              "background": {
-                "color": {
-                  "fixed": "#182231"
-                }
-              },
-              "border": {
-                "color": {
-                  "fixed": "#475569"
-                },
-                "width": 1,
-                "radius": 6
-              },
-              "config": {
-                "text": {
-                  "mode": "field",
-                  "field": "route_2",
-                  "fixed": ""
-                },
-                "color": {
-                  "fixed": "#ffffff"
-                },
-                "size": 12,
-                "align": "center",
-                "valign": "middle"
-              }
-            },
-            {
-              "name": "route_3",
-              "type": "metric-value",
-              "placement": {
-                "left": 510.0,
-                "top": 162.5,
-                "width": 100,
-                "height": 24,
-                "rotation": 0
-              },
-              "constraint": {
-                "horizontal": "left",
-                "vertical": "top"
-              },
-              "background": {
-                "color": {
-                  "fixed": "#182231"
-                }
-              },
-              "border": {
-                "color": {
-                  "fixed": "#475569"
-                },
-                "width": 1,
-                "radius": 6
-              },
-              "config": {
-                "text": {
-                  "mode": "field",
-                  "field": "route_3",
-                  "fixed": ""
-                },
-                "color": {
-                  "fixed": "#ffffff"
-                },
-                "size": 12,
-                "align": "center",
-                "valign": "middle"
-              }
-            },
-            {
-              "name": "route_4",
-              "type": "metric-value",
-              "placement": {
-                "left": 640.0,
-                "top": 344.5,
-                "width": 100,
-                "height": 24,
-                "rotation": 0
-              },
-              "constraint": {
-                "horizontal": "left",
-                "vertical": "top"
-              },
-              "background": {
-                "color": {
-                  "fixed": "#182231"
-                }
-              },
-              "border": {
-                "color": {
-                  "fixed": "#475569"
-                },
-                "width": 1,
-                "radius": 6
-              },
-              "config": {
-                "text": {
-                  "mode": "field",
-                  "field": "route_4",
-                  "fixed": ""
-                },
-                "color": {
-                  "fixed": "#ffffff"
-                },
-                "size": 12,
-                "align": "center",
-                "valign": "middle"
-              }
-            },
-            {
-              "name": "route_5",
-              "type": "metric-value",
-              "placement": {
-                "left": 250.0,
-                "top": 362.5,
-                "width": 100,
-                "height": 24,
-                "rotation": 0
-              },
-              "constraint": {
-                "horizontal": "left",
-                "vertical": "top"
-              },
-              "background": {
-                "color": {
-                  "fixed": "#182231"
-                }
-              },
-              "border": {
-                "color": {
-                  "fixed": "#475569"
-                },
-                "width": 1,
-                "radius": 6
-              },
-              "config": {
-                "text": {
-                  "mode": "field",
-                  "field": "route_5",
-                  "fixed": ""
-                },
-                "color": {
-                  "fixed": "#ffffff"
-                },
-                "size": 12,
-                "align": "center",
-                "valign": "middle"
-              }
-            },
-            {
-              "name": "route_6",
-              "type": "metric-value",
-              "placement": {
-                "left": 640.0,
-                "top": 144.5,
-                "width": 100,
-                "height": 24,
-                "rotation": 0
-              },
-              "constraint": {
-                "horizontal": "left",
-                "vertical": "top"
-              },
-              "background": {
-                "color": {
-                  "fixed": "#182231"
-                }
-              },
-              "border": {
-                "color": {
-                  "fixed": "#475569"
-                },
-                "width": 1,
-                "radius": 6
-              },
-              "config": {
-                "text": {
-                  "mode": "field",
-                  "field": "route_6",
-                  "fixed": ""
-                },
-                "color": {
-                  "fixed": "#ffffff"
-                },
-                "size": 12,
-                "align": "center",
-                "valign": "middle"
-              }
-            },
-            {
-              "name": "route_7",
-              "type": "metric-value",
-              "placement": {
-                "left": 510.0,
-                "top": 430.0,
-                "width": 100,
-                "height": 24,
-                "rotation": 0
-              },
-              "constraint": {
-                "horizontal": "left",
-                "vertical": "top"
-              },
-              "background": {
-                "color": {
-                  "fixed": "#182231"
-                }
-              },
-              "border": {
-                "color": {
-                  "fixed": "#475569"
-                },
-                "width": 1,
-                "radius": 6
-              },
-              "config": {
-                "text": {
-                  "mode": "field",
-                  "field": "route_7",
-                  "fixed": ""
-                },
-                "color": {
-                  "fixed": "#ffffff"
-                },
-                "size": 12,
-                "align": "center",
-                "valign": "middle"
-              }
-            },
-            {
-              "name": "route_8",
-              "type": "metric-value",
-              "placement": {
-                "left": 370.0,
-                "top": 272.0,
-                "width": 100,
-                "height": 24,
-                "rotation": 0
-              },
-              "constraint": {
-                "horizontal": "left",
-                "vertical": "top"
-              },
-              "background": {
-                "color": {
-                  "fixed": "#182231"
-                }
-              },
-              "border": {
-                "color": {
-                  "fixed": "#475569"
-                },
-                "width": 1,
-                "radius": 6
-              },
-              "config": {
-                "text": {
-                  "mode": "field",
-                  "field": "route_8",
-                  "fixed": ""
-                },
-                "color": {
-                  "fixed": "#ffffff"
-                },
-                "size": 12,
-                "align": "center",
-                "valign": "middle"
-              }
-            },
-            {
-              "name": "route_9",
-              "type": "metric-value",
-              "placement": {
-                "left": 760.0,
-                "top": 290.0,
-                "width": 100,
-                "height": 24,
-                "rotation": 0
-              },
-              "constraint": {
-                "horizontal": "left",
-                "vertical": "top"
-              },
-              "background": {
-                "color": {
-                  "fixed": "#182231"
-                }
-              },
-              "border": {
-                "color": {
-                  "fixed": "#475569"
-                },
-                "width": 1,
-                "radius": 6
-              },
-              "config": {
-                "text": {
-                  "mode": "field",
-                  "field": "route_9",
-                  "fixed": ""
-                },
-                "color": {
-                  "fixed": "#ffffff"
-                },
-                "size": 12,
-                "align": "center",
-                "valign": "middle"
-              }
-            },
-            {
-              "name": "kafka-note",
+              "name": "Gateway_name",
               "type": "text",
               "placement": {
-                "left": 390,
-                "top": 450,
-                "width": 330,
-                "height": 28,
+                "left": 130,
+                "top": 227,
+                "width": 160,
+                "height": 24,
                 "rotation": 0
               },
               "constraint": {
@@ -3704,7 +3322,7 @@
               },
               "border": {
                 "color": {
-                  "fixed": "#475569"
+                  "fixed": "transparent"
                 },
                 "width": 0,
                 "radius": 6
@@ -3712,10 +3330,10 @@
               "config": {
                 "text": {
                   "mode": "fixed",
-                  "fixed": "Kafka 선: 처리량 계측 예정"
+                  "fixed": "Gateway"
                 },
                 "color": {
-                  "fixed": "#e2e8f0"
+                  "fixed": "#dce5f4"
                 },
                 "size": 14,
                 "align": "center",
@@ -3723,13 +3341,13 @@
               }
             },
             {
-              "name": "registry-note",
+              "name": "Gateway_expected",
               "type": "text",
               "placement": {
-                "left": 240,
-                "top": 665,
-                "width": 380,
-                "height": 25,
+                "left": 130,
+                "top": 281,
+                "width": 160,
+                "height": 18,
                 "rotation": 0
               },
               "constraint": {
@@ -3743,7 +3361,7 @@
               },
               "border": {
                 "color": {
-                  "fixed": "#475569"
+                  "fixed": "transparent"
                 },
                 "width": 0,
                 "radius": 6
@@ -3751,12 +3369,1045 @@
               "config": {
                 "text": {
                   "mode": "fixed",
-                  "fixed": "Eureka 등록 수: 계측 예정"
+                  "fixed": "ready / expected 2"
                 },
                 "color": {
-                  "fixed": "#e2e8f0"
+                  "fixed": "#dce5f4"
                 },
-                "size": 13,
+                "size": 11,
+                "align": "center",
+                "valign": "middle"
+              }
+            },
+            {
+              "name": "PurchaseGateway",
+              "type": "metric-value",
+              "placement": {
+                "left": 130,
+                "top": 54,
+                "width": 160,
+                "height": 80,
+                "rotation": 0
+              },
+              "constraint": {
+                "horizontal": "left",
+                "vertical": "top"
+              },
+              "background": {
+                "color": {
+                  "field": "PurchaseGateway_ratio",
+                  "fixed": "#475569"
+                }
+              },
+              "border": {
+                "color": {
+                  "fixed": "#52647c"
+                },
+                "width": 1,
+                "radius": 6
+              },
+              "config": {
+                "text": {
+                  "mode": "field",
+                  "field": "PurchaseGateway_ready"
+                },
+                "color": {
+                  "fixed": "#ffffff"
+                },
+                "size": 24,
+                "align": "center",
+                "valign": "middle"
+              },
+              "connections": [
+                {
+                  "targetName": "ProductCommandService",
+                  "path": "straight",
+                  "source": {
+                    "x": 1,
+                    "y": 0
+                  },
+                  "target": {
+                    "x": 0,
+                    "y": 1
+                  },
+                  "sourceOriginal": {
+                    "x": 290.0,
+                    "y": 94.0
+                  },
+                  "targetOriginal": {
+                    "x": 1572.5,
+                    "y": 260.0
+                  },
+                  "vertices": [
+                    {
+                      "x": 0.015594541910331383,
+                      "y": 0.0
+                    },
+                    {
+                      "x": 1.1734892787524367,
+                      "y": 0.0
+                    },
+                    {
+                      "x": 1.1734892787524367,
+                      "y": 0.3373493975903614
+                    },
+                    {
+                      "x": 1.0510721247563353,
+                      "y": 0.3373493975903614
+                    },
+                    {
+                      "x": 1.0510721247563353,
+                      "y": 0.8493975903614458
+                    },
+                    {
+                      "x": 1.0,
+                      "y": 0.8493975903614458
+                    }
+                  ],
+                  "color": {
+                    "fixed": "#5794f2"
+                  },
+                  "size": {
+                    "fixed": 2
+                  },
+                  "direction": {
+                    "fixed": "forward"
+                  }
+                },
+                {
+                  "targetName": "OrderCommandService",
+                  "path": "straight",
+                  "source": {
+                    "x": 1,
+                    "y": 0
+                  },
+                  "target": {
+                    "x": 0,
+                    "y": 1
+                  },
+                  "sourceOriginal": {
+                    "x": 290.0,
+                    "y": 94.0
+                  },
+                  "targetOriginal": {
+                    "x": 1712.5,
+                    "y": 260.0
+                  },
+                  "vertices": [
+                    {
+                      "x": 0.014059753954305799,
+                      "y": 0.0
+                    },
+                    {
+                      "x": 1.0579964850615113,
+                      "y": 0.0
+                    },
+                    {
+                      "x": 1.0579964850615113,
+                      "y": 0.3373493975903614
+                    },
+                    {
+                      "x": 1.0,
+                      "y": 0.3373493975903614
+                    },
+                    {
+                      "x": 1.0,
+                      "y": 0.8493975903614458
+                    }
+                  ],
+                  "color": {
+                    "fixed": "#5794f2"
+                  },
+                  "size": {
+                    "fixed": 2
+                  },
+                  "direction": {
+                    "fixed": "forward"
+                  }
+                },
+                {
+                  "targetName": "PaymentService",
+                  "path": "straight",
+                  "source": {
+                    "x": 1,
+                    "y": 0
+                  },
+                  "target": {
+                    "x": 0,
+                    "y": 1
+                  },
+                  "sourceOriginal": {
+                    "x": 290.0,
+                    "y": 94.0
+                  },
+                  "targetOriginal": {
+                    "x": 1412.5,
+                    "y": 260.0
+                  },
+                  "vertices": [
+                    {
+                      "x": 0.017817371937639197,
+                      "y": 0.0
+                    },
+                    {
+                      "x": 1.3407572383073496,
+                      "y": 0.0
+                    },
+                    {
+                      "x": 1.3407572383073496,
+                      "y": 0.3373493975903614
+                    },
+                    {
+                      "x": 1.200890868596882,
+                      "y": 0.3373493975903614
+                    },
+                    {
+                      "x": 1.200890868596882,
+                      "y": 0.8493975903614458
+                    },
+                    {
+                      "x": 1.0,
+                      "y": 0.8493975903614458
+                    }
+                  ],
+                  "color": {
+                    "fixed": "#5794f2"
+                  },
+                  "size": {
+                    "fixed": 2
+                  },
+                  "direction": {
+                    "fixed": "forward"
+                  }
+                }
+              ]
+            },
+            {
+              "name": "PurchaseGateway_name",
+              "type": "text",
+              "placement": {
+                "left": 130,
+                "top": 57,
+                "width": 160,
+                "height": 24,
+                "rotation": 0
+              },
+              "constraint": {
+                "horizontal": "left",
+                "vertical": "top"
+              },
+              "background": {
+                "color": {
+                  "fixed": "transparent"
+                }
+              },
+              "border": {
+                "color": {
+                  "fixed": "transparent"
+                },
+                "width": 0,
+                "radius": 6
+              },
+              "config": {
+                "text": {
+                  "mode": "fixed",
+                  "fixed": "PurchaseGateway"
+                },
+                "color": {
+                  "fixed": "#dce5f4"
+                },
+                "size": 15,
+                "align": "center",
+                "valign": "middle"
+              }
+            },
+            {
+              "name": "PurchaseGateway_expected",
+              "type": "text",
+              "placement": {
+                "left": 130,
+                "top": 111,
+                "width": 160,
+                "height": 18,
+                "rotation": 0
+              },
+              "constraint": {
+                "horizontal": "left",
+                "vertical": "top"
+              },
+              "background": {
+                "color": {
+                  "fixed": "transparent"
+                }
+              },
+              "border": {
+                "color": {
+                  "fixed": "transparent"
+                },
+                "width": 0,
+                "radius": 6
+              },
+              "config": {
+                "text": {
+                  "mode": "fixed",
+                  "fixed": "ready / expected 2"
+                },
+                "color": {
+                  "fixed": "#dce5f4"
+                },
+                "size": 11,
+                "align": "center",
+                "valign": "middle"
+              }
+            },
+            {
+              "name": "client",
+              "type": "text",
+              "placement": {
+                "left": 5,
+                "top": 150,
+                "width": 100,
+                "height": 65,
+                "rotation": 0
+              },
+              "constraint": {
+                "horizontal": "left",
+                "vertical": "top"
+              },
+              "background": {
+                "color": {
+                  "fixed": "#21334b"
+                }
+              },
+              "border": {
+                "color": {
+                  "fixed": "#40516a"
+                },
+                "width": 1,
+                "radius": 6
+              },
+              "config": {
+                "text": {
+                  "mode": "fixed",
+                  "fixed": "사용자 / 앱"
+                },
+                "color": {
+                  "fixed": "#dce5f4"
+                },
+                "size": 17,
+                "align": "center",
+                "valign": "middle"
+              },
+              "connections": [
+                {
+                  "targetName": "Gateway",
+                  "path": "straight",
+                  "source": {
+                    "x": 1,
+                    "y": 0
+                  },
+                  "target": {
+                    "x": -1,
+                    "y": 0
+                  },
+                  "sourceOriginal": {
+                    "x": 105.0,
+                    "y": 182.5
+                  },
+                  "targetOriginal": {
+                    "x": 130.0,
+                    "y": 264.0
+                  },
+                  "vertices": [
+                    {
+                      "x": 0.48,
+                      "y": 0.0
+                    },
+                    {
+                      "x": 0.48,
+                      "y": 1.0
+                    }
+                  ],
+                  "color": {
+                    "fixed": "#5794f2"
+                  },
+                  "size": {
+                    "fixed": 2
+                  },
+                  "direction": {
+                    "fixed": "forward"
+                  }
+                },
+                {
+                  "targetName": "PurchaseGateway",
+                  "path": "straight",
+                  "source": {
+                    "x": 1,
+                    "y": 0
+                  },
+                  "target": {
+                    "x": -1,
+                    "y": 0
+                  },
+                  "sourceOriginal": {
+                    "x": 105.0,
+                    "y": 182.5
+                  },
+                  "targetOriginal": {
+                    "x": 130.0,
+                    "y": 94.0
+                  },
+                  "vertices": [
+                    {
+                      "x": 0.48,
+                      "y": -0.0
+                    },
+                    {
+                      "x": 0.48,
+                      "y": 1.0
+                    }
+                  ],
+                  "color": {
+                    "fixed": "#5794f2"
+                  },
+                  "size": {
+                    "fixed": 2
+                  },
+                  "direction": {
+                    "fixed": "forward"
+                  }
+                }
+              ]
+            },
+            {
+              "name": "rate_AccountService",
+              "type": "metric-value",
+              "placement": {
+                "left": 350,
+                "top": 211,
+                "width": 125,
+                "height": 21,
+                "rotation": 0
+              },
+              "constraint": {
+                "horizontal": "left",
+                "vertical": "top"
+              },
+              "background": {
+                "color": {
+                  "fixed": "transparent"
+                }
+              },
+              "border": {
+                "color": {
+                  "fixed": "transparent"
+                },
+                "width": 0,
+                "radius": 6
+              },
+              "config": {
+                "text": {
+                  "mode": "field",
+                  "field": "AccountService_rps"
+                },
+                "color": {
+                  "field": "AccountService_rps",
+                  "fixed": "#718096"
+                },
+                "size": 12,
+                "align": "center",
+                "valign": "middle"
+              }
+            },
+            {
+              "name": "rate_NotificationService",
+              "type": "metric-value",
+              "placement": {
+                "left": 490,
+                "top": 211,
+                "width": 125,
+                "height": 21,
+                "rotation": 0
+              },
+              "constraint": {
+                "horizontal": "left",
+                "vertical": "top"
+              },
+              "background": {
+                "color": {
+                  "fixed": "transparent"
+                }
+              },
+              "border": {
+                "color": {
+                  "fixed": "transparent"
+                },
+                "width": 0,
+                "radius": 6
+              },
+              "config": {
+                "text": {
+                  "mode": "field",
+                  "field": "NotificationService_rps"
+                },
+                "color": {
+                  "field": "NotificationService_rps",
+                  "fixed": "#718096"
+                },
+                "size": 12,
+                "align": "center",
+                "valign": "middle"
+              }
+            },
+            {
+              "name": "rate_CouponService",
+              "type": "metric-value",
+              "placement": {
+                "left": 630,
+                "top": 211,
+                "width": 125,
+                "height": 21,
+                "rotation": 0
+              },
+              "constraint": {
+                "horizontal": "left",
+                "vertical": "top"
+              },
+              "background": {
+                "color": {
+                  "fixed": "transparent"
+                }
+              },
+              "border": {
+                "color": {
+                  "fixed": "transparent"
+                },
+                "width": 0,
+                "radius": 6
+              },
+              "config": {
+                "text": {
+                  "mode": "field",
+                  "field": "CouponService_rps"
+                },
+                "color": {
+                  "field": "CouponService_rps",
+                  "fixed": "#718096"
+                },
+                "size": 12,
+                "align": "center",
+                "valign": "middle"
+              }
+            },
+            {
+              "name": "rate_ProductQueryService",
+              "type": "metric-value",
+              "placement": {
+                "left": 930,
+                "top": 211,
+                "width": 125,
+                "height": 21,
+                "rotation": 0
+              },
+              "constraint": {
+                "horizontal": "left",
+                "vertical": "top"
+              },
+              "background": {
+                "color": {
+                  "fixed": "transparent"
+                }
+              },
+              "border": {
+                "color": {
+                  "fixed": "transparent"
+                },
+                "width": 0,
+                "radius": 6
+              },
+              "config": {
+                "text": {
+                  "mode": "field",
+                  "field": "ProductQueryService_rps"
+                },
+                "color": {
+                  "field": "ProductQueryService_rps",
+                  "fixed": "#718096"
+                },
+                "size": 12,
+                "align": "center",
+                "valign": "middle"
+              }
+            },
+            {
+              "name": "rate_OrderQueryService",
+              "type": "metric-value",
+              "placement": {
+                "left": 1070,
+                "top": 211,
+                "width": 125,
+                "height": 21,
+                "rotation": 0
+              },
+              "constraint": {
+                "horizontal": "left",
+                "vertical": "top"
+              },
+              "background": {
+                "color": {
+                  "fixed": "transparent"
+                }
+              },
+              "border": {
+                "color": {
+                  "fixed": "transparent"
+                },
+                "width": 0,
+                "radius": 6
+              },
+              "config": {
+                "text": {
+                  "mode": "field",
+                  "field": "OrderQueryService_rps"
+                },
+                "color": {
+                  "field": "OrderQueryService_rps",
+                  "fixed": "#718096"
+                },
+                "size": 12,
+                "align": "center",
+                "valign": "middle"
+              }
+            },
+            {
+              "name": "rate_AIService",
+              "type": "metric-value",
+              "placement": {
+                "left": 1210,
+                "top": 211,
+                "width": 125,
+                "height": 21,
+                "rotation": 0
+              },
+              "constraint": {
+                "horizontal": "left",
+                "vertical": "top"
+              },
+              "background": {
+                "color": {
+                  "fixed": "transparent"
+                }
+              },
+              "border": {
+                "color": {
+                  "fixed": "transparent"
+                },
+                "width": 0,
+                "radius": 6
+              },
+              "config": {
+                "text": {
+                  "mode": "field",
+                  "field": "AIService_rps"
+                },
+                "color": {
+                  "field": "AIService_rps",
+                  "fixed": "#718096"
+                },
+                "size": 12,
+                "align": "center",
+                "valign": "middle"
+              }
+            },
+            {
+              "name": "rate_PaymentService",
+              "type": "metric-value",
+              "placement": {
+                "left": 1350,
+                "top": 211,
+                "width": 125,
+                "height": 21,
+                "rotation": 0
+              },
+              "constraint": {
+                "horizontal": "left",
+                "vertical": "top"
+              },
+              "background": {
+                "color": {
+                  "fixed": "transparent"
+                }
+              },
+              "border": {
+                "color": {
+                  "fixed": "transparent"
+                },
+                "width": 0,
+                "radius": 6
+              },
+              "config": {
+                "text": {
+                  "mode": "field",
+                  "field": "PaymentService_rps"
+                },
+                "color": {
+                  "field": "PaymentService_rps",
+                  "fixed": "#718096"
+                },
+                "size": 12,
+                "align": "center",
+                "valign": "middle"
+              }
+            },
+            {
+              "name": "rate_ProductCommandService",
+              "type": "metric-value",
+              "placement": {
+                "left": 1510,
+                "top": 211,
+                "width": 125,
+                "height": 21,
+                "rotation": 0
+              },
+              "constraint": {
+                "horizontal": "left",
+                "vertical": "top"
+              },
+              "background": {
+                "color": {
+                  "fixed": "transparent"
+                }
+              },
+              "border": {
+                "color": {
+                  "fixed": "transparent"
+                },
+                "width": 0,
+                "radius": 6
+              },
+              "config": {
+                "text": {
+                  "mode": "field",
+                  "field": "ProductCommandService_rps"
+                },
+                "color": {
+                  "field": "ProductCommandService_rps",
+                  "fixed": "#718096"
+                },
+                "size": 12,
+                "align": "center",
+                "valign": "middle"
+              }
+            },
+            {
+              "name": "rate_OrderCommandService",
+              "type": "metric-value",
+              "placement": {
+                "left": 1650,
+                "top": 115,
+                "width": 125,
+                "height": 21,
+                "rotation": 0
+              },
+              "constraint": {
+                "horizontal": "left",
+                "vertical": "top"
+              },
+              "background": {
+                "color": {
+                  "fixed": "transparent"
+                }
+              },
+              "border": {
+                "color": {
+                  "fixed": "transparent"
+                },
+                "width": 0,
+                "radius": 6
+              },
+              "config": {
+                "text": {
+                  "mode": "field",
+                  "field": "OrderCommandService_rps"
+                },
+                "color": {
+                  "field": "OrderCommandService_rps",
+                  "fixed": "#718096"
+                },
+                "size": 12,
+                "align": "center",
+                "valign": "middle"
+              }
+            },
+            {
+              "name": "Kafka",
+              "type": "text",
+              "placement": {
+                "left": 340,
+                "top": 422,
+                "width": 1440,
+                "height": 42,
+                "rotation": 0
+              },
+              "constraint": {
+                "horizontal": "left",
+                "vertical": "top"
+              },
+              "background": {
+                "color": {
+                  "fixed": "#302047"
+                }
+              },
+              "border": {
+                "color": {
+                  "fixed": "#40516a"
+                },
+                "width": 1,
+                "radius": 6
+              },
+              "config": {
+                "text": {
+                  "mode": "fixed",
+                  "fixed": "Kafka 이벤트 버스"
+                },
+                "color": {
+                  "fixed": "#e2c8ff"
+                },
+                "size": 19,
+                "align": "center",
+                "valign": "middle"
+              }
+            },
+            {
+              "name": "topic_0",
+              "type": "text",
+              "placement": {
+                "left": 460,
+                "top": 389,
+                "width": 90,
+                "height": 20,
+                "rotation": 0
+              },
+              "constraint": {
+                "horizontal": "left",
+                "vertical": "top"
+              },
+              "background": {
+                "color": {
+                  "fixed": "#111820"
+                }
+              },
+              "border": {
+                "color": {
+                  "fixed": "transparent"
+                },
+                "width": 0,
+                "radius": 6
+              },
+              "config": {
+                "text": {
+                  "mode": "fixed",
+                  "fixed": "주문"
+                },
+                "color": {
+                  "fixed": "#be91df"
+                },
+                "size": 12,
+                "align": "center",
+                "valign": "middle"
+              }
+            },
+            {
+              "name": "topic_1",
+              "type": "text",
+              "placement": {
+                "left": 750,
+                "top": 389,
+                "width": 90,
+                "height": 20,
+                "rotation": 0
+              },
+              "constraint": {
+                "horizontal": "left",
+                "vertical": "top"
+              },
+              "background": {
+                "color": {
+                  "fixed": "#111820"
+                }
+              },
+              "border": {
+                "color": {
+                  "fixed": "transparent"
+                },
+                "width": 0,
+                "radius": 6
+              },
+              "config": {
+                "text": {
+                  "mode": "fixed",
+                  "fixed": "결제"
+                },
+                "color": {
+                  "fixed": "#be91df"
+                },
+                "size": 12,
+                "align": "center",
+                "valign": "middle"
+              }
+            },
+            {
+              "name": "topic_2",
+              "type": "text",
+              "placement": {
+                "left": 1040,
+                "top": 389,
+                "width": 90,
+                "height": 20,
+                "rotation": 0
+              },
+              "constraint": {
+                "horizontal": "left",
+                "vertical": "top"
+              },
+              "background": {
+                "color": {
+                  "fixed": "#111820"
+                }
+              },
+              "border": {
+                "color": {
+                  "fixed": "transparent"
+                },
+                "width": 0,
+                "radius": 6
+              },
+              "config": {
+                "text": {
+                  "mode": "fixed",
+                  "fixed": "쿠폰"
+                },
+                "color": {
+                  "fixed": "#be91df"
+                },
+                "size": 12,
+                "align": "center",
+                "valign": "middle"
+              }
+            },
+            {
+              "name": "topic_3",
+              "type": "text",
+              "placement": {
+                "left": 1310,
+                "top": 389,
+                "width": 90,
+                "height": 20,
+                "rotation": 0
+              },
+              "constraint": {
+                "horizontal": "left",
+                "vertical": "top"
+              },
+              "background": {
+                "color": {
+                  "fixed": "#111820"
+                }
+              },
+              "border": {
+                "color": {
+                  "fixed": "transparent"
+                },
+                "width": 0,
+                "radius": 6
+              },
+              "config": {
+                "text": {
+                  "mode": "fixed",
+                  "fixed": "알림"
+                },
+                "color": {
+                  "fixed": "#be91df"
+                },
+                "size": 12,
+                "align": "center",
+                "valign": "middle"
+              }
+            },
+            {
+              "name": "topic_4",
+              "type": "text",
+              "placement": {
+                "left": 1610,
+                "top": 389,
+                "width": 90,
+                "height": 20,
+                "rotation": 0
+              },
+              "constraint": {
+                "horizontal": "left",
+                "vertical": "top"
+              },
+              "background": {
+                "color": {
+                  "fixed": "#111820"
+                }
+              },
+              "border": {
+                "color": {
+                  "fixed": "transparent"
+                },
+                "width": 0,
+                "radius": 6
+              },
+              "config": {
+                "text": {
+                  "mode": "fixed",
+                  "fixed": "AI"
+                },
+                "color": {
+                  "fixed": "#be91df"
+                },
+                "size": 12,
+                "align": "center",
+                "valign": "middle"
+              }
+            },
+            {
+              "name": "http-note",
+              "type": "text",
+              "placement": {
+                "left": 340,
+                "top": 33,
+                "width": 600,
+                "height": 27,
+                "rotation": 0
+              },
+              "constraint": {
+                "horizontal": "left",
+                "vertical": "top"
+              },
+              "background": {
+                "color": {
+                  "fixed": "transparent"
+                }
+              },
+              "border": {
+                "color": {
+                  "fixed": "transparent"
+                },
+                "width": 0,
+                "radius": 6
+              },
+              "config": {
+                "text": {
+                  "mode": "fixed",
+                  "fixed": "HTTP 라우팅: Gateway / PurchaseGateway"
+                },
+                "color": {
+                  "fixed": "#80b4ff"
+                },
+                "size": 17,
                 "align": "center",
                 "valign": "middle"
               }
@@ -3765,9 +4416,9 @@
               "name": "legend",
               "type": "text",
               "placement": {
-                "left": 200,
-                "top": 705,
-                "width": 650,
+                "left": 300,
+                "top": 485,
+                "width": 1500,
                 "height": 26,
                 "rotation": 0
               },
@@ -3782,7 +4433,7 @@
               },
               "border": {
                 "color": {
-                  "fixed": "#475569"
+                  "fixed": "transparent"
                 },
                 "width": 0,
                 "radius": 6
@@ -3790,12 +4441,12 @@
               "config": {
                 "text": {
                   "mode": "fixed",
-                  "fixed": "회색/자료 없음 = 관측 불가 | 모든 서비스 expected 2대"
+                  "fixed": "파랑 HTTP req/s    보라 Kafka 이벤트    초록 2/2    노랑 1/2    빨강 0/2    회색 관측 불가"
                 },
                 "color": {
-                  "fixed": "#e2e8f0"
+                  "fixed": "#dce5f4"
                 },
-                "size": 14,
+                "size": 15,
                 "align": "center",
                 "valign": "middle"
               }
@@ -3803,17 +4454,17 @@
           ]
         }
       },
-      "description": "12종은 Gateway와 PurchaseGateway를 포함한다. 인벤토리는 2026-11-27 EC2 기준 고정 2대. 새 인스턴스 교체 시 demo.yml을 갱신한다. No data는 관측 불가이며 초록으로 대체하지 않는다. 선은 정적 계약이며 Kafka 선 수치는 계측 예정이다. AI? Notification HTTP ?? ?? ??? route?? RPS ???? ?? route ?? ????? routeId?? ????."
+      "description": "HTTP 선은 실제 라우팅 계약을 표시하며 공통 구간을 공유한다. Kafka 연결은 이벤트 계약이며 처리량이 아니다. 서비스 인벤토리 expected=2. 회색은 관측 불가."
     },
     {
       "id": 7,
       "type": "state-timeline",
       "title": "서비스 x EC2 인스턴스 ready",
       "gridPos": {
-        "x": 17,
-        "y": 3,
-        "w": 7,
-        "h": 18
+        "x": 0,
+        "y": 27,
+        "w": 24,
+        "h": 12
       },
       "datasource": {
         "type": "prometheus",
@@ -3836,7 +4487,7 @@
       "fieldConfig": {
         "defaults": {
           "unit": "short",
-          "noValue": "계측 예정 / 자료 없음",
+          "noValue": "관측 불가",
           "color": {
             "mode": "thresholds"
           },
@@ -3896,7 +4547,7 @@
       "title": "Gateway 응답 코드별 RPS",
       "gridPos": {
         "x": 0,
-        "y": 21,
+        "y": 19,
         "w": 8,
         "h": 8
       },
@@ -3907,7 +4558,7 @@
       "targets": [
         {
           "refId": "A",
-          "expr": "sum by(service,status)(rate(http_server_requests_seconds_count{service=~\"Gateway|PurchaseGateway\",uri!~\"/actuator.*\"}[1m]))",
+          "expr": "sum by(service,status)(rate(http_server_requests_seconds_count{service=~\"Gateway|PurchaseGateway\",uri!~\"/actuator.*\"}[1m])) or on(service) label_replace((0 * (max by(service)(up{service=~\"Gateway|PurchaseGateway\"}) == 1)),\"status\",\"idle\",\"service\",\".*\")",
           "legendFormat": "{{service}} {{status}}",
           "datasource": {
             "type": "prometheus",
@@ -3921,14 +4572,16 @@
       "fieldConfig": {
         "defaults": {
           "unit": "reqps",
-          "noValue": "계측 예정 / 자료 없음",
+          "noValue": "관측 불가",
           "color": {
             "mode": "palette-classic"
           },
           "custom": {
             "lineWidth": 2,
-            "fillOpacity": 8
-          }
+            "fillOpacity": 8,
+            "axisSoftMax": 1
+          },
+          "min": 0
         },
         "overrides": []
       },
@@ -3949,7 +4602,7 @@
       "title": "Gateway 5xx RPS",
       "gridPos": {
         "x": 8,
-        "y": 21,
+        "y": 19,
         "w": 8,
         "h": 8
       },
@@ -3960,7 +4613,7 @@
       "targets": [
         {
           "refId": "A",
-          "expr": "sum by(service)(rate(http_server_requests_seconds_count{service=~\"Gateway|PurchaseGateway\",status=~\"5..\",uri!~\"/actuator.*\"}[1m]))",
+          "expr": "sum by(service)(rate(http_server_requests_seconds_count{service=~\"Gateway|PurchaseGateway\",status=~\"5..\",uri!~\"/actuator.*\"}[1m])) or on(service) (0 * (max by(service)(up{service=~\"Gateway|PurchaseGateway\"}) == 1))",
           "legendFormat": "{{service}}",
           "datasource": {
             "type": "prometheus",
@@ -3974,14 +4627,16 @@
       "fieldConfig": {
         "defaults": {
           "unit": "reqps",
-          "noValue": "계측 예정 / 자료 없음",
+          "noValue": "관측 불가",
           "color": {
             "mode": "palette-classic"
           },
           "custom": {
             "lineWidth": 2,
-            "fillOpacity": 8
-          }
+            "fillOpacity": 8,
+            "axisSoftMax": 1
+          },
+          "min": 0
         },
         "overrides": []
       },
@@ -4002,7 +4657,7 @@
       "title": "Gateway 업무 HTTP p95",
       "gridPos": {
         "x": 16,
-        "y": 21,
+        "y": 19,
         "w": 8,
         "h": 8
       },
@@ -4013,7 +4668,7 @@
       "targets": [
         {
           "refId": "A",
-          "expr": "histogram_quantile(0.95,sum by(service,le)(rate(http_server_requests_seconds_bucket{service=~\"Gateway|PurchaseGateway\",uri!~\"/actuator.*\"}[1m])))",
+          "expr": "(histogram_quantile(0.95,sum by(service,le)(rate(http_server_requests_seconds_bucket{service=~\"Gateway|PurchaseGateway\",uri!~\"/actuator.*\"}[1m]))) >= 0) or on(service) (0 * (sum by(service)(rate(http_server_requests_seconds_count{service=~\"Gateway|PurchaseGateway\",uri!~\"/actuator.*\"}[1m])) == 0))",
           "legendFormat": "{{service}}",
           "datasource": {
             "type": "prometheus",
@@ -4027,14 +4682,16 @@
       "fieldConfig": {
         "defaults": {
           "unit": "s",
-          "noValue": "계측 예정 / 자료 없음",
+          "noValue": "관측 불가",
           "color": {
             "mode": "palette-classic"
           },
           "custom": {
             "lineWidth": 2,
-            "fillOpacity": 8
-          }
+            "fillOpacity": 8,
+            "axisSoftMax": 0.1
+          },
+          "min": 0
         },
         "overrides": []
       },
@@ -4047,7 +4704,7 @@
           "mode": "multi"
         }
       },
-      "description": "공통 HTTP histogram 기준. route별 p95가 아니다. 트래픽이 없을 때 NaN은 자료 없음이다."
+      "description": "업무 요청이 0인 관측 구간은 0초로 표시한다. 공통 HTTP histogram의 p95이며 route별 p95가 아니다. 수집 장애는 자료 없음으로 남긴다."
     },
     {
       "id": 11,
@@ -4055,7 +4712,7 @@
       "title": "Kafka consumer group lag",
       "gridPos": {
         "x": 0,
-        "y": 29,
+        "y": 39,
         "w": 12,
         "h": 8
       },
@@ -4080,7 +4737,7 @@
       "fieldConfig": {
         "defaults": {
           "unit": "short",
-          "noValue": "계측 예정 / 자료 없음",
+          "noValue": "관측 불가",
           "color": {
             "mode": "palette-classic"
           },
@@ -4108,7 +4765,7 @@
       "title": "DLT 현재 보관량 추정",
       "gridPos": {
         "x": 12,
-        "y": 29,
+        "y": 39,
         "w": 12,
         "h": 8
       },
@@ -4133,7 +4790,7 @@
       "fieldConfig": {
         "defaults": {
           "unit": "short",
-          "noValue": "계측 예정 / 자료 없음",
+          "noValue": "관측 불가",
           "color": {
             "mode": "palette-classic"
           },
@@ -4161,7 +4818,7 @@
       "title": "Outbox 대기 건수 | shared DB max",
       "gridPos": {
         "x": 0,
-        "y": 37,
+        "y": 47,
         "w": 8,
         "h": 8
       },
@@ -4186,7 +4843,7 @@
       "fieldConfig": {
         "defaults": {
           "unit": "short",
-          "noValue": "계측 예정 / 자료 없음",
+          "noValue": "관측 불가",
           "color": {
             "mode": "palette-classic"
           },
@@ -4214,7 +4871,7 @@
       "title": "Outbox 가장 오래된 대기 | shared DB max",
       "gridPos": {
         "x": 8,
-        "y": 37,
+        "y": 47,
         "w": 8,
         "h": 8
       },
@@ -4239,7 +4896,7 @@
       "fieldConfig": {
         "defaults": {
           "unit": "s",
-          "noValue": "계측 예정 / 자료 없음",
+          "noValue": "관측 불가",
           "color": {
             "mode": "palette-classic"
           },
@@ -4267,7 +4924,7 @@
       "title": "Outbox collector 가용성",
       "gridPos": {
         "x": 16,
-        "y": 37,
+        "y": 47,
         "w": 8,
         "h": 8
       },
@@ -4292,7 +4949,7 @@
       "fieldConfig": {
         "defaults": {
           "unit": "short",
-          "noValue": "계측 예정 / 자료 없음",
+          "noValue": "관측 불가",
           "color": {
             "mode": "palette-classic"
           },
@@ -4320,7 +4977,7 @@
       "title": "ALERTS firing | 위 그래프와 동일 시간축",
       "gridPos": {
         "x": 0,
-        "y": 45,
+        "y": 55,
         "w": 24,
         "h": 6
       },
@@ -4345,7 +5002,7 @@
       "fieldConfig": {
         "defaults": {
           "unit": "short",
-          "noValue": "계측 예정 / 자료 없음",
+          "noValue": "관측 불가",
           "color": {
             "mode": "fixed",
             "fixed": "red"
@@ -4388,7 +5045,7 @@
       "title": "Gateway route별 RPS | Canvas 선 상세",
       "gridPos": {
         "x": 0,
-        "y": 51,
+        "y": 61,
         "w": 12,
         "h": 8
       },
@@ -4413,7 +5070,7 @@
       "fieldConfig": {
         "defaults": {
           "unit": "reqps",
-          "noValue": "계측 예정 / 자료 없음",
+          "noValue": "관측 불가",
           "color": {
             "mode": "palette-classic"
           },
@@ -4441,7 +5098,7 @@
       "title": "Kafka 미초기화 음수 lag 파티션",
       "gridPos": {
         "x": 12,
-        "y": 51,
+        "y": 61,
         "w": 12,
         "h": 8
       },
@@ -4466,7 +5123,7 @@
       "fieldConfig": {
         "defaults": {
           "unit": "short",
-          "noValue": "계측 예정 / 자료 없음",
+          "noValue": "관측 불가",
           "color": {
             "mode": "palette-classic"
           },
@@ -4494,7 +5151,7 @@
       "title": "App scrape와 health 상세",
       "gridPos": {
         "x": 0,
-        "y": 59,
+        "y": 69,
         "w": 12,
         "h": 8
       },
@@ -4531,7 +5188,7 @@
       "fieldConfig": {
         "defaults": {
           "unit": "short",
-          "noValue": "계측 예정 / 자료 없음",
+          "noValue": "관측 불가",
           "color": {
             "mode": "palette-classic"
           },
@@ -4559,7 +5216,7 @@
       "title": "추가 계측 계획과 시연 주의",
       "gridPos": {
         "x": 12,
-        "y": 59,
+        "y": 69,
         "w": 12,
         "h": 8
       },
@@ -4571,7 +5228,7 @@
       "fieldConfig": {
         "defaults": {
           "unit": "short",
-          "noValue": "계측 예정 / 자료 없음",
+          "noValue": "관측 불가",
           "color": {
             "mode": "palette-classic"
           },
