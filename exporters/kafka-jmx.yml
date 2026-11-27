@@ -2,6 +2,12 @@
 lowercaseOutputName: true
 lowercaseOutputLabelNames: true
 rules:
+  # 토픽별 누적 Count는 전체 broker 카운터와 topic 라벨로 구분합니다.
+  - pattern: 'kafka.server<type=BrokerTopicMetrics, name=MessagesInPerSec, topic=(.+)><>Count'
+    name: kafka_server_brokertopicmetrics_messagesin_total
+    labels:
+      topic: '$1'
+    type: COUNTER
   - pattern: 'kafka.server<type=BrokerTopicMetrics, name=MessagesInPerSec><>Count'
     name: kafka_server_brokertopicmetrics_messagesin_total
     type: COUNTER
