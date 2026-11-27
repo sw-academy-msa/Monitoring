@@ -110,3 +110,51 @@ tests:
         exp_samples:
           - labels: 'demo:outbox_oldest_pending_seconds{service="CouponService",application="coupon-service"}'
             value: 210
+  - interval: 15s
+    input_series:
+      - series: 'kafka_topic_partition_current_offset{instance="kafka-exporter:9308",job="kafka-consumer",service="kafka",topic="a.v1.DLT",partition="0"}'
+        values: '24+0x4'
+      - series: 'kafka_topic_partition_oldest_offset{instance="kafka-exporter:9308",job="kafka-consumer",service="kafka",topic="a.v1.DLT",partition="0"}'
+        values: '0+0x4'
+      - series: 'kafka_topic_partition_current_offset{instance="kafka-exporter:9308",job="kafka-consumer",service="kafka",topic="a.v1.DLT",partition="1"}'
+        values: '20+0x4'
+      - series: 'kafka_topic_partition_oldest_offset{instance="kafka-exporter:9308",job="kafka-consumer",service="kafka",topic="a.v1.DLT",partition="1"}'
+        values: '0+0x4'
+      - series: 'kafka_consumergroup_current_offset{instance="kafka-exporter:9308",job="kafka-consumer",service="kafka",consumergroup="stockdrop-dlt-reviewed",topic="a.v1.DLT",partition="0"}'
+        values: '24+0x4'
+      - series: 'kafka_consumergroup_current_offset{instance="kafka-exporter:9308",job="kafka-consumer",service="kafka",consumergroup="stockdrop-dlt-reviewed",topic="a.v1.DLT",partition="1"}'
+        values: '-1+0x4'
+      - series: 'kafka_consumergroup_current_offset{instance="kafka-exporter:9308",job="kafka-consumer",service="kafka",consumergroup="other-v1",topic="a.v1.DLT",partition="1"}'
+        values: '20+0x4'
+      - series: 'kafka_topic_partition_current_offset{instance="kafka-exporter:9308",job="kafka-consumer",service="kafka",topic="b.v1.DLT",partition="0"}'
+        values: '2+0x4'
+      - series: 'kafka_topic_partition_oldest_offset{instance="kafka-exporter:9308",job="kafka-consumer",service="kafka",topic="b.v1.DLT",partition="0"}'
+        values: '0+0x4'
+      - series: 'kafka_topic_partition_current_offset{instance="kafka-exporter:9308",job="kafka-consumer",service="kafka",topic="c.v1.DLT",partition="0"}'
+        values: '10+0x4'
+      - series: 'kafka_topic_partition_oldest_offset{instance="kafka-exporter:9308",job="kafka-consumer",service="kafka",topic="c.v1.DLT",partition="0"}'
+        values: '5+0x4'
+      - series: 'kafka_consumergroup_current_offset{instance="kafka-exporter:9308",job="kafka-consumer",service="kafka",consumergroup="stockdrop-dlt-reviewed",topic="c.v1.DLT",partition="0"}'
+        values: '3+0x4'
+      - series: 'kafka_topic_partition_current_offset{instance="kafka-exporter:9308",job="kafka-consumer",service="kafka",topic="d.v1.DLT",partition="0"}'
+        values: '9+0x4'
+      - series: 'kafka_topic_partition_oldest_offset{instance="kafka-exporter:9308",job="kafka-consumer",service="kafka",topic="d.v1.DLT",partition="0"}'
+        values: '0+0x4'
+      - series: 'kafka_consumergroup_current_offset{instance="kafka-exporter:9308",job="kafka-consumer",service="kafka",consumergroup="stockdrop-dlt-reviewed",topic="d.v1.DLT",partition="0"}'
+        values: '6+0x4'
+      - series: 'kafka_topic_partition_current_offset{instance="kafka-exporter:9308",job="kafka-consumer",service="kafka",topic="e.v1",partition="0"}'
+        values: '100+0x4'
+      - series: 'kafka_topic_partition_oldest_offset{instance="kafka-exporter:9308",job="kafka-consumer",service="kafka",topic="e.v1",partition="0"}'
+        values: '0+0x4'
+    promql_expr_test:
+      - expr: demo:dlt_unreviewed_messages
+        eval_time: 30s
+        exp_samples:
+          - labels: 'demo:dlt_unreviewed_messages{topic="a.v1.DLT"}'
+            value: 20
+          - labels: 'demo:dlt_unreviewed_messages{topic="b.v1.DLT"}'
+            value: 2
+          - labels: 'demo:dlt_unreviewed_messages{topic="c.v1.DLT"}'
+            value: 5
+          - labels: 'demo:dlt_unreviewed_messages{topic="d.v1.DLT"}'
+            value: 3
