@@ -166,3 +166,6 @@ groups:
         expr: max by(service,application)(stockdrop_outbox_pending and on(service,instance)(stockdrop_outbox_collector_available == 1))
       - record: demo:outbox_oldest_pending_seconds
         expr: max by(service,application)(stockdrop_outbox_oldest_pending_seconds and on(service,instance)(stockdrop_outbox_collector_available == 1))
+      # 표시용 그룹 stockdrop-dlt-reviewed(소비 프로세스 없음)의 offset 이후를 미처리 DLT로 센다. offset이 없거나 보관 구간보다 앞이면 남은 전체를 센다.
+      - record: demo:dlt_unreviewed_messages
+        expr: 'sum by(topic)(clamp_min(max by(topic,partition)(kafka_topic_partition_current_offset{topic=~".*[.]DLT"}) - on(topic,partition) ((max by(topic,partition)(kafka_consumergroup_current_offset{consumergroup="stockdrop-dlt-reviewed",topic=~".*[.]DLT"}) >= on(topic,partition) max by(topic,partition)(kafka_topic_partition_oldest_offset{topic=~".*[.]DLT"})) or on(topic,partition) max by(topic,partition)(kafka_topic_partition_oldest_offset{topic=~".*[.]DLT"})), 0))'

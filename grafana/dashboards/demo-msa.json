@@ -300,7 +300,7 @@
       "gridPos": {
         "x": 16,
         "y": 0,
-        "w": 8,
+        "w": 4,
         "h": 2
       },
       "datasource": {
@@ -361,6 +361,87 @@
         "textMode": "auto"
       },
       "description": ""
+    },
+    {
+      "id": 28,
+      "type": "stat",
+      "title": "미처리 DLT",
+      "gridPos": {
+        "x": 20,
+        "y": 0,
+        "w": 4,
+        "h": 2
+      },
+      "datasource": {
+        "type": "prometheus",
+        "uid": "stockdrop-prometheus"
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "expr": "sum(demo:dlt_unreviewed_messages)",
+          "legendFormat": "",
+          "datasource": {
+            "type": "prometheus",
+            "uid": "stockdrop-prometheus"
+          },
+          "instant": false,
+          "range": true,
+          "format": "time_series"
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "unit": "short",
+          "noValue": "관측 불가",
+          "color": {
+            "mode": "thresholds"
+          },
+          "custom": {
+            "lineWidth": 2,
+            "fillOpacity": 8
+          },
+          "mappings": [
+            {
+              "type": "special",
+              "options": {
+                "match": "null",
+                "result": {
+                  "text": "자료 없음",
+                  "color": "#808080"
+                }
+              }
+            }
+          ],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 1
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "options": {
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "colorMode": "value",
+        "graphMode": "none",
+        "textMode": "auto"
+      },
+      "description": "모든 DLT 토픽의 미처리(재처리 대기) 메시지 합계. 재처리 또는 확인 후 stockdrop-dlt-reviewed 그룹 offset을 DLT 토픽 끝으로 옮기면 0이 된다. 토픽별 값은 미처리 DLT(재처리 대기) 패널에서 본다."
     },
     {
       "id": 6,
@@ -9237,7 +9318,7 @@
     {
       "id": 12,
       "type": "timeseries",
-      "title": "DLT 현재 보관량 추정",
+      "title": "미처리 DLT(재처리 대기)",
       "gridPos": {
         "x": 12,
         "y": 39,
@@ -9251,7 +9332,7 @@
       "targets": [
         {
           "refId": "A",
-          "expr": "sum by(topic)(clamp_min(kafka_topic_partition_current_offset{topic=~\".*[.]DLT\"}-kafka_topic_partition_oldest_offset{topic=~\".*[.]DLT\"},0))",
+          "expr": "demo:dlt_unreviewed_messages",
           "legendFormat": "{{topic}}",
           "datasource": {
             "type": "prometheus",
@@ -9285,7 +9366,7 @@
           "mode": "multi"
         }
       },
-      "description": "offset 차이의 보관량 추정. 발행 성공 counter가 아니다. 자료 없음은 0으로 처리하지 않는다."
+      "description": "DLT 토픽별로 아직 재처리하거나 확인하지 않은 메시지 수. 파티션마다 DLT 끝 offset에서 표시용 소비 그룹 stockdrop-dlt-reviewed의 committed offset을 뺀 값이고, 그룹 offset이 없거나 보관 기간으로 지워진 구간보다 앞이면 남아 있는 전체(끝 offset - 가장 오래된 offset)를 센다. 이 그룹을 실제로 소비하는 프로세스는 없다. 재처리 또는 확인을 마친 뒤 stockdrop-dlt-reviewed 그룹의 offset을 해당 DLT 토픽 끝으로 옮기면 0이 된다. 그룹이 비어 있으면 Kafka가 offsets.retention.minutes(기본 7일) 뒤 offset을 지우므로 다시 전체가 미처리로 보일 수 있다. 자료 없음은 0으로 처리하지 않는다."
     },
     {
       "id": 13,
