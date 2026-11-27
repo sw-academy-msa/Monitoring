@@ -49,7 +49,7 @@ jobs:
         run: |
           docker run --rm --entrypoint /bin/promtool \
             -v "$PWD/prometheus:/work:ro" -w /work/tests \
-            "$PROMETHEUS_IMAGE" test rules alerts.test.yml
+            "$PROMETHEUS_IMAGE" test rules alerts.test.yml demo.test.yml
 
       # Slack 설정은 webhook 파일 경로만 확인하며 실제 발송하지 않습니다.
       - name: Check Alertmanager configs
