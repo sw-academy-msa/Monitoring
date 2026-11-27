@@ -34,3 +34,207 @@ tests:
           - exp_labels: {application: coupon-service, severity: warning}
             exp_annotations:
               summary: '쿠폰 잠금 24시간 초과'
+
+  # Two replicas of one snapshot must produce one alert per business identity.
+  - interval: 1m
+    input_series:
+      - series: 'stockdrop_outbox_oldest_pending_seconds{service="CouponService",application="coupon-service",campaign="spring",instance="a:8080",pod="pod-a",ec2_instance_id="i-a",job="coupon-a"}'
+        values: '180+0x6'
+      - series: 'stockdrop_outbox_oldest_pending_seconds{service="CouponService",application="coupon-service",campaign="spring",instance="b:8080",pod="pod-b",ec2_instance_id="i-b",job="coupon-b"}'
+        values: '180+0x6'
+      - series: 'stockdrop_outbox_oldest_pending_seconds{service="CouponService",application="coupon-service",campaign="summer",instance="a:8080",pod="pod-a",ec2_instance_id="i-a",job="coupon-a"}'
+        values: '180+0x6'
+      - series: 'stockdrop_outbox_oldest_pending_seconds{service="CouponService",application="coupon-service",campaign="summer",instance="b:8080",pod="pod-b",ec2_instance_id="i-b",job="coupon-b"}'
+        values: '180+0x6'
+      - series: 'stockdrop_coupon_campaign_budget_warning{service="CouponService",application="coupon-service",campaign="spring",instance="a:8080",pod="pod-a",ec2_instance_id="i-a",job="coupon-a"}'
+        values: '1+0x6'
+      - series: 'stockdrop_coupon_campaign_budget_warning{service="CouponService",application="coupon-service",campaign="spring",instance="b:8080",pod="pod-b",ec2_instance_id="i-b",job="coupon-b"}'
+        values: '1+0x6'
+      - series: 'stockdrop_coupon_campaign_budget_warning{service="CouponService",application="coupon-service",campaign="summer",instance="a:8080",pod="pod-a",ec2_instance_id="i-a",job="coupon-a"}'
+        values: '1+0x6'
+      - series: 'stockdrop_coupon_campaign_budget_warning{service="CouponService",application="coupon-service",campaign="summer",instance="b:8080",pod="pod-b",ec2_instance_id="i-b",job="coupon-b"}'
+        values: '1+0x6'
+      - series: 'stockdrop_coupon_pending_failed{service="CouponService",application="coupon-service",campaign="spring",instance="a:8080",pod="pod-a",ec2_instance_id="i-a",job="coupon-a"}'
+        values: '2+0x6'
+      - series: 'stockdrop_coupon_pending_failed{service="CouponService",application="coupon-service",campaign="spring",instance="b:8080",pod="pod-b",ec2_instance_id="i-b",job="coupon-b"}'
+        values: '2+0x6'
+      - series: 'stockdrop_coupon_pending_failed{service="CouponService",application="coupon-service",campaign="summer",instance="a:8080",pod="pod-a",ec2_instance_id="i-a",job="coupon-a"}'
+        values: '2+0x6'
+      - series: 'stockdrop_coupon_pending_failed{service="CouponService",application="coupon-service",campaign="summer",instance="b:8080",pod="pod-b",ec2_instance_id="i-b",job="coupon-b"}'
+        values: '2+0x6'
+      - series: 'stockdrop_coupon_locks_overdue{service="CouponService",application="coupon-service",campaign="spring",instance="a:8080",pod="pod-a",ec2_instance_id="i-a",job="coupon-a"}'
+        values: '3+0x6'
+      - series: 'stockdrop_coupon_locks_overdue{service="CouponService",application="coupon-service",campaign="spring",instance="b:8080",pod="pod-b",ec2_instance_id="i-b",job="coupon-b"}'
+        values: '3+0x6'
+      - series: 'stockdrop_coupon_locks_overdue{service="CouponService",application="coupon-service",campaign="summer",instance="a:8080",pod="pod-a",ec2_instance_id="i-a",job="coupon-a"}'
+        values: '3+0x6'
+      - series: 'stockdrop_coupon_locks_overdue{service="CouponService",application="coupon-service",campaign="summer",instance="b:8080",pod="pod-b",ec2_instance_id="i-b",job="coupon-b"}'
+        values: '3+0x6'
+    alert_rule_test:
+      - eval_time: 0m
+        alertname: OutboxDelayed
+        exp_alerts: []
+      - eval_time: 3m
+        alertname: OutboxDelayed
+        exp_alerts:
+          - exp_labels: {service: CouponService, application: coupon-service, campaign: spring, severity: warning}
+            exp_annotations:
+              summary: '미발행 Outbox 대기: coupon-service'
+          - exp_labels: {service: CouponService, application: coupon-service, campaign: summer, severity: warning}
+            exp_annotations:
+              summary: '미발행 Outbox 대기: coupon-service'
+      - eval_time: 6m
+        alertname: OutboxDelayed
+        exp_alerts:
+          - exp_labels: {service: CouponService, application: coupon-service, campaign: spring, severity: warning}
+            exp_annotations:
+              summary: '미발행 Outbox 대기: coupon-service'
+          - exp_labels: {service: CouponService, application: coupon-service, campaign: summer, severity: warning}
+            exp_annotations:
+              summary: '미발행 Outbox 대기: coupon-service'
+      - eval_time: 0m
+        alertname: CouponBudgetNearlyExhausted
+        exp_alerts: []
+      - eval_time: 3m
+        alertname: CouponBudgetNearlyExhausted
+        exp_alerts:
+          - exp_labels: {service: CouponService, application: coupon-service, campaign: spring, severity: warning}
+            exp_annotations:
+              summary: '쿠폰 캠페인 예산 90% 소진'
+          - exp_labels: {service: CouponService, application: coupon-service, campaign: summer, severity: warning}
+            exp_annotations:
+              summary: '쿠폰 캠페인 예산 90% 소진'
+      - eval_time: 6m
+        alertname: CouponBudgetNearlyExhausted
+        exp_alerts:
+          - exp_labels: {service: CouponService, application: coupon-service, campaign: spring, severity: warning}
+            exp_annotations:
+              summary: '쿠폰 캠페인 예산 90% 소진'
+          - exp_labels: {service: CouponService, application: coupon-service, campaign: summer, severity: warning}
+            exp_annotations:
+              summary: '쿠폰 캠페인 예산 90% 소진'
+      - eval_time: 0m
+        alertname: CouponTargetDispatchFailed
+        exp_alerts: []
+      - eval_time: 3m
+        alertname: CouponTargetDispatchFailed
+        exp_alerts:
+          - exp_labels: {service: CouponService, application: coupon-service, campaign: spring, severity: warning}
+            exp_annotations:
+              summary: '쿠폰 대상 처리 실패'
+          - exp_labels: {service: CouponService, application: coupon-service, campaign: summer, severity: warning}
+            exp_annotations:
+              summary: '쿠폰 대상 처리 실패'
+      - eval_time: 6m
+        alertname: CouponTargetDispatchFailed
+        exp_alerts:
+          - exp_labels: {service: CouponService, application: coupon-service, campaign: spring, severity: warning}
+            exp_annotations:
+              summary: '쿠폰 대상 처리 실패'
+          - exp_labels: {service: CouponService, application: coupon-service, campaign: summer, severity: warning}
+            exp_annotations:
+              summary: '쿠폰 대상 처리 실패'
+      - eval_time: 0m
+        alertname: CouponLocksOverdue
+        exp_alerts: []
+      - eval_time: 3m
+        alertname: CouponLocksOverdue
+        exp_alerts:
+          - exp_labels: {service: CouponService, application: coupon-service, campaign: spring, severity: warning}
+            exp_annotations:
+              summary: '쿠폰 잠금 24시간 초과'
+          - exp_labels: {service: CouponService, application: coupon-service, campaign: summer, severity: warning}
+            exp_annotations:
+              summary: '쿠폰 잠금 24시간 초과'
+      - eval_time: 6m
+        alertname: CouponLocksOverdue
+        exp_alerts:
+          - exp_labels: {service: CouponService, application: coupon-service, campaign: spring, severity: warning}
+            exp_annotations:
+              summary: '쿠폰 잠금 24시간 초과'
+          - exp_labels: {service: CouponService, application: coupon-service, campaign: summer, severity: warning}
+            exp_annotations:
+              summary: '쿠폰 잠금 24시간 초과'
+    promql_expr_test:
+      - expr: count(ALERTS{alertstate="firing"}) or vector(0)
+        eval_time: 3m
+        exp_samples:
+          - labels: "{}"
+            value: 8
+
+  # Infrastructure and collector failures must retain instance identity.
+  - interval: 1m
+    input_series:
+      - series: 'up{job="synthetic",instance="a",application="coupon-service"}'
+        values: '0+0x6'
+      - series: 'up{job="synthetic",instance="b",application="coupon-service"}'
+        values: '0+0x6'
+      - series: 'probe_success{job="application-health",instance="a",application="coupon-service"}'
+        values: '0+0x6'
+      - series: 'probe_success{job="application-health",instance="b",application="coupon-service"}'
+        values: '0+0x6'
+      - series: 'stockdrop_outbox_collector_available{job="coupon",instance="a",application="coupon-service"}'
+        values: '0+0x6'
+      - series: 'stockdrop_outbox_collector_available{job="coupon",instance="b",application="coupon-service"}'
+        values: '0+0x6'
+    alert_rule_test:
+      - eval_time: 3m
+        alertname: ScrapeTargetDown
+        exp_alerts:
+          - exp_labels: {job: synthetic, instance: a, application: coupon-service, severity: critical}
+            exp_annotations:
+              summary: '메트릭 수집 실패: synthetic a'
+          - exp_labels: {job: synthetic, instance: b, application: coupon-service, severity: critical}
+            exp_annotations:
+              summary: '메트릭 수집 실패: synthetic b'
+      - eval_time: 3m
+        alertname: ApplicationUnhealthy
+        exp_alerts:
+          - exp_labels: {job: application-health, instance: a, application: coupon-service, severity: critical}
+            exp_annotations:
+              summary: '서비스 헬스체크 실패: a'
+          - exp_labels: {job: application-health, instance: b, application: coupon-service, severity: critical}
+            exp_annotations:
+              summary: '서비스 헬스체크 실패: b'
+      - eval_time: 3m
+        alertname: OutboxCollectorUnavailable
+        exp_alerts:
+          - exp_labels: {job: coupon, instance: a, application: coupon-service, severity: warning}
+            exp_annotations:
+              summary: 'Outbox 집계 실패: coupon-service'
+          - exp_labels: {job: coupon, instance: b, application: coupon-service, severity: warning}
+            exp_annotations:
+              summary: 'Outbox 집계 실패: coupon-service'
+
+  # Healthy and initialization snapshots must not fire.
+  - interval: 1m
+    input_series:
+      - series: 'stockdrop_outbox_oldest_pending_seconds{service="CouponService",instance="a"}'
+        values: '0+0x6'
+      - series: 'stockdrop_outbox_oldest_pending_seconds{service="CouponService",instance="b"}'
+        values: '-1+0x6'
+      - series: 'stockdrop_coupon_campaign_budget_warning{service="CouponService",instance="a"}'
+        values: '0+0x6'
+      - series: 'stockdrop_coupon_campaign_budget_warning{service="CouponService",instance="b"}'
+        values: '-1+0x6'
+      - series: 'stockdrop_coupon_pending_failed{service="CouponService",instance="a"}'
+        values: '0+0x6'
+      - series: 'stockdrop_coupon_pending_failed{service="CouponService",instance="b"}'
+        values: '-1+0x6'
+      - series: 'stockdrop_coupon_locks_overdue{service="CouponService",instance="a"}'
+        values: '0+0x6'
+      - series: 'stockdrop_coupon_locks_overdue{service="CouponService",instance="b"}'
+        values: '-1+0x6'
+    alert_rule_test:
+      - eval_time: 6m
+        alertname: OutboxDelayed
+        exp_alerts: []
+      - eval_time: 6m
+        alertname: CouponBudgetNearlyExhausted
+        exp_alerts: []
+      - eval_time: 6m
+        alertname: CouponTargetDispatchFailed
+        exp_alerts: []
+      - eval_time: 6m
+        alertname: CouponLocksOverdue
+        exp_alerts: []

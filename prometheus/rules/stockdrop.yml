@@ -37,8 +37,9 @@ groups:
           severity: warning
         annotations:
           summary: 'Kafka 소비 지연: {{ $labels.consumergroup }} {{ $labels.topic }}'
+      # Shared DB snapshots: retain business identity and discard scrape target labels.
       - alert: OutboxDelayed
-        expr: stockdrop_outbox_oldest_pending_seconds > 120
+        expr: max by (service, application, campaign) (stockdrop_outbox_oldest_pending_seconds) > 120
         for: 2m
         labels:
           severity: warning
@@ -59,21 +60,21 @@ groups:
         annotations:
           summary: 'Outbox 집계 실패: {{ $labels.application }}'
       - alert: CouponBudgetNearlyExhausted
-        expr: stockdrop_coupon_campaign_budget_warning > 0
+        expr: max by (service, application, campaign) (stockdrop_coupon_campaign_budget_warning) > 0
         for: 1m
         labels:
           severity: warning
         annotations:
           summary: '쿠폰 캠페인 예산 90% 소진'
       - alert: CouponTargetDispatchFailed
-        expr: stockdrop_coupon_pending_failed > 0
+        expr: max by (service, application, campaign) (stockdrop_coupon_pending_failed) > 0
         for: 1m
         labels:
           severity: warning
         annotations:
           summary: '쿠폰 대상 처리 실패'
       - alert: CouponLocksOverdue
-        expr: stockdrop_coupon_locks_overdue > 0
+        expr: max by (service, application, campaign) (stockdrop_coupon_locks_overdue) > 0
         for: 1m
         labels:
           severity: warning

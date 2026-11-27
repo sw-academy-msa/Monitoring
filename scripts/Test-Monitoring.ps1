@@ -7,7 +7,7 @@ try {
     if ($LASTEXITCODE -ne 0) { throw 'Compose configuration failed.' }
     & docker compose run --rm --no-deps --entrypoint /bin/promtool prometheus check config /etc/prometheus/prometheus.yml
     if ($LASTEXITCODE -ne 0) { throw 'Prometheus configuration failed.' }
-    & docker run --rm --entrypoint /bin/promtool -v "${root}/prometheus:/work:ro" -w /work/tests prom/prometheus:v3.13.5 test rules alerts.test.yml
+    & docker run --rm --entrypoint /bin/promtool -v "${root}/prometheus:/work:ro" -w /work/tests prom/prometheus:v3.13.5 test rules alerts.test.yml demo.test.yml
     if ($LASTEXITCODE -ne 0) { throw 'Alert rule tests failed.' }
     & docker run --rm --entrypoint /bin/amtool -v "${root}/alertmanager:/work:ro" prom/alertmanager:v0.28.1 check-config /work/alertmanager.yml
     if ($LASTEXITCODE -ne 0) { throw 'Alertmanager configuration failed.' }

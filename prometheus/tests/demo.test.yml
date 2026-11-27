@@ -77,3 +77,36 @@ tests:
       - expr: demo:service_ready_ratio{service="PaymentService"}
         eval_time: 240s
         exp_samples: []
+
+  # Valid snapshots are deduplicated; unavailable collectors cannot override them.
+  - interval: 15s
+    input_series:
+      - series: 'stockdrop_outbox_pending{service="CouponService",application="coupon-service",instance="a",pod="a",ec2_instance_id="a"}'
+        values: '7+0x4'
+      - series: 'stockdrop_outbox_oldest_pending_seconds{service="CouponService",application="coupon-service",instance="a",pod="a",ec2_instance_id="a"}'
+        values: '210+0x4'
+      - series: 'stockdrop_outbox_collector_available{service="CouponService",application="coupon-service",instance="a",pod="a",ec2_instance_id="a"}'
+        values: '1+0x4'
+      - series: 'stockdrop_outbox_pending{service="CouponService",application="coupon-service",instance="b",pod="b",ec2_instance_id="b"}'
+        values: '5+0x4'
+      - series: 'stockdrop_outbox_oldest_pending_seconds{service="CouponService",application="coupon-service",instance="b",pod="b",ec2_instance_id="b"}'
+        values: '150+0x4'
+      - series: 'stockdrop_outbox_collector_available{service="CouponService",application="coupon-service",instance="b",pod="b",ec2_instance_id="b"}'
+        values: '1+0x4'
+      - series: 'stockdrop_outbox_pending{service="CouponService",application="coupon-service",instance="c",pod="c",ec2_instance_id="c"}'
+        values: '999+0x4'
+      - series: 'stockdrop_outbox_oldest_pending_seconds{service="CouponService",application="coupon-service",instance="c",pod="c",ec2_instance_id="c"}'
+        values: '29970+0x4'
+      - series: 'stockdrop_outbox_collector_available{service="CouponService",application="coupon-service",instance="c",pod="c",ec2_instance_id="c"}'
+        values: '0+0x4'
+    promql_expr_test:
+      - expr: demo:outbox_pending
+        eval_time: 30s
+        exp_samples:
+          - labels: 'demo:outbox_pending{service="CouponService",application="coupon-service"}'
+            value: 7
+      - expr: demo:outbox_oldest_pending_seconds
+        eval_time: 30s
+        exp_samples:
+          - labels: 'demo:outbox_oldest_pending_seconds{service="CouponService",application="coupon-service"}'
+            value: 210
