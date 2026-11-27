@@ -6,7 +6,7 @@ services:
       - ./prometheus/targets:/etc/prometheus/targets:ro
 
   grafana:
-    # Grafana? ALB? ??? ?? Prometheus? loopback? ?????.
+    # Grafana만 공개 바인딩하고 Prometheus는 loopback을 유지합니다.
     ports: !override ["${GRAFANA_BIND_ADDRESS:-0.0.0.0}:${GRAFANA_PORT:-3001}:3000"]
     environment:
       GF_SERVER_ROOT_URL: https://grafana.stockdrop.cloud
