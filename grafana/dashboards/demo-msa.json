@@ -9783,7 +9783,7 @@
       "targets": [
         {
           "refId": "A",
-          "expr": "sum by(topic)(rate(kafka_server_brokertopicmetrics_messagesin_total{topic!~\"__.*\"}[1m])) or on(topic) sum by(topic)(clamp_min(deriv(kafka_topic_partition_current_offset{topic!~\"__.*\"}[1m]),0))",
+          "expr": "sum by(topic)(rate(kafka_server_brokertopicmetrics_messagesin_total{topic=~\".+\",topic!~\"__.*\"}[1m])) or on(topic) sum by(topic)(clamp_min(deriv(kafka_topic_partition_current_offset{topic!~\"__.*\"}[1m]),0))",
           "legendFormat": "{{topic}}",
           "datasource": {
             "type": "prometheus",
