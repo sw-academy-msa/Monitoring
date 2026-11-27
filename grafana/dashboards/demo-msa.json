@@ -811,7 +811,7 @@
         },
         {
           "refId": "K36",
-          "expr": "(sum(sum by(topic)(rate(kafka_server_brokertopicmetrics_messagesin_total{topic=~\"stockdrop\\\\.notifications\\\\.coupon\\\\.v1\"}[1m])) or on(topic) sum by(topic)(clamp_min(deriv(kafka_topic_partition_current_offset{topic=~\"stockdrop\\\\.notifications\\\\.coupon\\\\.v1\"}[1m]),0)))) or vector(0/0)",
+          "expr": "(sum(sum by(topic)(rate(kafka_server_brokertopicmetrics_messagesin_total{topic=~\"stockdrop\\\\.notifications\\\\.coupon\\\\.v1|stockdrop\\\\.notifications\\\\.campaign\\\\.v1\"}[1m])) or on(topic) sum by(topic)(clamp_min(deriv(kafka_topic_partition_current_offset{topic=~\"stockdrop\\\\.notifications\\\\.coupon\\\\.v1|stockdrop\\\\.notifications\\\\.campaign\\\\.v1\"}[1m]),0)))) or vector(0/0)",
           "legendFormat": "CouponService_발행",
           "datasource": {
             "type": "prometheus",
@@ -883,7 +883,7 @@
         },
         {
           "refId": "K42",
-          "expr": "(sum(sum by(topic)(rate(kafka_server_brokertopicmetrics_messagesin_total{topic=~\"stockdrop\\\\.payment\\\\.results\\\\.private\\\\.v1\"}[1m])) or on(topic) sum by(topic)(clamp_min(deriv(kafka_topic_partition_current_offset{topic=~\"stockdrop\\\\.payment\\\\.results\\\\.private\\\\.v1\"}[1m]),0)))) or vector(0/0)",
+          "expr": "(sum(sum by(topic)(rate(kafka_server_brokertopicmetrics_messagesin_total{topic=~\"stockdrop\\\\.payment\\\\.results\\\\.private\\\\.v1|stockdrop\\\\.membership\\\\.events\\\\.private\\\\.v1|payment\\\\.advertising\\\\.results\\\\.v1\"}[1m])) or on(topic) sum by(topic)(clamp_min(deriv(kafka_topic_partition_current_offset{topic=~\"stockdrop\\\\.payment\\\\.results\\\\.private\\\\.v1|stockdrop\\\\.membership\\\\.events\\\\.private\\\\.v1|payment\\\\.advertising\\\\.results\\\\.v1\"}[1m]),0)))) or vector(0/0)",
           "legendFormat": "PaymentService_발행",
           "datasource": {
             "type": "prometheus",
@@ -895,7 +895,7 @@
         },
         {
           "refId": "K43",
-          "expr": "(sum(clamp_min(deriv(kafka_consumergroup_current_offset{consumergroup=~\"payment-command-v1|payment-membership-command-v1\"}[1m]),0))) or vector(0/0)",
+          "expr": "(sum(clamp_min(deriv(kafka_consumergroup_current_offset{consumergroup=~\"payment-command-v1|payment-membership-command-v1|payment-advertising-command-v1\"}[1m]),0))) or vector(0/0)",
           "legendFormat": "PaymentService_커밋",
           "datasource": {
             "type": "prometheus",
@@ -907,7 +907,7 @@
         },
         {
           "refId": "K44",
-          "expr": "(sum(sum by(topic)(rate(kafka_server_brokertopicmetrics_messagesin_total{topic=~\"stockdrop\\\\.product\\\\.public\\\\.v1|stockdrop\\\\.product\\\\.inquiries\\\\.v1|stockdrop\\\\.product\\\\.analysis-requested\\\\.v1|stockdrop\\\\.product\\\\.published\\\\.v1|stockdrop\\\\.notifications\\\\.product\\\\.v1\"}[1m])) or on(topic) sum by(topic)(clamp_min(deriv(kafka_topic_partition_current_offset{topic=~\"stockdrop\\\\.product\\\\.public\\\\.v1|stockdrop\\\\.product\\\\.inquiries\\\\.v1|stockdrop\\\\.product\\\\.analysis-requested\\\\.v1|stockdrop\\\\.product\\\\.published\\\\.v1|stockdrop\\\\.notifications\\\\.product\\\\.v1\"}[1m]),0)))) or vector(0/0)",
+          "expr": "(sum(sum by(topic)(rate(kafka_server_brokertopicmetrics_messagesin_total{topic=~\"stockdrop\\\\.product\\\\.public\\\\.v1|product\\\\.advertising\\\\.commands\\\\.v1|stockdrop\\\\.product\\\\.inquiries\\\\.v1|stockdrop\\\\.product\\\\.analysis-requested\\\\.v1|stockdrop\\\\.product\\\\.published\\\\.v1|stockdrop\\\\.notifications\\\\.product\\\\.v1\"}[1m])) or on(topic) sum by(topic)(clamp_min(deriv(kafka_topic_partition_current_offset{topic=~\"stockdrop\\\\.product\\\\.public\\\\.v1|product\\\\.advertising\\\\.commands\\\\.v1|stockdrop\\\\.product\\\\.inquiries\\\\.v1|stockdrop\\\\.product\\\\.analysis-requested\\\\.v1|stockdrop\\\\.product\\\\.published\\\\.v1|stockdrop\\\\.notifications\\\\.product\\\\.v1\"}[1m]),0)))) or vector(0/0)",
           "legendFormat": "ProductCommandService_발행",
           "datasource": {
             "type": "prometheus",
@@ -931,7 +931,7 @@
         },
         {
           "refId": "K46",
-          "expr": "(sum(sum by(topic)(rate(kafka_server_brokertopicmetrics_messagesin_total{topic=~\"stockdrop\\\\.orders\\\\.private\\\\.v1|stockdrop\\\\.orders\\\\.lifecycle\\\\.v1|stockdrop\\\\.payment\\\\.commands\\\\.private\\\\.v1|stockdrop\\\\.notifications\\\\.order\\\\.v1\"}[1m])) or on(topic) sum by(topic)(clamp_min(deriv(kafka_topic_partition_current_offset{topic=~\"stockdrop\\\\.orders\\\\.private\\\\.v1|stockdrop\\\\.orders\\\\.lifecycle\\\\.v1|stockdrop\\\\.payment\\\\.commands\\\\.private\\\\.v1|stockdrop\\\\.notifications\\\\.order\\\\.v1\"}[1m]),0)))) or vector(0/0)",
+          "expr": "(sum(sum by(topic)(rate(kafka_server_brokertopicmetrics_messagesin_total{topic=~\"stockdrop\\\\.orders\\\\.private\\\\.v1|stockdrop\\\\.orders\\\\.inquiries\\\\.private\\\\.v1|stockdrop\\\\.orders\\\\.lifecycle\\\\.v1|stockdrop\\\\.payment\\\\.commands\\\\.private\\\\.v1|stockdrop\\\\.notifications\\\\.order\\\\.v1\"}[1m])) or on(topic) sum by(topic)(clamp_min(deriv(kafka_topic_partition_current_offset{topic=~\"stockdrop\\\\.orders\\\\.private\\\\.v1|stockdrop\\\\.orders\\\\.inquiries\\\\.private\\\\.v1|stockdrop\\\\.orders\\\\.lifecycle\\\\.v1|stockdrop\\\\.payment\\\\.commands\\\\.private\\\\.v1|stockdrop\\\\.notifications\\\\.order\\\\.v1\"}[1m]),0)))) or vector(0/0)",
           "legendFormat": "OrderCommandService_발행",
           "datasource": {
             "type": "prometheus",
@@ -945,6 +945,66 @@
           "refId": "K47",
           "expr": "(sum(clamp_min(deriv(kafka_consumergroup_current_offset{consumergroup=~\"order-command-payment-v1\"}[1m]),0))) or vector(0/0)",
           "legendFormat": "OrderCommandService_커밋",
+          "datasource": {
+            "type": "prometheus",
+            "uid": "stockdrop-prometheus"
+          },
+          "instant": true,
+          "range": false,
+          "format": "time_series"
+        },
+        {
+          "refId": "S0",
+          "expr": "max(stockdrop_saga_collector_available{service=\"OrderCommandService\"}) or vector(-1)",
+          "legendFormat": "Saga_status",
+          "datasource": {
+            "type": "prometheus",
+            "uid": "stockdrop-prometheus"
+          },
+          "instant": true,
+          "range": false,
+          "format": "time_series"
+        },
+        {
+          "refId": "S1",
+          "expr": "(max(stockdrop_saga_in_progress{service=\"OrderCommandService\"} and on(service,instance) ((stockdrop_saga_collector_available{service=\"OrderCommandService\"} == 1) and on(service,instance) (up{job=\"OrderCommandService\"} == 1)))) or vector(0/0)",
+          "legendFormat": "Saga_value_0",
+          "datasource": {
+            "type": "prometheus",
+            "uid": "stockdrop-prometheus"
+          },
+          "instant": true,
+          "range": false,
+          "format": "time_series"
+        },
+        {
+          "refId": "S2",
+          "expr": "(sum(increase(stockdrop_saga_transitions_total{service=\"OrderCommandService\",to=\"CONFIRMED\"}[5m]))) or vector(0/0)",
+          "legendFormat": "Saga_value_1",
+          "datasource": {
+            "type": "prometheus",
+            "uid": "stockdrop-prometheus"
+          },
+          "instant": true,
+          "range": false,
+          "format": "time_series"
+        },
+        {
+          "refId": "S3",
+          "expr": "(sum(increase(stockdrop_saga_transitions_total{service=\"OrderCommandService\",to=~\"FAILED|EXPIRED\"}[5m]))) or vector(0/0)",
+          "legendFormat": "Saga_value_2",
+          "datasource": {
+            "type": "prometheus",
+            "uid": "stockdrop-prometheus"
+          },
+          "instant": true,
+          "range": false,
+          "format": "time_series"
+        },
+        {
+          "refId": "S4",
+          "expr": "(sum(increase(stockdrop_saga_compensations_total{service=\"OrderCommandService\",outcome=\"success\"}[5m]))) or vector(0/0)",
+          "legendFormat": "Saga_value_3",
           "datasource": {
             "type": "prometheus",
             "uid": "stockdrop-prometheus"
@@ -1967,6 +2027,173 @@
                     }
                   ]
                 }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Saga_status"
+            },
+            "properties": [
+              {
+                "id": "unit",
+                "value": "none"
+              },
+              {
+                "id": "mappings",
+                "value": [
+                  {
+                    "type": "value",
+                    "options": {
+                      "0": {
+                        "text": "Saga | 수집 장애"
+                      },
+                      "1": {
+                        "text": "Saga"
+                      },
+                      "-1": {
+                        "text": "Saga | 배포 후 표시"
+                      }
+                    }
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Saga_value_0"
+            },
+            "properties": [
+              {
+                "id": "unit",
+                "value": "short"
+              },
+              {
+                "id": "decimals",
+                "value": 0
+              },
+              {
+                "id": "noValue",
+                "value": "-"
+              },
+              {
+                "id": "mappings",
+                "value": [
+                  {
+                    "type": "special",
+                    "options": {
+                      "match": "nan",
+                      "result": {
+                        "text": "-"
+                      }
+                    }
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Saga_value_1"
+            },
+            "properties": [
+              {
+                "id": "unit",
+                "value": "short"
+              },
+              {
+                "id": "decimals",
+                "value": 0
+              },
+              {
+                "id": "noValue",
+                "value": "-"
+              },
+              {
+                "id": "mappings",
+                "value": [
+                  {
+                    "type": "special",
+                    "options": {
+                      "match": "nan",
+                      "result": {
+                        "text": "-"
+                      }
+                    }
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Saga_value_2"
+            },
+            "properties": [
+              {
+                "id": "unit",
+                "value": "short"
+              },
+              {
+                "id": "decimals",
+                "value": 0
+              },
+              {
+                "id": "noValue",
+                "value": "-"
+              },
+              {
+                "id": "mappings",
+                "value": [
+                  {
+                    "type": "special",
+                    "options": {
+                      "match": "nan",
+                      "result": {
+                        "text": "-"
+                      }
+                    }
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Saga_value_3"
+            },
+            "properties": [
+              {
+                "id": "unit",
+                "value": "short"
+              },
+              {
+                "id": "decimals",
+                "value": 0
+              },
+              {
+                "id": "noValue",
+                "value": "-"
+              },
+              {
+                "id": "mappings",
+                "value": [
+                  {
+                    "type": "special",
+                    "options": {
+                      "match": "nan",
+                      "result": {
+                        "text": "-"
+                      }
+                    }
+                  }
+                ]
               }
             ]
           }
@@ -4687,7 +4914,7 @@
               "config": {
                 "text": {
                   "mode": "fixed",
-                  "fixed": "파랑 HTTP req/s    보라 Kafka 이벤트    초록 2/2    노랑 1/2    빨강 0/2    회색 관측 불가"
+                  "fixed": "파랑 HTTP req/s    보라 Kafka 이벤트    초록 2/2    노랑 1/2    빨강 0/2    회색 관측 불가 | Kafka 위 발행/s 아래 커밋/s"
                 },
                 "color": {
                   "fixed": "#dce5f4"
@@ -8317,6 +8544,387 @@
                 "align": "center",
                 "valign": "middle"
               }
+            },
+            {
+              "name": "Saga",
+              "type": "text",
+              "placement": {
+                "left": 68.47826086956522,
+                "right": 3.2608695652173916,
+                "top": 0.37037037037037035,
+                "bottom": 84.25925925925925,
+                "rotation": 0
+              },
+              "constraint": {
+                "horizontal": "scale",
+                "vertical": "scale"
+              },
+              "background": {
+                "color": {
+                  "fixed": "#272038"
+                }
+              },
+              "border": {
+                "width": 1,
+                "color": {
+                  "fixed": "#655184"
+                },
+                "radius": 6
+              },
+              "config": {
+                "text": {
+                  "mode": "fixed",
+                  "fixed": " "
+                },
+                "color": {
+                  "fixed": "#c4b5fd"
+                },
+                "size": 12,
+                "align": "center",
+                "valign": "middle"
+              }
+            },
+            {
+              "name": "Saga_status",
+              "type": "metric-value",
+              "placement": {
+                "left": 68.47826086956522,
+                "right": 3.2608695652173916,
+                "top": 0.5555555555555555,
+                "bottom": 94.81481481481481,
+                "rotation": 0
+              },
+              "constraint": {
+                "horizontal": "scale",
+                "vertical": "scale"
+              },
+              "background": {
+                "color": {
+                  "fixed": "transparent"
+                }
+              },
+              "border": {
+                "width": 0,
+                "color": {
+                  "fixed": "transparent"
+                }
+              },
+              "config": {
+                "text": {
+                  "mode": "field",
+                  "field": "Saga_status"
+                },
+                "color": {
+                  "fixed": "#c4b5fd"
+                },
+                "size": 12,
+                "align": "center",
+                "valign": "middle"
+              }
+            },
+            {
+              "name": "Saga_value_0_label",
+              "type": "text",
+              "placement": {
+                "left": 68.47826086956522,
+                "right": 24.456521739130437,
+                "top": 5.37037037037037,
+                "bottom": 90.55555555555554,
+                "rotation": 0
+              },
+              "constraint": {
+                "horizontal": "scale",
+                "vertical": "scale"
+              },
+              "background": {
+                "color": {
+                  "fixed": "transparent"
+                }
+              },
+              "border": {
+                "width": 0,
+                "color": {
+                  "fixed": "transparent"
+                }
+              },
+              "config": {
+                "text": {
+                  "mode": "fixed",
+                  "fixed": "진행 중"
+                },
+                "color": {
+                  "fixed": "#c4b5fd"
+                },
+                "size": 12,
+                "align": "center",
+                "valign": "middle"
+              }
+            },
+            {
+              "name": "Saga_value_0",
+              "type": "metric-value",
+              "placement": {
+                "left": 68.47826086956522,
+                "right": 24.456521739130437,
+                "top": 9.444444444444445,
+                "bottom": 85.55555555555554,
+                "rotation": 0
+              },
+              "constraint": {
+                "horizontal": "scale",
+                "vertical": "scale"
+              },
+              "background": {
+                "color": {
+                  "fixed": "transparent"
+                }
+              },
+              "border": {
+                "width": 0,
+                "color": {
+                  "fixed": "transparent"
+                }
+              },
+              "config": {
+                "text": {
+                  "mode": "field",
+                  "field": "Saga_value_0"
+                },
+                "color": {
+                  "fixed": "#c4b5fd"
+                },
+                "size": 16,
+                "align": "center",
+                "valign": "middle"
+              }
+            },
+            {
+              "name": "Saga_value_1_label",
+              "type": "text",
+              "placement": {
+                "left": 75.54347826086958,
+                "right": 17.39130434782609,
+                "top": 5.37037037037037,
+                "bottom": 90.55555555555554,
+                "rotation": 0
+              },
+              "constraint": {
+                "horizontal": "scale",
+                "vertical": "scale"
+              },
+              "background": {
+                "color": {
+                  "fixed": "transparent"
+                }
+              },
+              "border": {
+                "width": 0,
+                "color": {
+                  "fixed": "transparent"
+                }
+              },
+              "config": {
+                "text": {
+                  "mode": "fixed",
+                  "fixed": "5분 확정"
+                },
+                "color": {
+                  "fixed": "#c4b5fd"
+                },
+                "size": 12,
+                "align": "center",
+                "valign": "middle"
+              }
+            },
+            {
+              "name": "Saga_value_1",
+              "type": "metric-value",
+              "placement": {
+                "left": 75.54347826086958,
+                "right": 17.39130434782609,
+                "top": 9.444444444444445,
+                "bottom": 85.55555555555554,
+                "rotation": 0
+              },
+              "constraint": {
+                "horizontal": "scale",
+                "vertical": "scale"
+              },
+              "background": {
+                "color": {
+                  "fixed": "transparent"
+                }
+              },
+              "border": {
+                "width": 0,
+                "color": {
+                  "fixed": "transparent"
+                }
+              },
+              "config": {
+                "text": {
+                  "mode": "field",
+                  "field": "Saga_value_1"
+                },
+                "color": {
+                  "fixed": "#c4b5fd"
+                },
+                "size": 16,
+                "align": "center",
+                "valign": "middle"
+              }
+            },
+            {
+              "name": "Saga_value_2_label",
+              "type": "text",
+              "placement": {
+                "left": 82.60869565217392,
+                "right": 10.32608695652174,
+                "top": 5.37037037037037,
+                "bottom": 90.55555555555554,
+                "rotation": 0
+              },
+              "constraint": {
+                "horizontal": "scale",
+                "vertical": "scale"
+              },
+              "background": {
+                "color": {
+                  "fixed": "transparent"
+                }
+              },
+              "border": {
+                "width": 0,
+                "color": {
+                  "fixed": "transparent"
+                }
+              },
+              "config": {
+                "text": {
+                  "mode": "fixed",
+                  "fixed": "5분 실패"
+                },
+                "color": {
+                  "fixed": "#c4b5fd"
+                },
+                "size": 12,
+                "align": "center",
+                "valign": "middle"
+              }
+            },
+            {
+              "name": "Saga_value_2",
+              "type": "metric-value",
+              "placement": {
+                "left": 82.60869565217392,
+                "right": 10.32608695652174,
+                "top": 9.444444444444445,
+                "bottom": 85.55555555555554,
+                "rotation": 0
+              },
+              "constraint": {
+                "horizontal": "scale",
+                "vertical": "scale"
+              },
+              "background": {
+                "color": {
+                  "fixed": "transparent"
+                }
+              },
+              "border": {
+                "width": 0,
+                "color": {
+                  "fixed": "transparent"
+                }
+              },
+              "config": {
+                "text": {
+                  "mode": "field",
+                  "field": "Saga_value_2"
+                },
+                "color": {
+                  "fixed": "#c4b5fd"
+                },
+                "size": 16,
+                "align": "center",
+                "valign": "middle"
+              }
+            },
+            {
+              "name": "Saga_value_3_label",
+              "type": "text",
+              "placement": {
+                "left": 89.67391304347827,
+                "right": 3.2608695652173916,
+                "top": 5.37037037037037,
+                "bottom": 90.55555555555554,
+                "rotation": 0
+              },
+              "constraint": {
+                "horizontal": "scale",
+                "vertical": "scale"
+              },
+              "background": {
+                "color": {
+                  "fixed": "transparent"
+                }
+              },
+              "border": {
+                "width": 0,
+                "color": {
+                  "fixed": "transparent"
+                }
+              },
+              "config": {
+                "text": {
+                  "mode": "fixed",
+                  "fixed": "5분 보상"
+                },
+                "color": {
+                  "fixed": "#c4b5fd"
+                },
+                "size": 12,
+                "align": "center",
+                "valign": "middle"
+              }
+            },
+            {
+              "name": "Saga_value_3",
+              "type": "metric-value",
+              "placement": {
+                "left": 89.67391304347827,
+                "right": 3.2608695652173916,
+                "top": 9.444444444444445,
+                "bottom": 85.55555555555554,
+                "rotation": 0
+              },
+              "constraint": {
+                "horizontal": "scale",
+                "vertical": "scale"
+              },
+              "background": {
+                "color": {
+                  "fixed": "transparent"
+                }
+              },
+              "border": {
+                "width": 0,
+                "color": {
+                  "fixed": "transparent"
+                }
+              },
+              "config": {
+                "text": {
+                  "mode": "field",
+                  "field": "Saga_value_3"
+                },
+                "color": {
+                  "fixed": "#c4b5fd"
+                },
+                "size": 16,
+                "align": "center",
+                "valign": "middle"
+              }
             }
           ]
         }
@@ -9108,7 +9716,7 @@
       },
       "options": {
         "mode": "markdown",
-        "content": "### 계측 예정\nSaga 상태/전이/보상, Eureka 등록 수, 내부 HTTP 재시도, Outbox 발행 결과, 서비스별 Kafka produce/consume 처리량.\n\nKafka 선은 정적 연결이며 처리량은 계측 예정입니다. Gateway → PurchaseGateway 가상 연결은 없습니다. PurchaseGateway 조건부 Payment 경로는 도식에서 제외했습니다.\n\n**인벤토리:** 12종에 Gateway와 PurchaseGateway 포함, 총 24개. 교체/스케일 변경 시 rules/demo.yml 갱신.\n\n**관측 불가:** datasource 오류/No data/회색을 정상으로 해석하지 않습니다. ALERTS는 발생 중인 구간만 표시합니다."
+        "content": "### 계측 예정\nSaga 상태/전이/보상, Eureka 등록 수, 내부 HTTP 재시도, Outbox 발행 결과, 서비스별 Kafka produce/consume 처리량.\n\nKafka 선은 정적 연결이며 처리량은 계측 예정입니다. Gateway → PurchaseGateway 가상 연결은 없습니다. PurchaseGateway 조건부 Payment 경로는 도식에서 제외했습니다.\n\n**인벤토리:** 12종에 Gateway와 PurchaseGateway 포함, 총 24개. 교체/스케일 변경 시 rules/demo.yml 갱신.\n\n**관측 불가:** datasource 오류/No data/회색을 정상으로 해석하지 않습니다. ALERTS는 발생 중인 구간만 표시합니다.\n\nSaga 패널은 OrderCommandService 배포 및 MONITORING_SAGA_ENABLED=true 활성화 후 표시됩니다. 진행 중 나이는 주문 생성 시각 기준이며 보상 수는 완료 단계 수입니다."
       },
       "description": ""
     },
@@ -9129,7 +9737,7 @@
       "targets": [
         {
           "refId": "A",
-          "expr": "sum by(topic)(rate(kafka_server_brokertopicmetrics_messagesin_total{topic=~\"stockdrop.*\"}[1m])) or on(topic) sum by(topic)(clamp_min(deriv(kafka_topic_partition_current_offset{topic=~\"stockdrop.*\"}[1m]),0))",
+          "expr": "sum by(topic)(rate(kafka_server_brokertopicmetrics_messagesin_total{topic!~\"__.*\"}[1m])) or on(topic) sum by(topic)(clamp_min(deriv(kafka_topic_partition_current_offset{topic!~\"__.*\"}[1m]),0))",
           "legendFormat": "{{topic}}",
           "datasource": {
             "type": "prometheus",
@@ -9162,6 +9770,318 @@
         }
       },
       "description": "토픽별 broker MessagesInPerSec Count의 rate를 우선 사용합니다. 아직 topic JMX 규칙이 배포되지 않은 토픽은 offset gauge의 deriv를 0 이상으로 제한한 추정치를 사용합니다. 로그 절단과 리더 변경으로 왜곡될 수 있습니다. Canvas 발행은 매핑된 토픽 유입 추정, 커밋은 소비자 그룹 offset 전진 추정이며 업무 성공 건수가 아닙니다. 무자료는 0으로 채우지 않습니다."
+    },
+    {
+      "id": 22,
+      "type": "timeseries",
+      "title": "Saga 단계별 전이 | 최근 5분",
+      "gridPos": {
+        "x": 0,
+        "y": 77,
+        "w": 6,
+        "h": 8
+      },
+      "datasource": {
+        "type": "prometheus",
+        "uid": "stockdrop-prometheus"
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "expr": "sum by(from,to)(increase(stockdrop_saga_transitions_total{service=\"OrderCommandService\"}[5m]))",
+          "legendFormat": "{{from}} → {{to}}",
+          "datasource": {
+            "type": "prometheus",
+            "uid": "stockdrop-prometheus"
+          },
+          "range": true
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "unit": "short",
+          "noValue": "배포 후 표시",
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "lineWidth": 2,
+            "fillOpacity": 8
+          },
+          "mappings": []
+        },
+        "overrides": []
+      },
+      "options": {
+        "legend": {
+          "displayMode": "list",
+          "placement": "bottom"
+        },
+        "tooltip": {
+          "mode": "multi"
+        }
+      },
+      "description": "MONITORING_SAGA_ENABLED=true로 서비스 배포 후 표시합니다. DB snapshot은 복제본별 max, 프로세스 카운터는 increase 후 sum 집계합니다. 쿠폰 반환은 주문 서비스에서 완료를 확인할 수 없어 보상 카운터에 포함하지 않습니다. 보상 수는 주문 수가 아닌 완료 단계 수입니다."
+    },
+    {
+      "id": 23,
+      "type": "timeseries",
+      "title": "Saga 진행 중 | shared DB max",
+      "gridPos": {
+        "x": 6,
+        "y": 77,
+        "w": 6,
+        "h": 8
+      },
+      "datasource": {
+        "type": "prometheus",
+        "uid": "stockdrop-prometheus"
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "expr": "max(stockdrop_saga_in_progress{service=\"OrderCommandService\"} and on(service,instance) ((stockdrop_saga_collector_available{service=\"OrderCommandService\"} == 1) and on(service,instance) (up{job=\"OrderCommandService\"} == 1)))",
+          "legendFormat": "진행 중",
+          "datasource": {
+            "type": "prometheus",
+            "uid": "stockdrop-prometheus"
+          },
+          "range": true
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "unit": "short",
+          "noValue": "배포 후 표시",
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "lineWidth": 2,
+            "fillOpacity": 8
+          },
+          "mappings": []
+        },
+        "overrides": []
+      },
+      "options": {
+        "legend": {
+          "displayMode": "list",
+          "placement": "bottom"
+        },
+        "tooltip": {
+          "mode": "multi"
+        }
+      },
+      "description": "MONITORING_SAGA_ENABLED=true로 서비스 배포 후 표시합니다. DB snapshot은 복제본별 max, 프로세스 카운터는 increase 후 sum 집계합니다. 쿠폰 반환은 주문 서비스에서 완료를 확인할 수 없어 보상 카운터에 포함하지 않습니다. 보상 수는 주문 수가 아닌 완료 단계 수입니다."
+    },
+    {
+      "id": 24,
+      "type": "timeseries",
+      "title": "Saga 보상 완료 단계 | 최근 5분",
+      "gridPos": {
+        "x": 12,
+        "y": 77,
+        "w": 6,
+        "h": 8
+      },
+      "datasource": {
+        "type": "prometheus",
+        "uid": "stockdrop-prometheus"
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "expr": "sum by(step)(increase(stockdrop_saga_compensations_total{service=\"OrderCommandService\",outcome=\"success\"}[5m]))",
+          "legendFormat": "{{step}}",
+          "datasource": {
+            "type": "prometheus",
+            "uid": "stockdrop-prometheus"
+          },
+          "range": true
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "unit": "short",
+          "noValue": "배포 후 표시",
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "lineWidth": 2,
+            "fillOpacity": 8
+          },
+          "mappings": []
+        },
+        "overrides": []
+      },
+      "options": {
+        "legend": {
+          "displayMode": "list",
+          "placement": "bottom"
+        },
+        "tooltip": {
+          "mode": "multi"
+        }
+      },
+      "description": "MONITORING_SAGA_ENABLED=true로 서비스 배포 후 표시합니다. DB snapshot은 복제본별 max, 프로세스 카운터는 increase 후 sum 집계합니다. 쿠폰 반환은 주문 서비스에서 완료를 확인할 수 없어 보상 카운터에 포함하지 않습니다. 보상 수는 주문 수가 아닌 완료 단계 수입니다."
+    },
+    {
+      "id": 25,
+      "type": "timeseries",
+      "title": "Saga 가장 오래된 진행 중 나이",
+      "gridPos": {
+        "x": 18,
+        "y": 77,
+        "w": 6,
+        "h": 8
+      },
+      "datasource": {
+        "type": "prometheus",
+        "uid": "stockdrop-prometheus"
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "expr": "max(stockdrop_saga_oldest_in_progress_seconds{service=\"OrderCommandService\"} and on(service,instance) ((stockdrop_saga_collector_available{service=\"OrderCommandService\"} == 1) and on(service,instance) (up{job=\"OrderCommandService\"} == 1)))",
+          "legendFormat": "나이",
+          "datasource": {
+            "type": "prometheus",
+            "uid": "stockdrop-prometheus"
+          },
+          "range": true
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "unit": "s",
+          "noValue": "배포 후 표시",
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "lineWidth": 2,
+            "fillOpacity": 8
+          },
+          "mappings": []
+        },
+        "overrides": []
+      },
+      "options": {
+        "legend": {
+          "displayMode": "list",
+          "placement": "bottom"
+        },
+        "tooltip": {
+          "mode": "multi"
+        }
+      },
+      "description": "MONITORING_SAGA_ENABLED=true로 서비스 배포 후 표시합니다. DB snapshot은 복제본별 max, 프로세스 카운터는 increase 후 sum 집계합니다. 쿠폰 반환은 주문 서비스에서 완료를 확인할 수 없어 보상 카운터에 포함하지 않습니다. 보상 수는 주문 수가 아닌 완료 단계 수입니다."
+    },
+    {
+      "id": 26,
+      "type": "timeseries",
+      "title": "Saga 상태별 주문 수 | shared DB max",
+      "gridPos": {
+        "x": 0,
+        "y": 85,
+        "w": 6,
+        "h": 8
+      },
+      "datasource": {
+        "type": "prometheus",
+        "uid": "stockdrop-prometheus"
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "expr": "max by(state)(stockdrop_saga_orders{service=\"OrderCommandService\"} and on(service,instance) ((stockdrop_saga_collector_available{service=\"OrderCommandService\"} == 1) and on(service,instance) (up{job=\"OrderCommandService\"} == 1)))",
+          "legendFormat": "{{state}}",
+          "datasource": {
+            "type": "prometheus",
+            "uid": "stockdrop-prometheus"
+          },
+          "range": true
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "unit": "short",
+          "noValue": "배포 후 표시",
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "lineWidth": 2,
+            "fillOpacity": 8
+          },
+          "mappings": []
+        },
+        "overrides": []
+      },
+      "options": {
+        "legend": {
+          "displayMode": "list",
+          "placement": "bottom"
+        },
+        "tooltip": {
+          "mode": "multi"
+        }
+      },
+      "description": "MONITORING_SAGA_ENABLED=true로 서비스 배포 후 표시합니다. DB snapshot은 복제본별 max, 프로세스 카운터는 increase 후 sum 집계합니다. 쿠폰 반환은 주문 서비스에서 완료를 확인할 수 없어 보상 카운터에 포함하지 않습니다. 보상 수는 주문 수가 아닌 완료 단계 수입니다."
+    },
+    {
+      "id": 27,
+      "type": "timeseries",
+      "title": "Saga 수집 상태 | min 복제본",
+      "gridPos": {
+        "x": 6,
+        "y": 85,
+        "w": 6,
+        "h": 8
+      },
+      "datasource": {
+        "type": "prometheus",
+        "uid": "stockdrop-prometheus"
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "expr": "min(stockdrop_saga_collector_available{service=\"OrderCommandService\"})",
+          "legendFormat": "collector",
+          "datasource": {
+            "type": "prometheus",
+            "uid": "stockdrop-prometheus"
+          },
+          "range": true
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "unit": "short",
+          "noValue": "배포 후 표시",
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "lineWidth": 2,
+            "fillOpacity": 8
+          },
+          "mappings": []
+        },
+        "overrides": []
+      },
+      "options": {
+        "legend": {
+          "displayMode": "list",
+          "placement": "bottom"
+        },
+        "tooltip": {
+          "mode": "multi"
+        }
+      },
+      "description": "MONITORING_SAGA_ENABLED=true로 서비스 배포 후 표시합니다. DB snapshot은 복제본별 max, 프로세스 카운터는 increase 후 sum 집계합니다. 쿠폰 반환은 주문 서비스에서 완료를 확인할 수 없어 보상 카운터에 포함하지 않습니다. 보상 수는 주문 수가 아닌 완료 단계 수입니다."
     }
   ],
   "templating": {
