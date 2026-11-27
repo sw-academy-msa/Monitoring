@@ -801,15 +801,15 @@
             "mode": "absolute",
             "steps": [
               {
-                "color": "red",
+                "color": "#a12f3a",
                 "value": null
               },
               {
-                "color": "yellow",
+                "color": "#806200",
                 "value": 0.01
               },
               {
-                "color": "green",
+                "color": "#216b42",
                 "value": 1
               }
             ]

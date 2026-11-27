@@ -4,7 +4,7 @@ tests:
   - interval: 15s
     input_series:
       - series: 'up{job="preview-health"}'
-        values: "1+0x20"
+        values: "1+0x14 0+0x6"
       - series: 'up{service="PaymentService",ec2_instance_id="i-07df32ccd033ba280",job="PaymentService"}'
         values: "1 1 1 1 1 stale _ _ _ _ _ _ 1 1 1"
       - series: 'probe_success{service="PaymentService",ec2_instance_id="i-07df32ccd033ba280",job="PaymentService-health"}'
@@ -74,3 +74,6 @@ tests:
         exp_samples:
           - labels: 'demo:service_ready_ratio{service="PaymentService"}'
             value: 1
+      - expr: demo:service_ready_ratio{service="PaymentService"}
+        eval_time: 240s
+        exp_samples: []
