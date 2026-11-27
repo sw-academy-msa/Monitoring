@@ -3,6 +3,8 @@ providers:
   - name: STOCKDROP
     folder: STOCKDROP
     type: file
+    # 파일 이벤트 누락에도 새 JSON을 주기적으로 다시 읽습니다.
+    updateIntervalSeconds: 30
     disableDeletion: true
     allowUiUpdates: false
     options:
