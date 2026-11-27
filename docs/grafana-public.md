@@ -26,7 +26,7 @@ git -C repo rev-parse HEAD > "$BACKUP/revision"
 cp -a repo/compose.yaml repo/compose.prod.yaml compose.override.yaml "$BACKUP/"
 if [ -f repo/.env ]; then cp -a repo/.env "$BACKUP/repo.env"; fi
 git -C repo diff --quiet && git -C repo diff --cached --quiet
-git -C repo fetch origin develop
+git -C repo fetch origin develop:refs/remotes/origin/develop
 git -C repo merge-base --is-ancestor "$RELEASE_SHA" origin/develop
 compose() { KAFKA_BOOTSTRAP="${KAFKA_BOOTSTRAP:-kafka.stockdrop.internal:9092}" docker compose -p stockdrop-monitoring -f repo/compose.yaml -f repo/compose.prod.yaml -f compose.override.yaml "$@"; }
 compose stop grafana
