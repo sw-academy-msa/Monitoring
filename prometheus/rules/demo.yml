@@ -1,0 +1,168 @@
+groups:
+  - name: stockdrop-demo-inventory
+    interval: 15s
+    rules:
+      - record: demo_instance_expected
+        expr: vector(1)
+        labels:
+          ec2_instance_id: i-07df32ccd033ba280
+          pool: query
+          service: AIService
+      - record: demo_instance_expected
+        expr: vector(1)
+        labels:
+          ec2_instance_id: i-0bf35d9454bf365d2
+          pool: query
+          service: AIService
+      - record: demo_instance_expected
+        expr: vector(1)
+        labels:
+          ec2_instance_id: i-066898d31eb95f4fa
+          pool: general
+          service: AccountService
+      - record: demo_instance_expected
+        expr: vector(1)
+        labels:
+          ec2_instance_id: i-07cf7b1dee0574a20
+          pool: general
+          service: AccountService
+      - record: demo_instance_expected
+        expr: vector(1)
+        labels:
+          ec2_instance_id: i-066898d31eb95f4fa
+          pool: general
+          service: CouponService
+      - record: demo_instance_expected
+        expr: vector(1)
+        labels:
+          ec2_instance_id: i-07cf7b1dee0574a20
+          pool: general
+          service: CouponService
+      - record: demo_instance_expected
+        expr: vector(1)
+        labels:
+          ec2_instance_id: i-066898d31eb95f4fa
+          pool: general
+          service: Eureka
+      - record: demo_instance_expected
+        expr: vector(1)
+        labels:
+          ec2_instance_id: i-07cf7b1dee0574a20
+          pool: general
+          service: Eureka
+      - record: demo_instance_expected
+        expr: vector(1)
+        labels:
+          ec2_instance_id: i-066898d31eb95f4fa
+          pool: general
+          service: Gateway
+      - record: demo_instance_expected
+        expr: vector(1)
+        labels:
+          ec2_instance_id: i-07cf7b1dee0574a20
+          pool: general
+          service: Gateway
+      - record: demo_instance_expected
+        expr: vector(1)
+        labels:
+          ec2_instance_id: i-066898d31eb95f4fa
+          pool: general
+          service: NotificationService
+      - record: demo_instance_expected
+        expr: vector(1)
+        labels:
+          ec2_instance_id: i-07cf7b1dee0574a20
+          pool: general
+          service: NotificationService
+      - record: demo_instance_expected
+        expr: vector(1)
+        labels:
+          ec2_instance_id: i-006b4b1e4469beaf5
+          pool: purchase
+          service: OrderCommandService
+      - record: demo_instance_expected
+        expr: vector(1)
+        labels:
+          ec2_instance_id: i-0ccd953f925ea2b11
+          pool: purchase
+          service: OrderCommandService
+      - record: demo_instance_expected
+        expr: vector(1)
+        labels:
+          ec2_instance_id: i-07df32ccd033ba280
+          pool: query
+          service: OrderQueryService
+      - record: demo_instance_expected
+        expr: vector(1)
+        labels:
+          ec2_instance_id: i-0bf35d9454bf365d2
+          pool: query
+          service: OrderQueryService
+      - record: demo_instance_expected
+        expr: vector(1)
+        labels:
+          ec2_instance_id: i-07df32ccd033ba280
+          pool: query
+          service: PaymentService
+      - record: demo_instance_expected
+        expr: vector(1)
+        labels:
+          ec2_instance_id: i-0bf35d9454bf365d2
+          pool: query
+          service: PaymentService
+      - record: demo_instance_expected
+        expr: vector(1)
+        labels:
+          ec2_instance_id: i-006b4b1e4469beaf5
+          pool: purchase
+          service: ProductCommandService
+      - record: demo_instance_expected
+        expr: vector(1)
+        labels:
+          ec2_instance_id: i-0ccd953f925ea2b11
+          pool: purchase
+          service: ProductCommandService
+      - record: demo_instance_expected
+        expr: vector(1)
+        labels:
+          ec2_instance_id: i-07df32ccd033ba280
+          pool: query
+          service: ProductQueryService
+      - record: demo_instance_expected
+        expr: vector(1)
+        labels:
+          ec2_instance_id: i-0bf35d9454bf365d2
+          pool: query
+          service: ProductQueryService
+      - record: demo_instance_expected
+        expr: vector(1)
+        labels:
+          ec2_instance_id: i-006b4b1e4469beaf5
+          pool: purchase
+          service: PurchaseGateway
+      - record: demo_instance_expected
+        expr: vector(1)
+        labels:
+          ec2_instance_id: i-0ccd953f925ea2b11
+          pool: purchase
+          service: PurchaseGateway
+      - record: demo:instance_scrape_up
+        expr: max by(service,ec2_instance_id)(up{job=~"AIService|AccountService|CouponService|Eureka|Gateway|NotificationService|OrderCommandService|OrderQueryService|PaymentService|ProductCommandService|ProductQueryService|PurchaseGateway"})
+      - record: demo:instance_health_up
+        expr: max by(service,ec2_instance_id)(probe_success{job=~".*-health"})
+      - record: demo:instance_ready
+        expr: ((demo:instance_scrape_up * on(service,ec2_instance_id) demo:instance_health_up) * on(service,ec2_instance_id) group_left(pool) demo_instance_expected) or on(service,ec2_instance_id) (0 * demo_instance_expected)
+      - record: demo:service_ready
+        expr: sum by(service)(demo:instance_ready)
+      - record: demo:service_expected
+        expr: sum by(service)(demo_instance_expected)
+      - record: demo:observation_available
+        expr: max(up{job=~".*-health"})
+      - record: demo:service_ready_ratio
+        expr: (demo:service_ready / demo:service_expected) and on() (demo:observation_available == 1)
+      - record: demo:gateway_route_rps
+        expr: sum by(service,routeId,routeUri)(rate(spring_cloud_gateway_requests_seconds_count[1m]))
+      - record: demo:outbox_pending
+        expr: max by(service)(stockdrop_outbox_pending and on(service,instance)(stockdrop_outbox_collector_available == 1))
+      - record: demo:outbox_oldest_pending_seconds
+        expr: max by(service)(stockdrop_outbox_oldest_pending_seconds and on(service,instance)(stockdrop_outbox_collector_available == 1))

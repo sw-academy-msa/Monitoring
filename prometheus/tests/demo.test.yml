@@ -1,0 +1,79 @@
+rule_files: [../rules/demo.yml]
+evaluation_interval: 15s
+tests:
+  - interval: 15s
+    input_series:
+      - series: 'up{job="preview-health"}'
+        values: "1+0x14 0+0x6"
+      - series: 'up{service="PaymentService",ec2_instance_id="i-07df32ccd033ba280",job="PaymentService"}'
+        values: "1 1 1 1 1 stale _ _ _ _ _ _ 1 1 1"
+      - series: 'probe_success{service="PaymentService",ec2_instance_id="i-07df32ccd033ba280",job="PaymentService-health"}'
+        values: "1 1 1 1 1 stale _ _ _ _ _ _ 1 1 1"
+      - series: 'up{service="PaymentService",ec2_instance_id="i-0bf35d9454bf365d2",job="PaymentService"}'
+        values: "1 1 stale _ _ _ _ _ _ _ _ _ 1 1 1"
+      - series: 'probe_success{service="PaymentService",ec2_instance_id="i-0bf35d9454bf365d2",job="PaymentService-health"}'
+        values: "1 1 stale _ _ _ _ _ _ _ _ _ 1 1 1"
+    promql_expr_test:
+      - expr: demo:service_ready{service="PaymentService"}
+        eval_time: 15s
+        exp_samples:
+          - labels: 'demo:service_ready{service="PaymentService"}'
+            value: 2
+      - expr: demo:service_ready{service="PaymentService"}
+        eval_time: 45s
+        exp_samples:
+          - labels: 'demo:service_ready{service="PaymentService"}'
+            value: 1
+      - expr: demo:service_ready{service="PaymentService"}
+        eval_time: 90s
+        exp_samples:
+          - labels: 'demo:service_ready{service="PaymentService"}'
+            value: 0
+      - expr: demo:service_ready{service="PaymentService"}
+        eval_time: 195s
+        exp_samples:
+          - labels: 'demo:service_ready{service="PaymentService"}'
+            value: 2
+      - expr: demo:service_expected{service="PaymentService"}
+        eval_time: 15s
+        exp_samples:
+          - labels: 'demo:service_expected{service="PaymentService"}'
+            value: 2
+      - expr: demo:service_expected{service="PaymentService"}
+        eval_time: 45s
+        exp_samples:
+          - labels: 'demo:service_expected{service="PaymentService"}'
+            value: 2
+      - expr: demo:service_expected{service="PaymentService"}
+        eval_time: 90s
+        exp_samples:
+          - labels: 'demo:service_expected{service="PaymentService"}'
+            value: 2
+      - expr: demo:service_expected{service="PaymentService"}
+        eval_time: 195s
+        exp_samples:
+          - labels: 'demo:service_expected{service="PaymentService"}'
+            value: 2
+      - expr: demo:service_ready_ratio{service="PaymentService"}
+        eval_time: 15s
+        exp_samples:
+          - labels: 'demo:service_ready_ratio{service="PaymentService"}'
+            value: 1
+      - expr: demo:service_ready_ratio{service="PaymentService"}
+        eval_time: 45s
+        exp_samples:
+          - labels: 'demo:service_ready_ratio{service="PaymentService"}'
+            value: 0.5
+      - expr: demo:service_ready_ratio{service="PaymentService"}
+        eval_time: 90s
+        exp_samples:
+          - labels: 'demo:service_ready_ratio{service="PaymentService"}'
+            value: 0
+      - expr: demo:service_ready_ratio{service="PaymentService"}
+        eval_time: 195s
+        exp_samples:
+          - labels: 'demo:service_ready_ratio{service="PaymentService"}'
+            value: 1
+      - expr: demo:service_ready_ratio{service="PaymentService"}
+        eval_time: 240s
+        exp_samples: []
