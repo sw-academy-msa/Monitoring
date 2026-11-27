@@ -10030,8 +10030,8 @@
       "type": "timeseries",
       "title": "Saga 상태별 주문 수 | shared DB max",
       "gridPos": {
-        "x": 0,
-        "y": 85,
+        "x": 12,
+        "y": 69,
         "w": 6,
         "h": 8
       },
@@ -10082,8 +10082,8 @@
       "type": "timeseries",
       "title": "Saga 수집 상태 | min 복제본",
       "gridPos": {
-        "x": 6,
-        "y": 85,
+        "x": 18,
+        "y": 69,
         "w": 6,
         "h": 8
       },
