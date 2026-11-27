@@ -66,3 +66,4 @@ jobs:
           for f in grafana/dashboards/*.json; do
             python3 -m json.tool "$f" > /dev/null || { echo "Invalid JSON: $f"; exit 1; }
           done
+          python3 scripts/test_demo_dashboard.py
