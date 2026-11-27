@@ -9767,41 +9767,6 @@
       "description": ""
     },
     {
-      "id": 20,
-      "type": "text",
-      "title": "추가 계측 계획과 시연 주의",
-      "gridPos": {
-        "x": 12,
-        "y": 69,
-        "w": 12,
-        "h": 8
-      },
-      "datasource": {
-        "type": "prometheus",
-        "uid": "stockdrop-prometheus"
-      },
-      "targets": [],
-      "fieldConfig": {
-        "defaults": {
-          "unit": "short",
-          "noValue": "관측 불가",
-          "color": {
-            "mode": "palette-classic"
-          },
-          "custom": {
-            "lineWidth": 2,
-            "fillOpacity": 8
-          }
-        },
-        "overrides": []
-      },
-      "options": {
-        "mode": "markdown",
-        "content": "### 계측 예정\nSaga 상태/전이/보상, Eureka 등록 수, 내부 HTTP 재시도, Outbox 발행 결과, 서비스별 Kafka produce/consume 처리량.\n\nKafka 선은 정적 연결이며 처리량은 계측 예정입니다. Gateway → PurchaseGateway 가상 연결은 없습니다. PurchaseGateway 조건부 Payment 경로는 도식에서 제외했습니다.\n\n**인벤토리:** 12종에 Gateway와 PurchaseGateway 포함, 총 24개. 교체/스케일 변경 시 rules/demo.yml 갱신.\n\n**관측 불가:** datasource 오류/No data/회색을 정상으로 해석하지 않습니다. ALERTS는 발생 중인 구간만 표시합니다.\n\nSaga 패널은 OrderCommandService 배포 및 MONITORING_SAGA_ENABLED=true 활성화 후 표시됩니다. 진행 중 나이는 주문 생성 시각 기준이며 보상 수는 완료 단계 수입니다."
-      },
-      "description": ""
-    },
-    {
       "id": 21,
       "type": "timeseries",
       "title": "토픽별 초당 메시지",
