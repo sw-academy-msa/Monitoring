@@ -772,6 +772,186 @@
           "instant": true,
           "range": false,
           "format": "time_series"
+        },
+        {
+          "refId": "K33",
+          "expr": "(sum(sum by(topic)(rate(kafka_server_brokertopicmetrics_messagesin_total{topic=~\"stockdrop\\\\.notifications\\\\.account\\\\.v1|stockdrop\\\\.notifications\\\\.membership\\\\.v1|stockdrop\\\\.membership\\\\.commands\\\\.private\\\\.v1\"}[1m])) or on(topic) sum by(topic)(clamp_min(deriv(kafka_topic_partition_current_offset{topic=~\"stockdrop\\\\.notifications\\\\.account\\\\.v1|stockdrop\\\\.notifications\\\\.membership\\\\.v1|stockdrop\\\\.membership\\\\.commands\\\\.private\\\\.v1\"}[1m]),0)))) or vector(0/0)",
+          "legendFormat": "AccountService_발행",
+          "datasource": {
+            "type": "prometheus",
+            "uid": "stockdrop-prometheus"
+          },
+          "instant": true,
+          "range": false,
+          "format": "time_series"
+        },
+        {
+          "refId": "K34",
+          "expr": "(sum(clamp_min(deriv(kafka_consumergroup_current_offset{consumergroup=~\"account-membership-result-v1\"}[1m]),0))) or vector(0/0)",
+          "legendFormat": "AccountService_커밋",
+          "datasource": {
+            "type": "prometheus",
+            "uid": "stockdrop-prometheus"
+          },
+          "instant": true,
+          "range": false,
+          "format": "time_series"
+        },
+        {
+          "refId": "K35",
+          "expr": "(sum(clamp_min(deriv(kafka_consumergroup_current_offset{consumergroup=~\"notification-.*\"}[1m]),0))) or vector(0/0)",
+          "legendFormat": "NotificationService_커밋",
+          "datasource": {
+            "type": "prometheus",
+            "uid": "stockdrop-prometheus"
+          },
+          "instant": true,
+          "range": false,
+          "format": "time_series"
+        },
+        {
+          "refId": "K36",
+          "expr": "(sum(sum by(topic)(rate(kafka_server_brokertopicmetrics_messagesin_total{topic=~\"stockdrop\\\\.notifications\\\\.coupon\\\\.v1\"}[1m])) or on(topic) sum by(topic)(clamp_min(deriv(kafka_topic_partition_current_offset{topic=~\"stockdrop\\\\.notifications\\\\.coupon\\\\.v1\"}[1m]),0)))) or vector(0/0)",
+          "legendFormat": "CouponService_발행",
+          "datasource": {
+            "type": "prometheus",
+            "uid": "stockdrop-prometheus"
+          },
+          "instant": true,
+          "range": false,
+          "format": "time_series"
+        },
+        {
+          "refId": "K37",
+          "expr": "(sum(clamp_min(deriv(kafka_consumergroup_current_offset{consumergroup=~\"coupon-.*\"}[1m]),0))) or vector(0/0)",
+          "legendFormat": "CouponService_커밋",
+          "datasource": {
+            "type": "prometheus",
+            "uid": "stockdrop-prometheus"
+          },
+          "instant": true,
+          "range": false,
+          "format": "time_series"
+        },
+        {
+          "refId": "K38",
+          "expr": "(sum(clamp_min(deriv(kafka_consumergroup_current_offset{consumergroup=~\"product-query-v1\"}[1m]),0))) or vector(0/0)",
+          "legendFormat": "ProductQueryService_커밋",
+          "datasource": {
+            "type": "prometheus",
+            "uid": "stockdrop-prometheus"
+          },
+          "instant": true,
+          "range": false,
+          "format": "time_series"
+        },
+        {
+          "refId": "K39",
+          "expr": "(sum(clamp_min(deriv(kafka_consumergroup_current_offset{consumergroup=~\"order-query-v1\"}[1m]),0))) or vector(0/0)",
+          "legendFormat": "OrderQueryService_커밋",
+          "datasource": {
+            "type": "prometheus",
+            "uid": "stockdrop-prometheus"
+          },
+          "instant": true,
+          "range": false,
+          "format": "time_series"
+        },
+        {
+          "refId": "K40",
+          "expr": "(sum(sum by(topic)(rate(kafka_server_brokertopicmetrics_messagesin_total{topic=~\"stockdrop\\\\.ai\\\\.product-analyzed\\\\.v1|stockdrop\\\\.ai\\\\.recommendation-candidates\\\\.v1|stockdrop\\\\.ai\\\\.campaign-targets\\\\.v1|stockdrop\\\\.notifications\\\\.campaign\\\\.v1\"}[1m])) or on(topic) sum by(topic)(clamp_min(deriv(kafka_topic_partition_current_offset{topic=~\"stockdrop\\\\.ai\\\\.product-analyzed\\\\.v1|stockdrop\\\\.ai\\\\.recommendation-candidates\\\\.v1|stockdrop\\\\.ai\\\\.campaign-targets\\\\.v1|stockdrop\\\\.notifications\\\\.campaign\\\\.v1\"}[1m]),0)))) or vector(0/0)",
+          "legendFormat": "AIService_발행",
+          "datasource": {
+            "type": "prometheus",
+            "uid": "stockdrop-prometheus"
+          },
+          "instant": true,
+          "range": false,
+          "format": "time_series"
+        },
+        {
+          "refId": "K41",
+          "expr": "(sum(clamp_min(deriv(kafka_consumergroup_current_offset{consumergroup=~\"ai-.*\"}[1m]),0))) or vector(0/0)",
+          "legendFormat": "AIService_커밋",
+          "datasource": {
+            "type": "prometheus",
+            "uid": "stockdrop-prometheus"
+          },
+          "instant": true,
+          "range": false,
+          "format": "time_series"
+        },
+        {
+          "refId": "K42",
+          "expr": "(sum(sum by(topic)(rate(kafka_server_brokertopicmetrics_messagesin_total{topic=~\"stockdrop\\\\.payment\\\\.results\\\\.private\\\\.v1\"}[1m])) or on(topic) sum by(topic)(clamp_min(deriv(kafka_topic_partition_current_offset{topic=~\"stockdrop\\\\.payment\\\\.results\\\\.private\\\\.v1\"}[1m]),0)))) or vector(0/0)",
+          "legendFormat": "PaymentService_발행",
+          "datasource": {
+            "type": "prometheus",
+            "uid": "stockdrop-prometheus"
+          },
+          "instant": true,
+          "range": false,
+          "format": "time_series"
+        },
+        {
+          "refId": "K43",
+          "expr": "(sum(clamp_min(deriv(kafka_consumergroup_current_offset{consumergroup=~\"payment-command-v1|payment-membership-command-v1\"}[1m]),0))) or vector(0/0)",
+          "legendFormat": "PaymentService_커밋",
+          "datasource": {
+            "type": "prometheus",
+            "uid": "stockdrop-prometheus"
+          },
+          "instant": true,
+          "range": false,
+          "format": "time_series"
+        },
+        {
+          "refId": "K44",
+          "expr": "(sum(sum by(topic)(rate(kafka_server_brokertopicmetrics_messagesin_total{topic=~\"stockdrop\\\\.product\\\\.public\\\\.v1|stockdrop\\\\.product\\\\.inquiries\\\\.v1|stockdrop\\\\.product\\\\.analysis-requested\\\\.v1|stockdrop\\\\.product\\\\.published\\\\.v1|stockdrop\\\\.notifications\\\\.product\\\\.v1\"}[1m])) or on(topic) sum by(topic)(clamp_min(deriv(kafka_topic_partition_current_offset{topic=~\"stockdrop\\\\.product\\\\.public\\\\.v1|stockdrop\\\\.product\\\\.inquiries\\\\.v1|stockdrop\\\\.product\\\\.analysis-requested\\\\.v1|stockdrop\\\\.product\\\\.published\\\\.v1|stockdrop\\\\.notifications\\\\.product\\\\.v1\"}[1m]),0)))) or vector(0/0)",
+          "legendFormat": "ProductCommandService_발행",
+          "datasource": {
+            "type": "prometheus",
+            "uid": "stockdrop-prometheus"
+          },
+          "instant": true,
+          "range": false,
+          "format": "time_series"
+        },
+        {
+          "refId": "K45",
+          "expr": "(sum(clamp_min(deriv(kafka_consumergroup_current_offset{consumergroup=~\"product-command-ai-results-v1|product-advertising-results-v1\"}[1m]),0))) or vector(0/0)",
+          "legendFormat": "ProductCommandService_커밋",
+          "datasource": {
+            "type": "prometheus",
+            "uid": "stockdrop-prometheus"
+          },
+          "instant": true,
+          "range": false,
+          "format": "time_series"
+        },
+        {
+          "refId": "K46",
+          "expr": "(sum(sum by(topic)(rate(kafka_server_brokertopicmetrics_messagesin_total{topic=~\"stockdrop\\\\.orders\\\\.private\\\\.v1|stockdrop\\\\.orders\\\\.lifecycle\\\\.v1|stockdrop\\\\.payment\\\\.commands\\\\.private\\\\.v1|stockdrop\\\\.notifications\\\\.order\\\\.v1\"}[1m])) or on(topic) sum by(topic)(clamp_min(deriv(kafka_topic_partition_current_offset{topic=~\"stockdrop\\\\.orders\\\\.private\\\\.v1|stockdrop\\\\.orders\\\\.lifecycle\\\\.v1|stockdrop\\\\.payment\\\\.commands\\\\.private\\\\.v1|stockdrop\\\\.notifications\\\\.order\\\\.v1\"}[1m]),0)))) or vector(0/0)",
+          "legendFormat": "OrderCommandService_발행",
+          "datasource": {
+            "type": "prometheus",
+            "uid": "stockdrop-prometheus"
+          },
+          "instant": true,
+          "range": false,
+          "format": "time_series"
+        },
+        {
+          "refId": "K47",
+          "expr": "(sum(clamp_min(deriv(kafka_consumergroup_current_offset{consumergroup=~\"order-command-payment-v1\"}[1m]),0))) or vector(0/0)",
+          "legendFormat": "OrderCommandService_커밋",
+          "datasource": {
+            "type": "prometheus",
+            "uid": "stockdrop-prometheus"
+          },
+          "instant": true,
+          "range": false,
+          "format": "time_series"
         }
       ],
       "fieldConfig": {
@@ -1159,6 +1339,636 @@
                 }
               }
             ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "AccountService_발행"
+            },
+            "properties": [
+              {
+                "id": "unit",
+                "value": "suffix:발행/s"
+              },
+              {
+                "id": "decimals",
+                "value": 1
+              },
+              {
+                "id": "noValue",
+                "value": "관측 불가"
+              },
+              {
+                "id": "color",
+                "value": {
+                  "mode": "thresholds"
+                }
+              },
+              {
+                "id": "thresholds",
+                "value": {
+                  "mode": "absolute",
+                  "steps": [
+                    {
+                      "color": "#626779",
+                      "value": null
+                    },
+                    {
+                      "color": "#cc94ee",
+                      "value": 0.000001
+                    }
+                  ]
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "AccountService_커밋"
+            },
+            "properties": [
+              {
+                "id": "unit",
+                "value": "suffix:커밋/s"
+              },
+              {
+                "id": "decimals",
+                "value": 1
+              },
+              {
+                "id": "noValue",
+                "value": "관측 불가"
+              },
+              {
+                "id": "color",
+                "value": {
+                  "mode": "thresholds"
+                }
+              },
+              {
+                "id": "thresholds",
+                "value": {
+                  "mode": "absolute",
+                  "steps": [
+                    {
+                      "color": "#626779",
+                      "value": null
+                    },
+                    {
+                      "color": "#cc94ee",
+                      "value": 0.000001
+                    }
+                  ]
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "NotificationService_커밋"
+            },
+            "properties": [
+              {
+                "id": "unit",
+                "value": "suffix:커밋/s"
+              },
+              {
+                "id": "decimals",
+                "value": 1
+              },
+              {
+                "id": "noValue",
+                "value": "관측 불가"
+              },
+              {
+                "id": "color",
+                "value": {
+                  "mode": "thresholds"
+                }
+              },
+              {
+                "id": "thresholds",
+                "value": {
+                  "mode": "absolute",
+                  "steps": [
+                    {
+                      "color": "#626779",
+                      "value": null
+                    },
+                    {
+                      "color": "#cc94ee",
+                      "value": 0.000001
+                    }
+                  ]
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "CouponService_발행"
+            },
+            "properties": [
+              {
+                "id": "unit",
+                "value": "suffix:발행/s"
+              },
+              {
+                "id": "decimals",
+                "value": 1
+              },
+              {
+                "id": "noValue",
+                "value": "관측 불가"
+              },
+              {
+                "id": "color",
+                "value": {
+                  "mode": "thresholds"
+                }
+              },
+              {
+                "id": "thresholds",
+                "value": {
+                  "mode": "absolute",
+                  "steps": [
+                    {
+                      "color": "#626779",
+                      "value": null
+                    },
+                    {
+                      "color": "#cc94ee",
+                      "value": 0.000001
+                    }
+                  ]
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "CouponService_커밋"
+            },
+            "properties": [
+              {
+                "id": "unit",
+                "value": "suffix:커밋/s"
+              },
+              {
+                "id": "decimals",
+                "value": 1
+              },
+              {
+                "id": "noValue",
+                "value": "관측 불가"
+              },
+              {
+                "id": "color",
+                "value": {
+                  "mode": "thresholds"
+                }
+              },
+              {
+                "id": "thresholds",
+                "value": {
+                  "mode": "absolute",
+                  "steps": [
+                    {
+                      "color": "#626779",
+                      "value": null
+                    },
+                    {
+                      "color": "#cc94ee",
+                      "value": 0.000001
+                    }
+                  ]
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "ProductQueryService_커밋"
+            },
+            "properties": [
+              {
+                "id": "unit",
+                "value": "suffix:커밋/s"
+              },
+              {
+                "id": "decimals",
+                "value": 1
+              },
+              {
+                "id": "noValue",
+                "value": "관측 불가"
+              },
+              {
+                "id": "color",
+                "value": {
+                  "mode": "thresholds"
+                }
+              },
+              {
+                "id": "thresholds",
+                "value": {
+                  "mode": "absolute",
+                  "steps": [
+                    {
+                      "color": "#626779",
+                      "value": null
+                    },
+                    {
+                      "color": "#cc94ee",
+                      "value": 0.000001
+                    }
+                  ]
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "OrderQueryService_커밋"
+            },
+            "properties": [
+              {
+                "id": "unit",
+                "value": "suffix:커밋/s"
+              },
+              {
+                "id": "decimals",
+                "value": 1
+              },
+              {
+                "id": "noValue",
+                "value": "관측 불가"
+              },
+              {
+                "id": "color",
+                "value": {
+                  "mode": "thresholds"
+                }
+              },
+              {
+                "id": "thresholds",
+                "value": {
+                  "mode": "absolute",
+                  "steps": [
+                    {
+                      "color": "#626779",
+                      "value": null
+                    },
+                    {
+                      "color": "#cc94ee",
+                      "value": 0.000001
+                    }
+                  ]
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "AIService_발행"
+            },
+            "properties": [
+              {
+                "id": "unit",
+                "value": "suffix:발행/s"
+              },
+              {
+                "id": "decimals",
+                "value": 1
+              },
+              {
+                "id": "noValue",
+                "value": "관측 불가"
+              },
+              {
+                "id": "color",
+                "value": {
+                  "mode": "thresholds"
+                }
+              },
+              {
+                "id": "thresholds",
+                "value": {
+                  "mode": "absolute",
+                  "steps": [
+                    {
+                      "color": "#626779",
+                      "value": null
+                    },
+                    {
+                      "color": "#cc94ee",
+                      "value": 0.000001
+                    }
+                  ]
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "AIService_커밋"
+            },
+            "properties": [
+              {
+                "id": "unit",
+                "value": "suffix:커밋/s"
+              },
+              {
+                "id": "decimals",
+                "value": 1
+              },
+              {
+                "id": "noValue",
+                "value": "관측 불가"
+              },
+              {
+                "id": "color",
+                "value": {
+                  "mode": "thresholds"
+                }
+              },
+              {
+                "id": "thresholds",
+                "value": {
+                  "mode": "absolute",
+                  "steps": [
+                    {
+                      "color": "#626779",
+                      "value": null
+                    },
+                    {
+                      "color": "#cc94ee",
+                      "value": 0.000001
+                    }
+                  ]
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "PaymentService_발행"
+            },
+            "properties": [
+              {
+                "id": "unit",
+                "value": "suffix:발행/s"
+              },
+              {
+                "id": "decimals",
+                "value": 1
+              },
+              {
+                "id": "noValue",
+                "value": "관측 불가"
+              },
+              {
+                "id": "color",
+                "value": {
+                  "mode": "thresholds"
+                }
+              },
+              {
+                "id": "thresholds",
+                "value": {
+                  "mode": "absolute",
+                  "steps": [
+                    {
+                      "color": "#626779",
+                      "value": null
+                    },
+                    {
+                      "color": "#cc94ee",
+                      "value": 0.000001
+                    }
+                  ]
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "PaymentService_커밋"
+            },
+            "properties": [
+              {
+                "id": "unit",
+                "value": "suffix:커밋/s"
+              },
+              {
+                "id": "decimals",
+                "value": 1
+              },
+              {
+                "id": "noValue",
+                "value": "관측 불가"
+              },
+              {
+                "id": "color",
+                "value": {
+                  "mode": "thresholds"
+                }
+              },
+              {
+                "id": "thresholds",
+                "value": {
+                  "mode": "absolute",
+                  "steps": [
+                    {
+                      "color": "#626779",
+                      "value": null
+                    },
+                    {
+                      "color": "#cc94ee",
+                      "value": 0.000001
+                    }
+                  ]
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "ProductCommandService_발행"
+            },
+            "properties": [
+              {
+                "id": "unit",
+                "value": "suffix:발행/s"
+              },
+              {
+                "id": "decimals",
+                "value": 1
+              },
+              {
+                "id": "noValue",
+                "value": "관측 불가"
+              },
+              {
+                "id": "color",
+                "value": {
+                  "mode": "thresholds"
+                }
+              },
+              {
+                "id": "thresholds",
+                "value": {
+                  "mode": "absolute",
+                  "steps": [
+                    {
+                      "color": "#626779",
+                      "value": null
+                    },
+                    {
+                      "color": "#cc94ee",
+                      "value": 0.000001
+                    }
+                  ]
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "ProductCommandService_커밋"
+            },
+            "properties": [
+              {
+                "id": "unit",
+                "value": "suffix:커밋/s"
+              },
+              {
+                "id": "decimals",
+                "value": 1
+              },
+              {
+                "id": "noValue",
+                "value": "관측 불가"
+              },
+              {
+                "id": "color",
+                "value": {
+                  "mode": "thresholds"
+                }
+              },
+              {
+                "id": "thresholds",
+                "value": {
+                  "mode": "absolute",
+                  "steps": [
+                    {
+                      "color": "#626779",
+                      "value": null
+                    },
+                    {
+                      "color": "#cc94ee",
+                      "value": 0.000001
+                    }
+                  ]
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "OrderCommandService_발행"
+            },
+            "properties": [
+              {
+                "id": "unit",
+                "value": "suffix:발행/s"
+              },
+              {
+                "id": "decimals",
+                "value": 1
+              },
+              {
+                "id": "noValue",
+                "value": "관측 불가"
+              },
+              {
+                "id": "color",
+                "value": {
+                  "mode": "thresholds"
+                }
+              },
+              {
+                "id": "thresholds",
+                "value": {
+                  "mode": "absolute",
+                  "steps": [
+                    {
+                      "color": "#626779",
+                      "value": null
+                    },
+                    {
+                      "color": "#cc94ee",
+                      "value": 0.000001
+                    }
+                  ]
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "OrderCommandService_커밋"
+            },
+            "properties": [
+              {
+                "id": "unit",
+                "value": "suffix:커밋/s"
+              },
+              {
+                "id": "decimals",
+                "value": 1
+              },
+              {
+                "id": "noValue",
+                "value": "관측 불가"
+              },
+              {
+                "id": "color",
+                "value": {
+                  "mode": "thresholds"
+                }
+              },
+              {
+                "id": "thresholds",
+                "value": {
+                  "mode": "absolute",
+                  "steps": [
+                    {
+                      "color": "#626779",
+                      "value": null
+                    },
+                    {
+                      "color": "#cc94ee",
+                      "value": 0.000001
+                    }
+                  ]
+                }
+              }
+            ]
           }
         ]
       },
@@ -1467,7 +2277,7 @@
                     "fixed": 2
                   },
                   "direction": {
-                    "fixed": "forward"
+                    "fixed": "both"
                   }
                 }
               ]
@@ -1609,7 +2419,7 @@
                     "fixed": 2
                   },
                   "direction": {
-                    "fixed": "forward"
+                    "fixed": "reverse"
                   }
                 }
               ]
@@ -1751,7 +2561,7 @@
                     "fixed": 2
                   },
                   "direction": {
-                    "fixed": "forward"
+                    "fixed": "both"
                   }
                 }
               ]
@@ -2050,7 +2860,7 @@
                     "fixed": 2
                   },
                   "direction": {
-                    "fixed": "forward"
+                    "fixed": "reverse"
                   }
                 }
               ]
@@ -2192,7 +3002,7 @@
                     "fixed": 2
                   },
                   "direction": {
-                    "fixed": "forward"
+                    "fixed": "reverse"
                   }
                 }
               ]
@@ -2334,7 +3144,7 @@
                     "fixed": 2
                   },
                   "direction": {
-                    "fixed": "forward"
+                    "fixed": "both"
                   }
                 }
               ]
@@ -2476,7 +3286,7 @@
                     "fixed": 2
                   },
                   "direction": {
-                    "fixed": "forward"
+                    "fixed": "both"
                   }
                 }
               ]
@@ -2618,7 +3428,7 @@
                     "fixed": 2
                   },
                   "direction": {
-                    "fixed": "forward"
+                    "fixed": "both"
                   }
                 }
               ]
@@ -2760,7 +3570,7 @@
                     "fixed": 2
                   },
                   "direction": {
-                    "fixed": "forward"
+                    "fixed": "both"
                   }
                 }
               ]
@@ -7102,11 +7912,611 @@
                   }
                 }
               ]
+            },
+            {
+              "name": "kafka_AccountService_발행",
+              "type": "metric-value",
+              "placement": {
+                "left": 19.021739130434785,
+                "right": 74.18478260869566,
+                "top": 67.5925925925926,
+                "bottom": 28.148148148148145,
+                "rotation": 0
+              },
+              "constraint": {
+                "horizontal": "scale",
+                "vertical": "scale"
+              },
+              "background": {
+                "color": {
+                  "fixed": "transparent"
+                }
+              },
+              "border": {
+                "color": {
+                  "fixed": "transparent"
+                },
+                "width": 0,
+                "radius": 6
+              },
+              "config": {
+                "text": {
+                  "mode": "field",
+                  "field": "AccountService_발행"
+                },
+                "color": {
+                  "field": "AccountService_발행",
+                  "fixed": "#718096"
+                },
+                "size": 11,
+                "align": "center",
+                "valign": "middle"
+              }
+            },
+            {
+              "name": "kafka_AccountService_커밋",
+              "type": "metric-value",
+              "placement": {
+                "left": 19.021739130434785,
+                "right": 74.18478260869566,
+                "top": 72.4074074074074,
+                "bottom": 23.333333333333332,
+                "rotation": 0
+              },
+              "constraint": {
+                "horizontal": "scale",
+                "vertical": "scale"
+              },
+              "background": {
+                "color": {
+                  "fixed": "transparent"
+                }
+              },
+              "border": {
+                "color": {
+                  "fixed": "transparent"
+                },
+                "width": 0,
+                "radius": 6
+              },
+              "config": {
+                "text": {
+                  "mode": "field",
+                  "field": "AccountService_커밋"
+                },
+                "color": {
+                  "field": "AccountService_커밋",
+                  "fixed": "#718096"
+                },
+                "size": 11,
+                "align": "center",
+                "valign": "middle"
+              }
+            },
+            {
+              "name": "kafka_NotificationService_커밋",
+              "type": "metric-value",
+              "placement": {
+                "left": 26.6304347826087,
+                "right": 66.57608695652173,
+                "top": 72.4074074074074,
+                "bottom": 23.333333333333332,
+                "rotation": 0
+              },
+              "constraint": {
+                "horizontal": "scale",
+                "vertical": "scale"
+              },
+              "background": {
+                "color": {
+                  "fixed": "transparent"
+                }
+              },
+              "border": {
+                "color": {
+                  "fixed": "transparent"
+                },
+                "width": 0,
+                "radius": 6
+              },
+              "config": {
+                "text": {
+                  "mode": "field",
+                  "field": "NotificationService_커밋"
+                },
+                "color": {
+                  "field": "NotificationService_커밋",
+                  "fixed": "#718096"
+                },
+                "size": 11,
+                "align": "center",
+                "valign": "middle"
+              }
+            },
+            {
+              "name": "kafka_CouponService_발행",
+              "type": "metric-value",
+              "placement": {
+                "left": 34.23913043478261,
+                "right": 58.96739130434783,
+                "top": 67.5925925925926,
+                "bottom": 28.148148148148145,
+                "rotation": 0
+              },
+              "constraint": {
+                "horizontal": "scale",
+                "vertical": "scale"
+              },
+              "background": {
+                "color": {
+                  "fixed": "transparent"
+                }
+              },
+              "border": {
+                "color": {
+                  "fixed": "transparent"
+                },
+                "width": 0,
+                "radius": 6
+              },
+              "config": {
+                "text": {
+                  "mode": "field",
+                  "field": "CouponService_발행"
+                },
+                "color": {
+                  "field": "CouponService_발행",
+                  "fixed": "#718096"
+                },
+                "size": 11,
+                "align": "center",
+                "valign": "middle"
+              }
+            },
+            {
+              "name": "kafka_CouponService_커밋",
+              "type": "metric-value",
+              "placement": {
+                "left": 34.23913043478261,
+                "right": 58.96739130434783,
+                "top": 72.4074074074074,
+                "bottom": 23.333333333333332,
+                "rotation": 0
+              },
+              "constraint": {
+                "horizontal": "scale",
+                "vertical": "scale"
+              },
+              "background": {
+                "color": {
+                  "fixed": "transparent"
+                }
+              },
+              "border": {
+                "color": {
+                  "fixed": "transparent"
+                },
+                "width": 0,
+                "radius": 6
+              },
+              "config": {
+                "text": {
+                  "mode": "field",
+                  "field": "CouponService_커밋"
+                },
+                "color": {
+                  "field": "CouponService_커밋",
+                  "fixed": "#718096"
+                },
+                "size": 11,
+                "align": "center",
+                "valign": "middle"
+              }
+            },
+            {
+              "name": "kafka_ProductQueryService_커밋",
+              "type": "metric-value",
+              "placement": {
+                "left": 50.54347826086957,
+                "right": 42.66304347826087,
+                "top": 72.4074074074074,
+                "bottom": 23.333333333333332,
+                "rotation": 0
+              },
+              "constraint": {
+                "horizontal": "scale",
+                "vertical": "scale"
+              },
+              "background": {
+                "color": {
+                  "fixed": "transparent"
+                }
+              },
+              "border": {
+                "color": {
+                  "fixed": "transparent"
+                },
+                "width": 0,
+                "radius": 6
+              },
+              "config": {
+                "text": {
+                  "mode": "field",
+                  "field": "ProductQueryService_커밋"
+                },
+                "color": {
+                  "field": "ProductQueryService_커밋",
+                  "fixed": "#718096"
+                },
+                "size": 11,
+                "align": "center",
+                "valign": "middle"
+              }
+            },
+            {
+              "name": "kafka_OrderQueryService_커밋",
+              "type": "metric-value",
+              "placement": {
+                "left": 58.152173913043484,
+                "right": 35.05434782608695,
+                "top": 72.4074074074074,
+                "bottom": 23.333333333333332,
+                "rotation": 0
+              },
+              "constraint": {
+                "horizontal": "scale",
+                "vertical": "scale"
+              },
+              "background": {
+                "color": {
+                  "fixed": "transparent"
+                }
+              },
+              "border": {
+                "color": {
+                  "fixed": "transparent"
+                },
+                "width": 0,
+                "radius": 6
+              },
+              "config": {
+                "text": {
+                  "mode": "field",
+                  "field": "OrderQueryService_커밋"
+                },
+                "color": {
+                  "field": "OrderQueryService_커밋",
+                  "fixed": "#718096"
+                },
+                "size": 11,
+                "align": "center",
+                "valign": "middle"
+              }
+            },
+            {
+              "name": "kafka_AIService_발행",
+              "type": "metric-value",
+              "placement": {
+                "left": 65.76086956521739,
+                "right": 27.445652173913043,
+                "top": 67.5925925925926,
+                "bottom": 28.148148148148145,
+                "rotation": 0
+              },
+              "constraint": {
+                "horizontal": "scale",
+                "vertical": "scale"
+              },
+              "background": {
+                "color": {
+                  "fixed": "transparent"
+                }
+              },
+              "border": {
+                "color": {
+                  "fixed": "transparent"
+                },
+                "width": 0,
+                "radius": 6
+              },
+              "config": {
+                "text": {
+                  "mode": "field",
+                  "field": "AIService_발행"
+                },
+                "color": {
+                  "field": "AIService_발행",
+                  "fixed": "#718096"
+                },
+                "size": 11,
+                "align": "center",
+                "valign": "middle"
+              }
+            },
+            {
+              "name": "kafka_AIService_커밋",
+              "type": "metric-value",
+              "placement": {
+                "left": 65.76086956521739,
+                "right": 27.445652173913043,
+                "top": 72.4074074074074,
+                "bottom": 23.333333333333332,
+                "rotation": 0
+              },
+              "constraint": {
+                "horizontal": "scale",
+                "vertical": "scale"
+              },
+              "background": {
+                "color": {
+                  "fixed": "transparent"
+                }
+              },
+              "border": {
+                "color": {
+                  "fixed": "transparent"
+                },
+                "width": 0,
+                "radius": 6
+              },
+              "config": {
+                "text": {
+                  "mode": "field",
+                  "field": "AIService_커밋"
+                },
+                "color": {
+                  "field": "AIService_커밋",
+                  "fixed": "#718096"
+                },
+                "size": 11,
+                "align": "center",
+                "valign": "middle"
+              }
+            },
+            {
+              "name": "kafka_PaymentService_발행",
+              "type": "metric-value",
+              "placement": {
+                "left": 73.36956521739131,
+                "right": 19.83695652173913,
+                "top": 67.5925925925926,
+                "bottom": 28.148148148148145,
+                "rotation": 0
+              },
+              "constraint": {
+                "horizontal": "scale",
+                "vertical": "scale"
+              },
+              "background": {
+                "color": {
+                  "fixed": "transparent"
+                }
+              },
+              "border": {
+                "color": {
+                  "fixed": "transparent"
+                },
+                "width": 0,
+                "radius": 6
+              },
+              "config": {
+                "text": {
+                  "mode": "field",
+                  "field": "PaymentService_발행"
+                },
+                "color": {
+                  "field": "PaymentService_발행",
+                  "fixed": "#718096"
+                },
+                "size": 11,
+                "align": "center",
+                "valign": "middle"
+              }
+            },
+            {
+              "name": "kafka_PaymentService_커밋",
+              "type": "metric-value",
+              "placement": {
+                "left": 73.36956521739131,
+                "right": 19.83695652173913,
+                "top": 72.4074074074074,
+                "bottom": 23.333333333333332,
+                "rotation": 0
+              },
+              "constraint": {
+                "horizontal": "scale",
+                "vertical": "scale"
+              },
+              "background": {
+                "color": {
+                  "fixed": "transparent"
+                }
+              },
+              "border": {
+                "color": {
+                  "fixed": "transparent"
+                },
+                "width": 0,
+                "radius": 6
+              },
+              "config": {
+                "text": {
+                  "mode": "field",
+                  "field": "PaymentService_커밋"
+                },
+                "color": {
+                  "field": "PaymentService_커밋",
+                  "fixed": "#718096"
+                },
+                "size": 11,
+                "align": "center",
+                "valign": "middle"
+              }
+            },
+            {
+              "name": "kafka_ProductCommandService_발행",
+              "type": "metric-value",
+              "placement": {
+                "left": 82.06521739130434,
+                "right": 11.141304347826086,
+                "top": 67.5925925925926,
+                "bottom": 28.148148148148145,
+                "rotation": 0
+              },
+              "constraint": {
+                "horizontal": "scale",
+                "vertical": "scale"
+              },
+              "background": {
+                "color": {
+                  "fixed": "transparent"
+                }
+              },
+              "border": {
+                "color": {
+                  "fixed": "transparent"
+                },
+                "width": 0,
+                "radius": 6
+              },
+              "config": {
+                "text": {
+                  "mode": "field",
+                  "field": "ProductCommandService_발행"
+                },
+                "color": {
+                  "field": "ProductCommandService_발행",
+                  "fixed": "#718096"
+                },
+                "size": 11,
+                "align": "center",
+                "valign": "middle"
+              }
+            },
+            {
+              "name": "kafka_ProductCommandService_커밋",
+              "type": "metric-value",
+              "placement": {
+                "left": 82.06521739130434,
+                "right": 11.141304347826086,
+                "top": 72.4074074074074,
+                "bottom": 23.333333333333332,
+                "rotation": 0
+              },
+              "constraint": {
+                "horizontal": "scale",
+                "vertical": "scale"
+              },
+              "background": {
+                "color": {
+                  "fixed": "transparent"
+                }
+              },
+              "border": {
+                "color": {
+                  "fixed": "transparent"
+                },
+                "width": 0,
+                "radius": 6
+              },
+              "config": {
+                "text": {
+                  "mode": "field",
+                  "field": "ProductCommandService_커밋"
+                },
+                "color": {
+                  "field": "ProductCommandService_커밋",
+                  "fixed": "#718096"
+                },
+                "size": 11,
+                "align": "center",
+                "valign": "middle"
+              }
+            },
+            {
+              "name": "kafka_OrderCommandService_발행",
+              "type": "metric-value",
+              "placement": {
+                "left": 89.67391304347827,
+                "right": 3.532608695652174,
+                "top": 67.5925925925926,
+                "bottom": 28.148148148148145,
+                "rotation": 0
+              },
+              "constraint": {
+                "horizontal": "scale",
+                "vertical": "scale"
+              },
+              "background": {
+                "color": {
+                  "fixed": "transparent"
+                }
+              },
+              "border": {
+                "color": {
+                  "fixed": "transparent"
+                },
+                "width": 0,
+                "radius": 6
+              },
+              "config": {
+                "text": {
+                  "mode": "field",
+                  "field": "OrderCommandService_발행"
+                },
+                "color": {
+                  "field": "OrderCommandService_발행",
+                  "fixed": "#718096"
+                },
+                "size": 11,
+                "align": "center",
+                "valign": "middle"
+              }
+            },
+            {
+              "name": "kafka_OrderCommandService_커밋",
+              "type": "metric-value",
+              "placement": {
+                "left": 89.67391304347827,
+                "right": 3.532608695652174,
+                "top": 72.4074074074074,
+                "bottom": 23.333333333333332,
+                "rotation": 0
+              },
+              "constraint": {
+                "horizontal": "scale",
+                "vertical": "scale"
+              },
+              "background": {
+                "color": {
+                  "fixed": "transparent"
+                }
+              },
+              "border": {
+                "color": {
+                  "fixed": "transparent"
+                },
+                "width": 0,
+                "radius": 6
+              },
+              "config": {
+                "text": {
+                  "mode": "field",
+                  "field": "OrderCommandService_커밋"
+                },
+                "color": {
+                  "field": "OrderCommandService_커밋",
+                  "fixed": "#718096"
+                },
+                "size": 11,
+                "align": "center",
+                "valign": "middle"
+              }
             }
           ]
         }
       },
-      "description": "HTTP 선은 실제 라우팅 계약을 표시하며 공통 구간을 공유한다. Kafka 연결은 이벤트 계약이며 처리량이 아니다. 서비스 인벤토리 expected=2. 회색은 관측 불가."
+      "description": "HTTP 선은 실제 라우팅 계약을 표시하며 공통 구간을 공유한다. Kafka 연결은 이벤트 계약이며 처리량이 아니다. 서비스 인벤토리 expected=2. 회색은 관측 불가. Kafka 보라색 연결의 발행/s는 매핑된 토픽 유입, 커밋/s는 서비스 consumer group의 커밋 offset 전진 추정입니다. 0은 흐리게 표시하며 무자료는 관측 불가입니다."
     },
     {
       "id": 7,
@@ -7896,6 +9306,57 @@
         "content": "### 계측 예정\nSaga 상태/전이/보상, Eureka 등록 수, 내부 HTTP 재시도, Outbox 발행 결과, 서비스별 Kafka produce/consume 처리량.\n\nKafka 선은 정적 연결이며 처리량은 계측 예정입니다. Gateway → PurchaseGateway 가상 연결은 없습니다. PurchaseGateway 조건부 Payment 경로는 도식에서 제외했습니다.\n\n**인벤토리:** 12종에 Gateway와 PurchaseGateway 포함, 총 24개. 교체/스케일 변경 시 rules/demo.yml 갱신.\n\n**관측 불가:** datasource 오류/No data/회색을 정상으로 해석하지 않습니다. ALERTS는 발생 중인 구간만 표시합니다."
       },
       "description": ""
+    },
+    {
+      "id": 21,
+      "type": "timeseries",
+      "title": "토픽별 초당 메시지",
+      "gridPos": {
+        "x": 0,
+        "y": 14,
+        "w": 24,
+        "h": 5
+      },
+      "datasource": {
+        "type": "prometheus",
+        "uid": "stockdrop-prometheus"
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "expr": "sum by(topic)(rate(kafka_server_brokertopicmetrics_messagesin_total{topic=~\"stockdrop.*\"}[1m])) or on(topic) sum by(topic)(clamp_min(deriv(kafka_topic_partition_current_offset{topic=~\"stockdrop.*\"}[1m]),0))",
+          "legendFormat": "{{topic}}",
+          "datasource": {
+            "type": "prometheus",
+            "uid": "stockdrop-prometheus"
+          },
+          "range": true
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "unit": "mps",
+          "noValue": "관측 불가",
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "lineWidth": 2,
+            "fillOpacity": 8
+          }
+        },
+        "overrides": []
+      },
+      "options": {
+        "legend": {
+          "displayMode": "list",
+          "placement": "bottom"
+        },
+        "tooltip": {
+          "mode": "multi"
+        }
+      },
+      "description": "토픽별 broker MessagesInPerSec Count의 rate를 우선 사용합니다. 아직 topic JMX 규칙이 배포되지 않은 토픽은 offset gauge의 deriv를 0 이상으로 제한한 추정치를 사용합니다. 로그 절단과 리더 변경으로 왜곡될 수 있습니다. Canvas 발행은 매핑된 토픽 유입 추정, 커밋은 소비자 그룹 offset 전진 추정이며 업무 성공 건수가 아닙니다. 무자료는 0으로 채우지 않습니다."
     }
   ],
   "templating": {
